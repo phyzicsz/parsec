@@ -1,11 +1,9 @@
 package com.phyzicsz.parsec.reflections;
 
-import com.phyzicsz.parsec.reflections.Reflections;
-import org.junit.Test;
 import com.phyzicsz.parsec.reflections.util.FilterBuilder;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test filtering
@@ -14,25 +12,25 @@ public class FilterBuilderTest {
 
   @Test
   public void test_include() {
-      FilterBuilder filter = new FilterBuilder().include("org\\.reflections.*");
-      assertTrue(filter.test("org.reflections.Reflections"));
-      assertTrue(filter.test("org.reflections.foo.Reflections"));
+      FilterBuilder filter = new FilterBuilder().include("com\\.phyzicsz.*");
+      assertTrue(filter.test("com.phyzicsz.parsec.reflections.Reflections"));
+      assertTrue(filter.test("com.phyzicsz.parsec.reflections.foo.Reflections"));
       assertFalse(filter.test("org.foobar.Reflections"));
   }
 
     @Test
     public void test_includePackage() {
-        FilterBuilder filter = new FilterBuilder().includePackage("org.reflections");
-        assertTrue(filter.test("org.reflections.Reflections"));
-        assertTrue(filter.test("org.reflections.foo.Reflections"));
+        FilterBuilder filter = new FilterBuilder().includePackage("com.phyzicsz.parsec.reflections");
+        assertTrue(filter.test("com.phyzicsz.parsec.reflections.Reflections"));
+        assertTrue(filter.test("com.phyzicsz.parsec.reflections.foo.Reflections"));
         assertFalse(filter.test("org.foobar.Reflections"));
     }
 
     @Test
     public void test_includePackageMultiple() {
-        FilterBuilder filter = new FilterBuilder().includePackage("org.reflections", "org.foo");
-        assertTrue(filter.test("org.reflections.Reflections"));
-        assertTrue(filter.test("org.reflections.foo.Reflections"));
+        FilterBuilder filter = new FilterBuilder().includePackage("com.phyzicsz.parsec.reflections", "org.foo");
+        assertTrue(filter.test("com.phyzicsz.parsec.reflections.Reflections"));
+        assertTrue(filter.test("com.phyzicsz.parsec.reflections.foo.Reflections"));
         assertTrue(filter.test("org.foo.Reflections"));
         assertTrue(filter.test("org.foo.bar.Reflections"));
         assertFalse(filter.test("org.bar.Reflections"));
@@ -41,33 +39,33 @@ public class FilterBuilderTest {
     @Test
     public void test_includePackagebyClass() {
         FilterBuilder filter = new FilterBuilder().includePackage(Reflections.class);
-        assertTrue(filter.test("org.reflections.Reflections"));
-        assertTrue(filter.test("org.reflections.foo.Reflections"));
+        assertTrue(filter.test("com.phyzicsz.parsec.reflections.Reflections"));
+        assertTrue(filter.test("com.phyzicsz.parsec.reflections.foo.Reflections"));
         assertFalse(filter.test("org.foobar.Reflections"));
     }
 
     //-----------------------------------------------------------------------
     @Test
     public void test_exclude() {
-        FilterBuilder filter = new FilterBuilder().exclude("org\\.reflections.*");
-        assertFalse(filter.test("org.reflections.Reflections"));
-        assertFalse(filter.test("org.reflections.foo.Reflections"));
-        assertTrue(filter.test("org.foobar.Reflections"));
+        FilterBuilder filter = new FilterBuilder().exclude("com\\.phyzicsz.parsec.reflections.*");
+        assertFalse(filter.test("com.phyzicsz.parsec.reflections.Reflections"));
+        assertFalse(filter.test("com.phyzicsz.parsec.reflections.foo.Reflections"));
+        assertTrue(filter.test("com.foobar.Reflections"));
     }
 
     @Test
     public void test_excludePackage() {
-        FilterBuilder filter = new FilterBuilder().excludePackage("org.reflections");
-        assertFalse(filter.test("org.reflections.Reflections"));
-        assertFalse(filter.test("org.reflections.foo.Reflections"));
+        FilterBuilder filter = new FilterBuilder().excludePackage("com.phyzicsz.parsec.reflections");
+        assertFalse(filter.test("com.phyzicsz.parsec.reflections.Reflections"));
+        assertFalse(filter.test("com.phyzicsz.parsec.reflections.foo.Reflections"));
         assertTrue(filter.test("org.foobar.Reflections"));
     }
 
     @Test
     public void test_excludePackageMultiple() {
-      FilterBuilder filter = new FilterBuilder().excludePackage("org.reflections", "org.foo");
-      assertFalse(filter.test("org.reflections.Reflections"));
-      assertFalse(filter.test("org.reflections.foo.Reflections"));
+      FilterBuilder filter = new FilterBuilder().excludePackage("com.phyzicsz.parsec.reflections", "org.foo");
+      assertFalse(filter.test("com.phyzicsz.parsec.reflections.Reflections"));
+      assertFalse(filter.test("com.phyzicsz.parsec.reflections.foo.Reflections"));
       assertFalse(filter.test("org.foo.Reflections"));
       assertFalse(filter.test("org.foo.bar.Reflections"));
       assertTrue(filter.test("org.bar.Reflections"));
@@ -76,26 +74,25 @@ public class FilterBuilderTest {
     @Test
     public void test_excludePackageByClass() {
         FilterBuilder filter = new FilterBuilder().excludePackage(Reflections.class);
-        assertFalse(filter.test("org.reflections.Reflections"));
-        assertFalse(filter.test("org.reflections.foo.Reflections"));
+        assertFalse(filter.test("com.phyzicsz.parsec.reflections.Reflections"));
+        assertFalse(filter.test("com.phyzicsz.parsec.reflections.foo.Reflections"));
         assertTrue(filter.test("org.foobar.Reflections"));
     }
 
     //-----------------------------------------------------------------------
     @Test
     public void test_parse_include() {
-        FilterBuilder filter = FilterBuilder.parse("+org.reflections.*");
-        assertTrue(filter.test("org.reflections.Reflections"));
-        assertTrue(filter.test("org.reflections.foo.Reflections"));
+        FilterBuilder filter = FilterBuilder.parse("+com.phyzicsz.parsec.reflections.*");
+        assertTrue(filter.test("com.phyzicsz.parsec.reflections.Reflections"));
+        assertTrue(filter.test("com.phyzicsz.parsec.reflections.foo.Reflections"));
         assertFalse(filter.test("org.foobar.Reflections"));
-        assertTrue(filter.test("org.reflectionsplus.Reflections"));
     }
 
     @Test
     public void test_parse_include_notRegex() {
-        FilterBuilder filter = FilterBuilder.parse("+org.reflections");
-        assertFalse(filter.test("org.reflections.Reflections"));
-        assertFalse(filter.test("org.reflections.foo.Reflections"));
+        FilterBuilder filter = FilterBuilder.parse("+com.phyzicsz.parsec.reflections");
+        assertFalse(filter.test("com.phyzicsz.parsec.reflections.Reflections"));
+        assertFalse(filter.test("com.phyzicsz.parsec.reflections.foo.Reflections"));
         assertFalse(filter.test("org.foobar.Reflections"));
         assertFalse(filter.test("org.reflectionsplus.Reflections"));
     }

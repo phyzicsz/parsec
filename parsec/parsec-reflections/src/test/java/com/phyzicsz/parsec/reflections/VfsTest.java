@@ -1,21 +1,22 @@
 package com.phyzicsz.parsec.reflections;
 
-import com.phyzicsz.parsec.reflections.ReflectionsException;
-import javassist.bytecode.ClassFile;
-import org.junit.Test;
 import com.phyzicsz.parsec.reflections.adapters.JavassistAdapter;
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
 import com.phyzicsz.parsec.reflections.vfs.SystemDir;
 import com.phyzicsz.parsec.reflections.vfs.Vfs;
-import org.slf4j.Logger;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
-
 import static java.text.MessageFormat.format;
-import static org.junit.Assert.*;
+import java.util.Collection;
+import javassist.bytecode.ClassFile;
+import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
 
 /**
  *
@@ -95,8 +96,8 @@ public class VfsTest {
         assertFalse(urls.isEmpty());
         for (URL url : urls) {
             Vfs.Dir dir = Vfs.fromURL(url);
-            assertNotNull(dir);
-            assertNotNull(dir.getFiles().iterator().next());
+            Assertions.assertNotNull(dir);
+            Assertions.assertNotNull(dir.getFiles().iterator().next());
         }
     }
 

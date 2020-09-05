@@ -1,18 +1,18 @@
 package com.phyzicsz.parsec.reflections;
 
-import com.phyzicsz.parsec.reflections.Reflections;
-import org.junit.Assert;
-import org.junit.Test;
+
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
 import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
 import com.phyzicsz.parsec.reflections.util.FilterBuilder;
-
 import java.util.Set;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 public class ReflectionsExpandSupertypesTest {
 
     private final static String packagePrefix =
-            "org.reflections.ReflectionsExpandSupertypesTest\\$TestModel\\$ScannedScope\\$.*";
+            "com.phyzicsz.parsec.reflections.ReflectionsExpandSupertypesTest\\$TestModel\\$ScannedScope\\$.*";
     private FilterBuilder inputsFilter = new FilterBuilder().include(packagePrefix);
 
     public interface TestModel {
@@ -36,10 +36,10 @@ public class ReflectionsExpandSupertypesTest {
         Reflections refExpand = new Reflections(new ConfigurationBuilder().
                 setUrls(ClasspathHelper.forClass(TestModel.ScannedScope.C.class)).
                 filterInputsBy(inputsFilter));
-        Assert.assertTrue(refExpand.getConfiguration().shouldExpandSuperTypes());
+        assertTrue(refExpand.getConfiguration().shouldExpandSuperTypes());
         Set<Class<? extends TestModel.A>> subTypesOf = refExpand.getSubTypesOf(TestModel.A.class);
-        Assert.assertTrue("expanded", subTypesOf.contains(TestModel.B.class));
-        Assert.assertTrue("transitivity", subTypesOf.containsAll(refExpand.getSubTypesOf(TestModel.B.class)));
+        assertTrue(subTypesOf.contains(TestModel.B.class),"expanded");
+        assertTrue(subTypesOf.containsAll(refExpand.getSubTypesOf(TestModel.B.class)),"transitivity");
     }
 
     @Test
@@ -48,8 +48,8 @@ public class ReflectionsExpandSupertypesTest {
                 setUrls(ClasspathHelper.forClass(TestModel.ScannedScope.C.class)).
                 filterInputsBy(inputsFilter).
                 setExpandSuperTypes(false));
-        Assert.assertFalse(refDontExpand.getConfiguration().shouldExpandSuperTypes());
+        assertFalse(refDontExpand.getConfiguration().shouldExpandSuperTypes());
         Set<Class<? extends TestModel.A>> subTypesOf1 = refDontExpand.getSubTypesOf(TestModel.A.class);
-        Assert.assertFalse(subTypesOf1.contains(TestModel.B.class));
+        assertFalse(subTypesOf1.contains(TestModel.B.class));
     }
 }

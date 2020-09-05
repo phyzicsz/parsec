@@ -68,13 +68,12 @@
             <scope>provided</scope>
             <optional>true</optional><!-- case: when using jboss-vfs -->
         </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13</version>
-            <scope>test</scope>
-        </dependency>
+        
+        <!--test dependencies-->
+         <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest</artifactId>
+            </dependency>
 
     </dependencies>
 </project>

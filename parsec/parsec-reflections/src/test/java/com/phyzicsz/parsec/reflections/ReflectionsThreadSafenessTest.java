@@ -1,21 +1,19 @@
 package com.phyzicsz.parsec.reflections;
 
-import com.phyzicsz.parsec.reflections.Reflections;
-import org.junit.Test;
+
 import com.phyzicsz.parsec.reflections.scanners.SubTypesScanner;
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
 import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
-import org.slf4j.Logger;
-
+import static java.util.Collections.singletonList;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import static java.util.Collections.singletonList;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
 
 public class ReflectionsThreadSafenessTest {
 

@@ -1,13 +1,25 @@
 package com.phyzicsz.parsec.reflections;
 
-import com.phyzicsz.parsec.reflections.Reflections;
-import com.phyzicsz.parsec.reflections.ReflectionsException;
-import com.phyzicsz.parsec.reflections.ReflectionUtils;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import com.phyzicsz.parsec.reflections.TestModel.AC1;
+import com.phyzicsz.parsec.reflections.TestModel.AC1n;
+import com.phyzicsz.parsec.reflections.TestModel.AC2;
+import com.phyzicsz.parsec.reflections.TestModel.AC3;
+import com.phyzicsz.parsec.reflections.TestModel.AF1;
+import com.phyzicsz.parsec.reflections.TestModel.AI1;
+import com.phyzicsz.parsec.reflections.TestModel.AI2;
+import com.phyzicsz.parsec.reflections.TestModel.AM1;
+import com.phyzicsz.parsec.reflections.TestModel.C1;
+import com.phyzicsz.parsec.reflections.TestModel.C2;
+import com.phyzicsz.parsec.reflections.TestModel.C3;
+import com.phyzicsz.parsec.reflections.TestModel.C4;
+import com.phyzicsz.parsec.reflections.TestModel.C5;
+import com.phyzicsz.parsec.reflections.TestModel.C6;
+import com.phyzicsz.parsec.reflections.TestModel.C7;
+import com.phyzicsz.parsec.reflections.TestModel.I1;
+import com.phyzicsz.parsec.reflections.TestModel.I2;
+import com.phyzicsz.parsec.reflections.TestModel.I3;
+import com.phyzicsz.parsec.reflections.TestModel.MAI1;
+import com.phyzicsz.parsec.reflections.TestModel.Usage;
 import com.phyzicsz.parsec.reflections.scanners.FieldAnnotationsScanner;
 import com.phyzicsz.parsec.reflections.scanners.MemberUsageScanner;
 import com.phyzicsz.parsec.reflections.scanners.MethodAnnotationsScanner;
@@ -19,7 +31,7 @@ import com.phyzicsz.parsec.reflections.scanners.TypeAnnotationsScanner;
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
 import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
 import com.phyzicsz.parsec.reflections.util.FilterBuilder;
-
+import static com.phyzicsz.parsec.reflections.util.Utils.index;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -33,20 +45,25 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static org.junit.Assert.*;
-import static com.phyzicsz.parsec.reflections.TestModel.*;
-import static com.phyzicsz.parsec.reflections.util.Utils.index;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  *
  */
 @SuppressWarnings("unchecked")
 public class ReflectionsTest {
-    public static final FilterBuilder TestModelFilter = new FilterBuilder().include("org.reflections.TestModel\\$.*");
+    public static final FilterBuilder TestModelFilter = new FilterBuilder().include("com.phyzicsz.parsec.reflections.TestModel\\$.*");
     static Reflections reflections;
 
-    @BeforeClass
+    @BeforeAll
     public static void init() {
         reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(Collections.singletonList(ClasspathHelper.forClass(TestModel.class)))
@@ -66,8 +83,7 @@ public class ReflectionsTest {
         assertThat(reflections.getSubTypesOf(I1.class), are(I2.class, C1.class, C2.class, C3.class, C5.class));
         assertThat(reflections.getSubTypesOf(C1.class), are(C2.class, C3.class, C5.class));
 
-        assertFalse("getAllTypes should not be empty when Reflections is configured with SubTypesScanner(false)",
-                reflections.getAllTypes().isEmpty());
+        assertFalse(reflections.getAllTypes().isEmpty(),"getAllTypes should not be empty when Reflections is configured with SubTypesScanner(false)");
     }
 
     @Test

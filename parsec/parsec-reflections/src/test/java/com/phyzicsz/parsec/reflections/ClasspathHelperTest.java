@@ -1,9 +1,6 @@
 package com.phyzicsz.parsec.reflections;
 
-import org.junit.Assert;
-import org.junit.Test;
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -11,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test ClasspathHelper utility class
@@ -29,7 +28,7 @@ public final class ClasspathHelperTest {
         final Collection<URL> resultUrls1 = ClasspathHelper.forClassLoader(urlClassLoader1);
         final Collection<URL> resultUrls2 = ClasspathHelper.forClassLoader(urlClassLoader2);
 
-        Assert.assertArrayEquals("URLs returned from forClassLoader should be in the same order as source URLs", urls1, resultUrls1.toArray());
-        Assert.assertArrayEquals("URLs returned from forClassLoader should be in the same order as source URLs", urls2, resultUrls2.toArray());
+        Assertions.assertArrayEquals(urls1, resultUrls1.toArray(),"URLs returned from forClassLoader should be in the same order as source URLs");
+        Assertions.assertArrayEquals(urls2, resultUrls2.toArray(),"URLs returned from forClassLoader should be in the same order as source URLs");
     }
 }

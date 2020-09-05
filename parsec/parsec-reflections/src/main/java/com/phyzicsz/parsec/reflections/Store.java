@@ -1,7 +1,7 @@
 package com.phyzicsz.parsec.reflections;
 
 import com.phyzicsz.parsec.reflections.scanners.Scanner;
-
+import static com.phyzicsz.parsec.reflections.util.Utils.index;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,13 +13,15 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static com.phyzicsz.parsec.reflections.util.Utils.index;
-
 /**
  * stores metadata information in multimaps
- * <p>use the different query methods (getXXX) to query the metadata
- * <p>the query methods are string based, and does not cause the class loader to define the types
- * <p>use {@link org.reflections.Reflections#getStore()} to access this store
+ * <p>
+ * use the different query methods (getXXX) to query the metadata
+ * <p>
+ * the query methods are string based, and does not cause the class loader to
+ * define the types
+ * <p>
+ * use {@link org.reflections.Reflections#getStore()} to access this store
  */
 public class Store {
 
@@ -33,12 +35,18 @@ public class Store {
         }
     }
 
-    /** return all indices */
+    /**
+     * return all indices
+     * @return 
+     */
     public Set<String> keySet() {
         return storeMap.keySet();
     }
 
-    /** *  get the multimap object for the given {@code index}, otherwise throws a {@link com.phyzicsz.parsec.reflections.ReflectionsException} */
+    /**
+     * * get the multimap object for the given {@code index}, otherwise throws a
+     * {@link com.phyzicsz.parsec.reflections.ReflectionsException}
+     */
     private Map<String, Collection<String>> get(String index) {
         Map<String, Collection<String>> mmap = storeMap.get(index);
         if (mmap == null) {
@@ -47,22 +55,39 @@ public class Store {
         return mmap;
     }
 
-    /** get the values stored for the given {@code index} and {@code keys} */
+    /**
+     * get the values stored for the given {@code index} and {@code keys}
+     * @param scannerClass
+     * @param key
+     * @return 
+     */
     public Set<String> get(Class<?> scannerClass, String key) {
         return get(index(scannerClass), Collections.singletonList(key));
     }
 
-    /** get the values stored for the given {@code index} and {@code keys} */
+    /**
+     * get the values stored for the given {@code index} and {@code keys}
+     * @param index
+     * @param key
+     * @return 
+     */
     public Set<String> get(String index, String key) {
         return get(index, Collections.singletonList(key));
     }
 
-    /** get the values stored for the given {@code index} and {@code keys} */
+    /**
+     * get the values stored for the given {@code index} and {@code keys}
+     * @param scannerClass
+     * @param keys
+     * @return 
+     */
     public Set<String> get(Class<?> scannerClass, Collection<String> keys) {
         return get(index(scannerClass), keys);
     }
 
-    /** get the values stored for the given {@code index} and {@code keys} */
+    /**
+     * get the values stored for the given {@code index} and {@code keys}
+     */
     private Set<String> get(String index, Collection<String> keys) {
         Map<String, Collection<String>> mmap = get(index);
         Set<String> result = new LinkedHashSet<>();
@@ -75,7 +100,13 @@ public class Store {
         return result;
     }
 
-    /** recursively get the values stored for the given {@code index} and {@code keys}, including keys */
+    /**
+     * recursively get the values stored for the given {@code index} and
+     * {@code keys}, including keys
+     * @param scannerClass
+     * @param keys
+     * @return 
+     */
     public Set<String> getAllIncluding(Class<?> scannerClass, Collection<String> keys) {
         String index = index(scannerClass);
         Map<String, Collection<String>> mmap = get(index);
@@ -94,12 +125,24 @@ public class Store {
         return result;
     }
 
-    /** recursively get the values stored for the given {@code index} and {@code keys}, not including keys */
+    /**
+     * recursively get the values stored for the given {@code index} and
+     * {@code keys}, not including keys
+     * @param scannerClass
+     * @param key
+     * @return 
+     */
     public Set<String> getAll(Class<?> scannerClass, String key) {
         return getAllIncluding(scannerClass, get(scannerClass, key));
     }
 
-    /** recursively get the values stored for the given {@code index} and {@code keys}, not including keys */
+    /**
+     * recursively get the values stored for the given {@code index} and
+     * {@code keys}, not including keys
+     * @param scannerClass
+     * @param keys
+     * @return 
+     */
     public Set<String> getAll(Class<?> scannerClass, Collection<String> keys) {
         return getAllIncluding(scannerClass, get(scannerClass, keys));
     }

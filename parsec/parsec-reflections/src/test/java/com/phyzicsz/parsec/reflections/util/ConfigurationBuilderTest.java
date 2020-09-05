@@ -1,9 +1,8 @@
 package com.phyzicsz.parsec.reflections.util;
 
-import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
-import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 public class ConfigurationBuilderTest
 {
