@@ -30,12 +30,13 @@ import java.util.stream.StreamSupport;
  * {@link org.reflections.vfs.Vfs.File}
  * <p>
  * for example:
- * <pre>
+ * <pre>{@code
  *      Vfs.Dir dir = Vfs.fromURL(url);
  *      Iterable<Vfs.File> files = dir.getFiles();
  *      for (Vfs.File file : files) {
  *          InputStream is = file.openInputStream();
  *      }
+ * }
  * </pre>
  * <p>
  * {@link org.reflections.vfs.Vfs#fromURL(java.net.URL)} uses static

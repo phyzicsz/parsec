@@ -9,8 +9,6 @@ import com.phyzicsz.parsec.reflections.adapters.MetadataAdapter;
 import com.phyzicsz.parsec.reflections.scanners.Scanner;
 import com.phyzicsz.parsec.reflections.scanners.SubTypesScanner;
 import com.phyzicsz.parsec.reflections.scanners.TypeAnnotationsScanner;
-import com.phyzicsz.parsec.reflections.serializers.Serializer;
-import com.phyzicsz.parsec.reflections.serializers.XmlSerializer;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -51,7 +49,6 @@ public class ConfigurationBuilder implements Configuration {
     private Set<URL> urls;
     /*lazy*/ protected MetadataAdapter<?,?,?> metadataAdapter;
     private Predicate<String> inputsFilter;
-    /*lazy*/ private Serializer serializer;
     private ExecutorService executorService;
     private ClassLoader[] classLoaders;
     private boolean expandSuperTypes = true;
@@ -385,23 +382,6 @@ public class ConfigurationBuilder implements Configuration {
             }
         };
         setExecutorService(Executors.newFixedThreadPool(availableProcessors, threadFactory));
-        return this;
-    }
-
-    @Override
-    public Serializer getSerializer() {
-        return serializer != null ? serializer : (serializer = new XmlSerializer()); //lazily defaults to XmlSerializer
-    }
-
-    /**
-     * sets the serializer used when issuing
-     * {@link org.reflections.Reflections#save}
-     *
-     * @param serializer
-     * @return
-     */
-    public ConfigurationBuilder setSerializer(Serializer serializer) {
-        this.serializer = serializer;
         return this;
     }
 

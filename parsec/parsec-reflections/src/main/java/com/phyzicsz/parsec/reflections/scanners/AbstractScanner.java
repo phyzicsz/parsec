@@ -79,7 +79,7 @@ public abstract class AbstractScanner implements Scanner {
     //
     @Override
     public boolean equals(Object o) {
-        return this == o || o != null && getClass() == o.getClass();
+        return this == o || (o != null && getClass() == o.getClass());
     }
 
     @Override

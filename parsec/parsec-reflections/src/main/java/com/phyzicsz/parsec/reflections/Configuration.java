@@ -2,7 +2,6 @@ package com.phyzicsz.parsec.reflections;
 
 import com.phyzicsz.parsec.reflections.adapters.MetadataAdapter;
 import com.phyzicsz.parsec.reflections.scanners.Scanner;
-import com.phyzicsz.parsec.reflections.serializers.Serializer;
 import java.net.URL;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -51,12 +50,6 @@ public interface Configuration {
      */
     ExecutorService getExecutorService();
 
-    /**
-     * the default serializer to use when saving Reflection
-     *
-     * @return
-     */
-    Serializer getSerializer();
 
     /**
      * get class loaders, might be used for resolving methods/fields
