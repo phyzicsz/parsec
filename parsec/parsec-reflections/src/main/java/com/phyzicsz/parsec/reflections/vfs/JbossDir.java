@@ -1,12 +1,11 @@
 package com.phyzicsz.parsec.reflections.vfs;
 
-import org.jboss.vfs.VirtualFile;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.jar.JarFile;
+import org.jboss.vfs.VirtualFile;
 
 public class JbossDir implements Vfs.Dir {
 
@@ -18,12 +17,11 @@ public class JbossDir implements Vfs.Dir {
 
     public static Vfs.Dir createDir(URL url) throws Exception {
         VirtualFile virtualFile = (VirtualFile) url.openConnection().getContent();
-        if(virtualFile.isFile()) {
+        if (virtualFile.isFile()) {
             return new ZipDir(new JarFile(virtualFile.getPhysicalFile()));
         }
         return new JbossDir(virtualFile);
     }
-
 
     @Override
     public String getPath() {

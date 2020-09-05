@@ -1,5 +1,17 @@
 package com.phyzicsz.parsec.reflections.serializers;
 
+import com.phyzicsz.parsec.reflections.Reflections;
+import com.phyzicsz.parsec.reflections.ReflectionsException;
+import com.phyzicsz.parsec.reflections.Store;
+import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
+import com.phyzicsz.parsec.reflections.util.Utils;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
@@ -7,22 +19,12 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import com.phyzicsz.parsec.reflections.Reflections;
-import com.phyzicsz.parsec.reflections.ReflectionsException;
-import com.phyzicsz.parsec.reflections.Store;
-import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
-import com.phyzicsz.parsec.reflections.util.Utils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.lang.reflect.Constructor;
-
-/** serialization of Reflections to xml
+/**
+ * serialization of Reflections to xml
  *
- * <p>an example of produced xml:
+ * <p>
+ * an example of produced xml:
  * <pre>
  * &#60?xml version="1.0" encoding="UTF-8"?>
  *
@@ -35,16 +37,18 @@ import java.lang.reflect.Constructor;
  *              &#60value>fully.qualified.name.2&#60/value>
  * ...
  * </pre>
- * */
+ *
+ */
 public class XmlSerializer implements Serializer {
 
+    @Override
     public Reflections read(InputStream inputStream) {
         Reflections reflections;
         try {
             Constructor<Reflections> constructor = Reflections.class.getDeclaredConstructor();
             constructor.setAccessible(true);
             reflections = constructor.newInstance();
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             reflections = new Reflections(new ConfigurationBuilder());
         }
 
@@ -71,9 +75,9 @@ public class XmlSerializer implements Serializer {
         return reflections;
     }
 
+    @Override
     public File save(final Reflections reflections, final String filename) {
         File file = Utils.prepareFile(filename);
-
 
         try {
             Document document = createDocument(reflections);
@@ -89,6 +93,7 @@ public class XmlSerializer implements Serializer {
         return file;
     }
 
+    @Override
     public String toString(final Reflections reflections) {
         Document document = createDocument(reflections);
 

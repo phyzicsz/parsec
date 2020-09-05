@@ -4,7 +4,6 @@ import com.phyzicsz.parsec.reflections.Reflections;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import com.phyzicsz.parsec.reflections.vfs.Vfs.Dir;
 import com.phyzicsz.parsec.reflections.vfs.Vfs.UrlType;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -15,28 +14,35 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * UrlType to be used by Reflections library.
- * This class handles the vfszip and vfsfile protocol of JBOSS files.
+ * UrlType to be used by Reflections library. This class handles the vfszip and
+ * vfsfile protocol of JBOSS files.
  * <p>
- * <p>to use it, register it in Vfs via {@link org.reflections.vfs.Vfs#addDefaultURLTypes(org.reflections.vfs.Vfs.UrlType)} or {@link org.reflections.vfs.Vfs#setDefaultURLTypes(java.util.List)}.
+ * <p>
+ * to use it, register it in Vfs via
+ * {@link org.reflections.vfs.Vfs#addDefaultURLTypes(org.reflections.vfs.Vfs.UrlType)}
+ * or {@link org.reflections.vfs.Vfs#setDefaultURLTypes(java.util.List)}.
+ *
  * @author Sergio Pola
  *
  */
 public class UrlTypeVFS implements UrlType {
+
     public final static String[] REPLACE_EXTENSION = new String[]{".ear/", ".jar/", ".war/", ".sar/", ".har/", ".par/"};
 
     final String VFSZIP = "vfszip";
     final String VFSFILE = "vfsfile";
 
+    @Override
     public boolean matches(URL url) {
         return VFSZIP.equals(url.getProtocol()) || VFSFILE.equals(url.getProtocol());
     }
 
+    @Override
     public Dir createDir(final URL url) {
         try {
             URL adaptedUrl = adaptURL(url);
             return new ZipDir(new JarFile(adaptedUrl.getFile()));
-        } catch (Exception e) {
+        } catch (IOException e) {
             try {
                 return new ZipDir(new JarFile(url.getFile()));
             } catch (IOException e1) {
@@ -49,12 +55,17 @@ public class UrlTypeVFS implements UrlType {
     }
 
     public URL adaptURL(URL url) throws MalformedURLException {
-        if (VFSZIP.equals(url.getProtocol())) {
-            return replaceZipSeparators(url.getPath(), realFile);
-        } else if (VFSFILE.equals(url.getProtocol())) {
-            return new URL(url.toString().replace(VFSFILE, "file"));
-        } else {
+        if (null == url.getProtocol()) {
             return url;
+        } else {
+            switch (url.getProtocol()) {
+                case VFSZIP:
+                    return replaceZipSeparators(url.getPath(), realFile);
+                case VFSFILE:
+                    return new URL(url.toString().replace(VFSFILE, "file"));
+                default:
+                    return url;
+            }
         }
     }
 
@@ -66,7 +77,9 @@ public class UrlTypeVFS implements UrlType {
 
             if (pos > 0) {
                 File file = new File(path.substring(0, pos - 1));
-                if (acceptFile.test(file)) { return replaceZipSeparatorStartingFrom(path, pos); }
+                if (acceptFile.test(file)) {
+                    return replaceZipSeparatorStartingFrom(path, pos);
+                }
             }
         }
 

@@ -1,12 +1,15 @@
 package com.phyzicsz.parsec.reflections.scanners;
 
 import com.phyzicsz.parsec.reflections.Store;
-
 import java.util.List;
 
-/** scans for field's annotations */
+/**
+ * scans for field's annotations
+ */
 @SuppressWarnings({"unchecked"})
 public class FieldAnnotationsScanner extends AbstractScanner {
+
+    @Override
     public void scan(final Object cls, Store store) {
         final String className = getMetadataAdapter().getClassName(cls);
         List<Object> fields = getMetadataAdapter().getFields(cls);

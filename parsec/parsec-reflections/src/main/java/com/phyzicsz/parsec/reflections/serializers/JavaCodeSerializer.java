@@ -2,10 +2,11 @@ package com.phyzicsz.parsec.reflections.serializers;
 
 import com.phyzicsz.parsec.reflections.ReflectionUtils;
 import com.phyzicsz.parsec.reflections.Reflections;
+import static com.phyzicsz.parsec.reflections.Reflections.log;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import com.phyzicsz.parsec.reflections.scanners.TypeElementsScanner;
 import com.phyzicsz.parsec.reflections.util.Utils;
-
+import static com.phyzicsz.parsec.reflections.util.Utils.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,16 +24,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static com.phyzicsz.parsec.reflections.Reflections.log;
-import static com.phyzicsz.parsec.reflections.util.Utils.*;
-
-/** Serialization of Reflections to java code
- * <p> Serializes types and types elements into interfaces respectively to fully qualified name,
- * <p> For example, after saving with JavaCodeSerializer:
+/**
+ * Serialization of Reflections to java code
+ * <p>
+ * Serializes types and types elements into interfaces respectively to fully
+ * qualified name,
+ * <p>
+ * For example, after saving with JavaCodeSerializer:
  * <pre>
  *   reflections.save(filename, new JavaCodeSerializer());
  * </pre>
- * <p>Saved file should look like:
+ * <p>
+ * Saved file should look like:
  * <pre>
  *     public interface MyModel {
  *      public interface my {
@@ -49,14 +52,21 @@ import static com.phyzicsz.parsec.reflections.util.Utils.*;
  *	...
  * }
  * </pre>
- * <p> Use the different resolve methods to resolve the serialized element into Class, Field or Method. for example:
+ * <p>
+ * Use the different resolve methods to resolve the serialized element into
+ * Class, Field or Method. for example:
  * <pre>
  *  Class m1Ref = MyModel.my.package1.MyClass1.methods.m1.class;
  *  Method method = JavaCodeSerializer.resolve(m1Ref);
  * </pre>
- * <p>The {@link #save(org.reflections.Reflections, String)} method filename should be in the pattern: path/path/path/package.package.classname
- * <p>depends on Reflections configured with {@link com.phyzicsz.parsec.reflections.scanners.TypeElementsScanner}
- * */
+ * <p>
+ * The {@link #save(org.reflections.Reflections, String)} method filename should
+ * be in the pattern: path/path/path/package.package.classname
+ * <p>
+ * depends on Reflections configured with
+ * {@link com.phyzicsz.parsec.reflections.scanners.TypeElementsScanner}
+ *
+ */
 public class JavaCodeSerializer implements Serializer {
 
     private static final String pathSeparator = "_";
@@ -65,15 +75,23 @@ public class JavaCodeSerializer implements Serializer {
     private static final String arrayDescriptor = "$$";
     private static final String tokenSeparator = "_";
 
+    @Override
     public Reflections read(InputStream inputStream) {
         throw new UnsupportedOperationException("read is not implemented on JavaCodeSerializer");
     }
 
     /**
      * name should be in the pattern: path/path/path/package.package.classname,
-     * for example <pre>/data/projects/my/src/main/java/org.my.project.MyStore</pre>
-     * would create class MyStore in package org.my.project in the path /data/projects/my/src/main/java
+     * for example
+     * <pre>/data/projects/my/src/main/java/org.my.project.MyStore</pre> would
+     * create class MyStore in package org.my.project in the path
+     * /data/projects/my/src/main/java
+     *
+     * @param reflections
+     * @param name
+     * @return
      */
+    @Override
     public File save(Reflections reflections, String name) {
         if (name.endsWith("/")) {
             name = name.substring(0, name.length() - 1); //trim / at the end
@@ -118,9 +136,12 @@ public class JavaCodeSerializer implements Serializer {
         return file;
     }
 
+    @Override
     public String toString(Reflections reflections) {
         if (reflections.getStore().keys(index(TypeElementsScanner.class)).isEmpty()) {
-            if (log != null) log.warn("JavaCodeSerializer needs TypeElementsScanner configured");
+            if (log != null) {
+                log.warn("JavaCodeSerializer needs TypeElementsScanner configured");
+            }
         }
 
         StringBuilder sb = new StringBuilder();
@@ -223,7 +244,6 @@ public class JavaCodeSerializer implements Serializer {
             prevPaths = typePaths;
         }
 
-
         //close indention
         for (int j = prevPaths.size(); j >= 1; j--) {
             sb.append(repeat("\t", j)).append("}\n");
@@ -268,7 +288,7 @@ public class JavaCodeSerializer implements Serializer {
     public static Class<?> resolveClass(final Class aClass) {
         try {
             return resolveClassOf(aClass);
-        } catch (Exception e) {
+        } catch (ClassNotFoundException e) {
             throw new ReflectionsException("could not resolve to class " + aClass.getName(), e);
         }
     }
@@ -278,7 +298,7 @@ public class JavaCodeSerializer implements Serializer {
             String name = aField.getSimpleName();
             Class<?> declaringClass = aField.getDeclaringClass().getDeclaringClass();
             return resolveClassOf(declaringClass).getDeclaredField(name);
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | NoSuchFieldException | SecurityException e) {
             throw new ReflectionsException("could not resolve to field " + aField.getName(), e);
         }
     }
@@ -291,7 +311,7 @@ public class JavaCodeSerializer implements Serializer {
             Class<? extends Annotation> aClass1 = (Class<? extends Annotation>) ReflectionUtils.forName(name);
             Annotation annotation1 = aClass.getAnnotation(aClass1);
             return annotation1;
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SecurityException e) {
             throw new ReflectionsException("could not resolve to annotation " + annotation.getName(), e);
         }
     }
@@ -317,7 +337,7 @@ public class JavaCodeSerializer implements Serializer {
 
             Class<?> declaringClass = aMethod.getDeclaringClass().getDeclaringClass();
             return resolveClassOf(declaringClass).getDeclaredMethod(methodName, paramTypes);
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException e) {
             throw new ReflectionsException("could not resolve to method " + aMethod.getName(), e);
         }
     }

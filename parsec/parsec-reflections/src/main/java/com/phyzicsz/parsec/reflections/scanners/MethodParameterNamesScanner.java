@@ -1,16 +1,17 @@
 package com.phyzicsz.parsec.reflections.scanners;
 
-import javassist.bytecode.CodeAttribute;
-import javassist.bytecode.LocalVariableAttribute;
-import javassist.bytecode.MethodInfo;
 import com.phyzicsz.parsec.reflections.Store;
 import com.phyzicsz.parsec.reflections.adapters.MetadataAdapter;
-
 import java.lang.reflect.Modifier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.LocalVariableAttribute;
+import javassist.bytecode.MethodInfo;
 
-/** scans methods/constructors and indexes parameter names */
+/**
+ * scans methods/constructors and indexes parameter names
+ */
 @SuppressWarnings("unchecked")
 public class MethodParameterNamesScanner extends AbstractScanner {
 

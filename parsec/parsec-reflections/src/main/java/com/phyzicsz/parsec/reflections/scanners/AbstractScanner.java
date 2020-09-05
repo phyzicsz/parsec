@@ -14,13 +14,15 @@ import java.util.function.Predicate;
 @SuppressWarnings({"RawUseOfParameterizedType"})
 public abstract class AbstractScanner implements Scanner {
 
-	private Configuration configuration;
-	private Predicate<String> resultFilter = s -> true; //accept all by default
+    private Configuration configuration;
+    private Predicate<String> resultFilter = s -> true; //accept all by default
 
+    @Override
     public boolean acceptsInput(String file) {
         return getMetadataAdapter().acceptsInput(file);
     }
 
+    @Override
     public Object scan(Vfs.File file, Object classObject, Store store) {
         if (classObject == null) {
             try {
@@ -44,6 +46,7 @@ public abstract class AbstractScanner implements Scanner {
         return configuration;
     }
 
+    @Override
     public void setConfiguration(final Configuration configuration) {
         this.configuration = configuration;
     }
@@ -56,25 +59,30 @@ public abstract class AbstractScanner implements Scanner {
         this.resultFilter = resultFilter;
     }
 
+    @Override
     public Scanner filterResultsBy(Predicate<String> filter) {
-        this.setResultFilter(filter); return this;
+        this.setResultFilter(filter);
+        return this;
     }
 
     //
+    @Override
     public boolean acceptResult(final String fqn) {
-		return fqn != null && resultFilter.test(fqn);
-	}
+        return fqn != null && resultFilter.test(fqn);
+    }
 
-	protected MetadataAdapter getMetadataAdapter() {
-		return configuration.getMetadataAdapter();
-	}
+    protected MetadataAdapter getMetadataAdapter() {
+        return configuration.getMetadataAdapter();
+    }
 
     //
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass();
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return getClass().hashCode();
     }
 }

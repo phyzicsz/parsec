@@ -2,10 +2,12 @@ package com.phyzicsz.parsec.reflections.scanners;
 
 import com.phyzicsz.parsec.reflections.Store;
 import com.phyzicsz.parsec.reflections.adapters.MetadataAdapter;
-
 import java.util.List;
 
-/** scans methods/constructors and indexes parameters, return type and parameter annotations */
+/**
+ * scans methods/constructors and indexes parameters, return type and parameter
+ * annotations
+ */
 @SuppressWarnings("unchecked")
 public class MethodParameterScanner extends AbstractScanner {
 

@@ -1,11 +1,15 @@
 package com.phyzicsz.parsec.reflections.vfs;
 
-import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 
-/** an implementation of {@link org.reflections.vfs.Vfs.File} for a directory {@link java.io.File} */
+/**
+ * an implementation of {@link org.reflections.vfs.Vfs.File} for a directory
+ * {@link java.io.File}
+ */
 public class SystemFile implements Vfs.File {
+
     private final SystemDir root;
     private final java.io.File file;
 
@@ -14,10 +18,12 @@ public class SystemFile implements Vfs.File {
         this.file = file;
     }
 
+    @Override
     public String getName() {
         return file.getName();
     }
 
+    @Override
     public String getRelativePath() {
         String filepath = file.getPath().replace("\\", "/");
         if (filepath.startsWith(root.getPath())) {
@@ -27,6 +33,7 @@ public class SystemFile implements Vfs.File {
         return null; //should not get here
     }
 
+    @Override
     public InputStream openInputStream() {
         try {
             return new FileInputStream(file);

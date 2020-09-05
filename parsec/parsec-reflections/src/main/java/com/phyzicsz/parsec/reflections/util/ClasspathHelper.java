@@ -1,8 +1,6 @@
 package com.phyzicsz.parsec.reflections.util;
 
 import com.phyzicsz.parsec.reflections.Reflections;
-
-import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -21,6 +19,7 @@ import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import javax.servlet.ServletContext;
 
 /**
  * Helper methods for working with the classpath.
@@ -30,7 +29,7 @@ public abstract class ClasspathHelper {
     /**
      * Gets the current thread context class loader.
      * {@code Thread.currentThread().getContextClassLoader()}.
-     * 
+     *
      * @return the context class loader, may be null
      */
     public static ClassLoader contextClassLoader() {
@@ -40,7 +39,7 @@ public abstract class ClasspathHelper {
     /**
      * Gets the class loader of this library.
      * {@code Reflections.class.getClassLoader()}.
-     * 
+     *
      * @return the static library class loader, may be null
      */
     public static ClassLoader staticClassLoader() {
@@ -50,8 +49,10 @@ public abstract class ClasspathHelper {
     /**
      * Returns an array of class Loaders initialized from the specified array.
      * <p>
-     * If the input is null or empty, it defaults to both {@link #contextClassLoader()} and {@link #staticClassLoader()}
-     * 
+     * If the input is null or empty, it defaults to both
+     * {@link #contextClassLoader()} and {@link #staticClassLoader()}
+     *
+     * @param classLoaders
      * @return the array of class loaders, not null
      */
     public static ClassLoader[] classLoaders(ClassLoader... classLoaders) {
@@ -59,11 +60,11 @@ public abstract class ClasspathHelper {
             return classLoaders;
         } else {
             ClassLoader contextClassLoader = contextClassLoader(), staticClassLoader = staticClassLoader();
-            return contextClassLoader != null ?
-                    staticClassLoader != null && contextClassLoader != staticClassLoader ?
-                            new ClassLoader[]{contextClassLoader, staticClassLoader} :
-                            new ClassLoader[]{contextClassLoader} :
-                    new ClassLoader[] {};
+            return contextClassLoader != null
+                    ? staticClassLoader != null && contextClassLoader != staticClassLoader
+                            ? new ClassLoader[]{contextClassLoader, staticClassLoader}
+                    : new ClassLoader[]{contextClassLoader}
+                    : new ClassLoader[]{};
 
         }
     }
@@ -71,15 +72,19 @@ public abstract class ClasspathHelper {
     /**
      * Returns a distinct collection of URLs based on a package name.
      * <p>
-     * This searches for the package name as a resource, using {@link ClassLoader#getResources(String)}.
-     * For example, {@code forPackage(org.reflections)} effectively returns URLs from the
+     * This searches for the package name as a resource, using
+     * {@link ClassLoader#getResources(String)}. For example,
+     * {@code forPackage(org.reflections)} effectively returns URLs from the
      * classpath containing packages starting with {@code org.reflections}.
      * <p>
-     * If the optional {@link ClassLoader}s are not specified, then both {@link #contextClassLoader()}
-     * and {@link #staticClassLoader()} are used for {@link ClassLoader#getResources(String)}.
+     * If the optional {@link ClassLoader}s are not specified, then both
+     * {@link #contextClassLoader()} and {@link #staticClassLoader()} are used
+     * for {@link ClassLoader#getResources(String)}.
      * <p>
      * The returned URLs retainsthe order of the given {@code classLoaders}.
-     * 
+     *
+     * @param name
+     * @param classLoaders
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forPackage(String name, ClassLoader... classLoaders) {
@@ -89,15 +94,19 @@ public abstract class ClasspathHelper {
     /**
      * Returns a distinct collection of URLs based on a resource.
      * <p>
-     * This searches for the resource name, using {@link ClassLoader#getResources(String)}.
-     * For example, {@code forResource(test.properties)} effectively returns URLs from the
+     * This searches for the resource name, using
+     * {@link ClassLoader#getResources(String)}. For example,
+     * {@code forResource(test.properties)} effectively returns URLs from the
      * classpath containing files of that name.
      * <p>
-     * If the optional {@link ClassLoader}s are not specified, then both {@link #contextClassLoader()}
-     * and {@link #staticClassLoader()} are used for {@link ClassLoader#getResources(String)}.
+     * If the optional {@link ClassLoader}s are not specified, then both
+     * {@link #contextClassLoader()} and {@link #staticClassLoader()} are used
+     * for {@link ClassLoader#getResources(String)}.
      * <p>
      * The returned URLs retains the order of the given {@code classLoaders}.
      *
+     * @param resourceName
+     * @param classLoaders
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forResource(String resourceName, ClassLoader... classLoaders) {
@@ -110,7 +119,7 @@ public abstract class ClasspathHelper {
                     final URL url = urls.nextElement();
                     int index = url.toExternalForm().lastIndexOf(resourceName);
                     if (index != -1) {
-                    	// Add old url as contextUrl to support exotic url handlers
+                        // Add old url as contextUrl to support exotic url handlers
                         result.add(new URL(url, url.toExternalForm().substring(0, index)));
                     } else {
                         result.add(url);
@@ -128,11 +137,15 @@ public abstract class ClasspathHelper {
     /**
      * Returns the URL that contains a {@code Class}.
      * <p>
-     * This searches for the class using {@link ClassLoader#getResource(String)}.
+     * This searches for the class using
+     * {@link ClassLoader#getResource(String)}.
      * <p>
-     * If the optional {@link ClassLoader}s are not specified, then both {@link #contextClassLoader()}
-     * and {@link #staticClassLoader()} are used for {@link ClassLoader#getResources(String)}.
-     * 
+     * If the optional {@link ClassLoader}s are not specified, then both
+     * {@link #contextClassLoader()} and {@link #staticClassLoader()} are used
+     * for {@link ClassLoader#getResources(String)}.
+     *
+     * @param aClass
+     * @param classLoaders
      * @return the URL containing the class, null if not found
      */
     public static URL forClass(Class<?> aClass, ClassLoader... classLoaders) {
@@ -153,15 +166,16 @@ public abstract class ClasspathHelper {
         }
         return null;
     }
-    
+
     /**
-     * Returns a distinct collection of URLs based on URLs derived from class loaders.
+     * Returns a distinct collection of URLs based on URLs derived from class
+     * loaders.
      * <p>
      * This finds the URLs using {@link URLClassLoader#getURLs()} using both
      * {@link #contextClassLoader()} and {@link #staticClassLoader()}.
      * <p>
      * The returned URLs retains the order of the given {@code classLoaders}.
-     * 
+     *
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forClassLoader() {
@@ -169,16 +183,19 @@ public abstract class ClasspathHelper {
     }
 
     /**
-     * Returns a distinct collection of URLs based on URLs derived from class loaders.
+     * Returns a distinct collection of URLs based on URLs derived from class
+     * loaders.
      * <p>
-     * This finds the URLs using {@link URLClassLoader#getURLs()} using the specified
-     * class loader, searching up the parent hierarchy.
+     * This finds the URLs using {@link URLClassLoader#getURLs()} using the
+     * specified class loader, searching up the parent hierarchy.
      * <p>
-     * If the optional {@link ClassLoader}s are not specified, then both {@link #contextClassLoader()}
-     * and {@link #staticClassLoader()} are used for {@link ClassLoader#getResources(String)}.
+     * If the optional {@link ClassLoader}s are not specified, then both
+     * {@link #contextClassLoader()} and {@link #staticClassLoader()} are used
+     * for {@link ClassLoader#getResources(String)}.
      * <p>
      * The returned URLs retains the order of the given {@code classLoaders}.
-     * 
+     *
+     * @param classLoaders
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forClassLoader(ClassLoader... classLoaders) {
@@ -199,12 +216,13 @@ public abstract class ClasspathHelper {
     }
 
     /**
-     * Returns a distinct collection of URLs based on the {@code java.class.path} system property.
+     * Returns a distinct collection of URLs based on the
+     * {@code java.class.path} system property.
      * <p>
      * This finds the URLs using the {@code java.class.path} system property.
      * <p>
      * The returned collection of URLs retains the classpath order.
-     * 
+     *
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forJavaClassPath() {
@@ -214,7 +232,7 @@ public abstract class ClasspathHelper {
             for (String path : javaClassPath.split(File.pathSeparator)) {
                 try {
                     urls.add(new File(path).toURI().toURL());
-                } catch (Exception e) {
+                } catch (MalformedURLException e) {
                     if (Reflections.log != null) {
                         Reflections.log.warn("Could not get URL", e);
                     }
@@ -225,12 +243,14 @@ public abstract class ClasspathHelper {
     }
 
     /**
-     * Returns a distinct collection of URLs based on the {@code WEB-INF/lib} folder.
+     * Returns a distinct collection of URLs based on the {@code WEB-INF/lib}
+     * folder.
      * <p>
      * This finds the URLs using the {@link ServletContext}.
      * <p>
      * The returned URLs retains the order of the given {@code classLoaders}.
-     * 
+     *
+     * @param servletContext
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forWebInfLib(final ServletContext servletContext) {
@@ -242,7 +262,8 @@ public abstract class ClasspathHelper {
         for (Object urlString : resourcePaths) {
             try {
                 urls.add(servletContext.getResource((String) urlString));
-            } catch (MalformedURLException e) { /*fuck off*/ }
+            } catch (MalformedURLException e) {
+                /*fuck off*/ }
         }
         return distinctUrls(urls);
     }
@@ -251,7 +272,8 @@ public abstract class ClasspathHelper {
      * Returns the URL of the {@code WEB-INF/classes} folder.
      * <p>
      * This finds the URLs using the {@link ServletContext}.
-     * 
+     *
+     * @param servletContext
      * @return the collection of URLs, not null
      */
     public static URL forWebInfClasses(final ServletContext servletContext) {
@@ -259,23 +281,27 @@ public abstract class ClasspathHelper {
             final String path = servletContext.getRealPath("/WEB-INF/classes");
             if (path != null) {
                 final File file = new File(path);
-                if (file.exists())
+                if (file.exists()) {
                     return file.toURL();
+                }
             } else {
                 return servletContext.getResource("/WEB-INF/classes");
             }
-        } catch (MalformedURLException e) { /*fuck off*/ }
+        } catch (MalformedURLException e) {
+            /*fuck off*/ }
         return null;
     }
 
     /**
-     * Returns a distinct collection of URLs based on URLs derived from class loaders expanded with Manifest information.
+     * Returns a distinct collection of URLs based on URLs derived from class
+     * loaders expanded with Manifest information.
      * <p>
-     * The {@code MANIFEST.MF} file can contain a {@code Class-Path} entry that defines
-     * additional jar files to be included on the classpath. This method finds the jar files
-     * using the {@link #contextClassLoader()} and {@link #staticClassLoader()}, before
-     * searching for any additional manifest classpaths.
-     * 
+     * The {@code MANIFEST.MF} file can contain a {@code Class-Path} entry that
+     * defines additional jar files to be included on the classpath. This method
+     * finds the jar files using the {@link #contextClassLoader()} and
+     * {@link #staticClassLoader()}, before searching for any additional
+     * manifest classpaths.
+     *
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forManifest() {
@@ -283,13 +309,16 @@ public abstract class ClasspathHelper {
     }
 
     /**
-     * Returns a distinct collection of URLs from a single URL based on the Manifest information.
+     * Returns a distinct collection of URLs from a single URL based on the
+     * Manifest information.
      * <p>
-     * The {@code MANIFEST.MF} file can contain a {@code Class-Path} entry that defines additional
-     * jar files to be included on the classpath. This method takes a single URL, tries to
-     * resolve it as a jar file, and if so, adds any additional manifest classpaths.
-     * The returned collection of URLs will always contain the input URL.
-     * 
+     * The {@code MANIFEST.MF} file can contain a {@code Class-Path} entry that
+     * defines additional jar files to be included on the classpath. This method
+     * takes a single URL, tries to resolve it as a jar file, and if so, adds
+     * any additional manifest classpaths. The returned collection of URLs will
+     * always contain the input URL.
+     *
+     * @param url
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forManifest(final URL url) {
@@ -300,14 +329,18 @@ public abstract class ClasspathHelper {
             File jarFile = new File(part);
             JarFile myJar = new JarFile(part);
             URL validUrl = tryToGetValidUrl(jarFile.getPath(), new File(part).getParent(), part);
-            if (validUrl != null) { result.add(validUrl); }
+            if (validUrl != null) {
+                result.add(validUrl);
+            }
             final Manifest manifest = myJar.getManifest();
             if (manifest != null) {
                 final String classPath = manifest.getMainAttributes().getValue(new Attributes.Name("Class-Path"));
                 if (classPath != null) {
                     for (String jar : classPath.split(" ")) {
                         validUrl = tryToGetValidUrl(jarFile.getPath(), new File(part).getParent(), jar);
-                        if (validUrl != null) { result.add(validUrl); }
+                        if (validUrl != null) {
+                            result.add(validUrl);
+                        }
                     }
                 }
             }
@@ -318,15 +351,18 @@ public abstract class ClasspathHelper {
     }
 
     /**
-     * Returns a distinct collection of URLs by expanding the specified URLs with Manifest information.
+     * Returns a distinct collection of URLs by expanding the specified URLs
+     * with Manifest information.
      * <p>
-     * The {@code MANIFEST.MF} file can contain a {@code Class-Path} entry that defines additional
-     * jar files to be included on the classpath. This method takes each URL in turn, tries to
-     * resolve it as a jar file, and if so, adds any additional manifest classpaths.
-     * The returned collection of URLs will always contain all the input URLs.
+     * The {@code MANIFEST.MF} file can contain a {@code Class-Path} entry that
+     * defines additional jar files to be included on the classpath. This method
+     * takes each URL in turn, tries to resolve it as a jar file, and if so,
+     * adds any additional manifest classpaths. The returned collection of URLs
+     * will always contain all the input URLs.
      * <p>
      * The returned URLs retains the input order.
-     * 
+     *
+     * @param urls
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forManifest(final Iterable<URL> urls) {
@@ -341,14 +377,18 @@ public abstract class ClasspathHelper {
     //a little bit cryptic...
     static URL tryToGetValidUrl(String workingDir, String path, String filename) {
         try {
-            if (new File(filename).exists())
+            if (new File(filename).exists()) {
                 return new File(filename).toURI().toURL();
-            if (new File(path + File.separator + filename).exists())
+            }
+            if (new File(path + File.separator + filename).exists()) {
                 return new File(path + File.separator + filename).toURI().toURL();
-            if (new File(workingDir + File.separator + filename).exists())
+            }
+            if (new File(workingDir + File.separator + filename).exists()) {
                 return new File(workingDir + File.separator + filename).toURI().toURL();
-            if (new File(new URL(filename).getFile()).exists())
+            }
+            if (new File(new URL(filename).getFile()).exists()) {
                 return new File(new URL(filename).getFile()).toURI().toURL();
+            }
         } catch (MalformedURLException e) {
             // don't do anything, we're going on the assumption it is a jar, which could be wrong
         }
@@ -357,15 +397,16 @@ public abstract class ClasspathHelper {
 
     /**
      * Cleans the URL.
-     * 
-     * @param url  the URL to clean, not null
+     *
+     * @param url the URL to clean, not null
      * @return the path, not null
      */
     public static String cleanPath(final URL url) {
         String path = url.getPath();
         try {
             path = URLDecoder.decode(path, "UTF-8");
-        } catch (UnsupportedEncodingException e) { /**/ }
+        } catch (UnsupportedEncodingException e) {
+            /**/ }
         if (path.startsWith("jar:")) {
             path = path.substring("jar:".length());
         }
@@ -399,4 +440,3 @@ public abstract class ClasspathHelper {
         return distinct.values();
     }
 }
-

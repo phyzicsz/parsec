@@ -1,5 +1,9 @@
 package com.phyzicsz.parsec.reflections.adapters;
 
+import com.phyzicsz.parsec.reflections.ReflectionsException;
+import com.phyzicsz.parsec.reflections.util.Utils;
+import static com.phyzicsz.parsec.reflections.util.Utils.join;
+import com.phyzicsz.parsec.reflections.vfs.Vfs;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -21,52 +25,59 @@ import javassist.bytecode.FieldInfo;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.ParameterAnnotationsAttribute;
 import javassist.bytecode.annotation.Annotation;
-import com.phyzicsz.parsec.reflections.ReflectionsException;
-import com.phyzicsz.parsec.reflections.util.Utils;
-import static com.phyzicsz.parsec.reflections.util.Utils.join;
-import com.phyzicsz.parsec.reflections.vfs.Vfs;
 
 /**
  *
  */
 public class JavassistAdapter implements MetadataAdapter<ClassFile, FieldInfo, MethodInfo> {
 
-    /**setting this to false will result in returning only visible annotations from the relevant methods here (only {@link java.lang.annotation.RetentionPolicy#RUNTIME})*/
+    /**
+     * setting this to false will result in returning only visible annotations
+     * from the relevant methods here (only {@link java.lang.annotation.RetentionPolicy#RUNTIME})
+     */
     public static boolean includeInvisibleTag = true;
 
+    @Override
     public List<FieldInfo> getFields(final ClassFile cls) {
         return cls.getFields();
     }
 
+    @Override
     public List<MethodInfo> getMethods(final ClassFile cls) {
         return cls.getMethods();
     }
 
+    @Override
     public String getMethodName(final MethodInfo method) {
         return method.getName();
     }
 
+    @Override
     public List<String> getParameterNames(final MethodInfo method) {
         String descriptor = method.getDescriptor();
         descriptor = descriptor.substring(descriptor.indexOf("(") + 1, descriptor.lastIndexOf(")"));
         return splitDescriptorToTypeNames(descriptor);
     }
 
+    @Override
     public List<String> getClassAnnotationNames(final ClassFile aClass) {
         return getAnnotationNames((AnnotationsAttribute) aClass.getAttribute(AnnotationsAttribute.visibleTag),
                 includeInvisibleTag ? (AnnotationsAttribute) aClass.getAttribute(AnnotationsAttribute.invisibleTag) : null);
     }
 
+    @Override
     public List<String> getFieldAnnotationNames(final FieldInfo field) {
         return getAnnotationNames((AnnotationsAttribute) field.getAttribute(AnnotationsAttribute.visibleTag),
                 includeInvisibleTag ? (AnnotationsAttribute) field.getAttribute(AnnotationsAttribute.invisibleTag) : null);
     }
 
+    @Override
     public List<String> getMethodAnnotationNames(final MethodInfo method) {
         return getAnnotationNames((AnnotationsAttribute) method.getAttribute(AnnotationsAttribute.visibleTag),
                 includeInvisibleTag ? (AnnotationsAttribute) method.getAttribute(AnnotationsAttribute.invisibleTag) : null);
     }
 
+    @Override
     public List<String> getParameterAnnotationNames(final MethodInfo method, final int parameterIndex) {
         List<String> result = new ArrayList<>();
 
@@ -87,16 +98,19 @@ public class JavassistAdapter implements MetadataAdapter<ClassFile, FieldInfo, M
         return result;
     }
 
+    @Override
     public String getReturnTypeName(final MethodInfo method) {
         String descriptor = method.getDescriptor();
         descriptor = descriptor.substring(descriptor.lastIndexOf(")") + 1);
         return splitDescriptorToTypeNames(descriptor).get(0);
     }
 
+    @Override
     public String getFieldName(final FieldInfo field) {
         return field.getName();
     }
 
+    @Override
     public ClassFile getOrCreateClassObject(final Vfs.File file) {
         InputStream inputStream = null;
         try {
@@ -110,48 +124,56 @@ public class JavassistAdapter implements MetadataAdapter<ClassFile, FieldInfo, M
         }
     }
 
+    @Override
     public String getMethodModifier(MethodInfo method) {
         int accessFlags = method.getAccessFlags();
-        return isPrivate(accessFlags) ? "private" :
-               isProtected(accessFlags) ? "protected" :
-               isPublic(accessFlags) ? "public" : "";
+        return isPrivate(accessFlags) ? "private"
+                : isProtected(accessFlags) ? "protected"
+                : isPublic(accessFlags) ? "public" : "";
     }
 
+    @Override
     public String getMethodKey(ClassFile cls, MethodInfo method) {
         return getMethodName(method) + "(" + join(getParameterNames(method), ", ") + ")";
     }
 
+    @Override
     public String getMethodFullKey(ClassFile cls, MethodInfo method) {
         return getClassName(cls) + "." + getMethodKey(cls, method);
     }
 
     @SuppressWarnings("NullTernary")
+    @Override
     public boolean isPublic(Object o) {
-        Integer accessFlags =
-                o instanceof ClassFile ? ((ClassFile) o).getAccessFlags() :
-                o instanceof FieldInfo ? ((FieldInfo) o).getAccessFlags() :
-                o instanceof MethodInfo ? ((MethodInfo) o).getAccessFlags() : null;
+        Integer accessFlags
+                = o instanceof ClassFile ? ((ClassFile) o).getAccessFlags()
+                        : o instanceof FieldInfo ? ((FieldInfo) o).getAccessFlags()
+                                : o instanceof MethodInfo ? ((MethodInfo) o).getAccessFlags() : null;
 
         return accessFlags != null && AccessFlag.isPublic(accessFlags);
     }
 
     //
+    @Override
     public String getClassName(final ClassFile cls) {
         return cls.getName();
     }
 
+    @Override
     public String getSuperclassName(final ClassFile cls) {
         return cls.getSuperclass();
     }
 
+    @Override
     public List<String> getInterfacesNames(final ClassFile cls) {
         return Arrays.asList(cls.getInterfaces());
     }
 
+    @Override
     public boolean acceptsInput(String file) {
         return file.endsWith(".class");
     }
-    
+
     //
     private List<String> getAnnotationNames(final AnnotationsAttribute... annotationsAttributes) {
         if (annotationsAttributes != null) {

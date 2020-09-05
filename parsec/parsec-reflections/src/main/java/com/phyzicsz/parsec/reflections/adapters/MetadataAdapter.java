@@ -1,11 +1,13 @@
 package com.phyzicsz.parsec.reflections.adapters;
 
 import com.phyzicsz.parsec.reflections.vfs.Vfs;
-
 import java.util.List;
 
 /**
  *
+ * @param <C>
+ * @param <F>
+ * @param <M>
  */
 public interface MetadataAdapter<C,F,M> {
 

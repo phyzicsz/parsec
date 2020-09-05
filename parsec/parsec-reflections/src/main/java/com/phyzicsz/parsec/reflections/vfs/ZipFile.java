@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
 
-/** an implementation of {@link org.reflections.vfs.Vfs.File} for {@link java.util.zip.ZipEntry} */
+/**
+ * an implementation of {@link org.reflections.vfs.Vfs.File} for
+ * {@link java.util.zip.ZipEntry}
+ */
 public class ZipFile implements Vfs.File {
+
     private final ZipDir root;
     private final ZipEntry entry;
 
@@ -14,15 +18,18 @@ public class ZipFile implements Vfs.File {
         this.entry = entry;
     }
 
+    @Override
     public String getName() {
         String name = entry.getName();
         return name.substring(name.lastIndexOf("/") + 1);
     }
 
+    @Override
     public String getRelativePath() {
         return entry.getName();
     }
 
+    @Override
     public InputStream openInputStream() throws IOException {
         return root.jarFile.getInputStream(entry);
     }

@@ -1,7 +1,6 @@
 package com.phyzicsz.parsec.reflections.vfs;
 
 import com.phyzicsz.parsec.reflections.ReflectionsException;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +10,7 @@ import java.util.Collections;
  * An implementation of {@link org.reflections.vfs.Vfs.Dir} for directory {@link java.io.File}.
  */
 public class SystemDir implements Vfs.Dir {
+
     private final File file;
 
     public SystemDir(File file) {
@@ -21,6 +21,7 @@ public class SystemDir implements Vfs.Dir {
         this.file = file;
     }
 
+    @Override
     public String getPath() {
         if (file == null) {
             return "/NO-SUCH-DIRECTORY/";
@@ -28,6 +29,7 @@ public class SystemDir implements Vfs.Dir {
         return file.getPath().replace("\\", "/");
     }
 
+    @Override
     public Iterable<Vfs.File> getFiles() {
         if (file == null || !file.exists()) {
             return Collections.emptyList();
@@ -44,6 +46,7 @@ public class SystemDir implements Vfs.Dir {
         };
     }
 
+    @Override
     public void close() {
     }
 

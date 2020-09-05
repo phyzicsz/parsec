@@ -2,7 +2,6 @@ package com.phyzicsz.parsec.reflections.vfs;
 
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import com.phyzicsz.parsec.reflections.util.Utils;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
@@ -13,6 +12,7 @@ import java.util.zip.ZipEntry;
  *
  */
 public class JarInputDir implements Vfs.Dir {
+
     private final URL url;
     JarInputStream jarInputStream;
     long cursor = 0;
@@ -22,16 +22,21 @@ public class JarInputDir implements Vfs.Dir {
         this.url = url;
     }
 
+    @Override
     public String getPath() {
         return url.getPath();
     }
 
+    @Override
     public Iterable<Vfs.File> getFiles() {
         return () -> new Iterator<Vfs.File>() {
 
             {
-                try { jarInputStream = new JarInputStream(url.openConnection().getInputStream()); }
-                catch (Exception e) { throw new ReflectionsException("Could not open url connection", e); }
+                try {
+                    jarInputStream = new JarInputStream(url.openConnection().getInputStream());
+                } catch (IOException e) {
+                    throw new ReflectionsException("Could not open url connection", e);
+                }
             }
 
             Vfs.File entry = null;
@@ -57,7 +62,9 @@ public class JarInputDir implements Vfs.Dir {
                         }
 
                         long size = entry.getSize();
-                        if (size < 0) size = 0xffffffffl + size; //JDK-6916399
+                        if (size < 0) {
+                            size = 0xffffffffl + size; //JDK-6916399
+                        }
                         nextCursor += size;
                         if (!entry.isDirectory()) {
                             return new JarInputFile(entry, JarInputDir.this, cursor, nextCursor);
@@ -70,6 +77,7 @@ public class JarInputDir implements Vfs.Dir {
         };
     }
 
+    @Override
     public void close() {
         Utils.close(jarInputStream);
     }

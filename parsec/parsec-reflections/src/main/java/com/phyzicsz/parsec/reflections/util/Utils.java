@@ -1,10 +1,8 @@
 package com.phyzicsz.parsec.reflections.util;
 
+import static com.phyzicsz.parsec.reflections.ReflectionUtils.forName;
 import com.phyzicsz.parsec.reflections.Reflections;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +18,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static com.phyzicsz.parsec.reflections.ReflectionUtils.forName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * a garbage can of convenient methods
@@ -34,6 +32,9 @@ public abstract class Utils {
 
     /**
      * isEmpty compatible with Java 5
+     *
+     * @param s
+     * @return
      */
     public static boolean isEmpty(String s) {
         return s == null || s.length() == 0;
@@ -74,7 +75,7 @@ public abstract class Utils {
                 } else {
                     return aClass.isInterface() ? aClass.getMethod(memberName, parameterTypes) : aClass.getDeclaredMethod(memberName, parameterTypes);
                 }
-            } catch (Exception e) {
+            } catch (NoSuchFieldException | NoSuchMethodException | SecurityException e) {
                 aClass = aClass.getSuperclass();
             }
         }
@@ -86,7 +87,9 @@ public abstract class Utils {
         for (String annotated : annotatedWith) {
             if (!isConstructor(annotated)) {
                 Method member = (Method) getMemberFromDescriptor(annotated, classLoaders);
-                if (member != null) result.add(member);
+                if (member != null) {
+                    result.add(member);
+                }
             }
         }
         return result;
@@ -97,7 +100,9 @@ public abstract class Utils {
         for (String annotated : annotatedWith) {
             if (isConstructor(annotated)) {
                 Constructor member = (Constructor) getMemberFromDescriptor(annotated, classLoaders);
-                if (member != null) result.add(member);
+                if (member != null) {
+                    result.add(member);
+                }
             }
         }
         return result;
@@ -127,8 +132,11 @@ public abstract class Utils {
     }
 
     public static void close(InputStream closeable) {
-        try { if (closeable != null) closeable.close(); }
-        catch (IOException e) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (IOException e) {
             if (Reflections.log != null) {
                 Reflections.log.warn("Could not close InputStream", e);
             }
@@ -143,7 +151,7 @@ public abstract class Utils {
             // "slf4j.suppressInitError" system property in order to avoid the warning, which both is inconvenient.
             Class.forName("org.slf4j.impl.StaticLoggerBinder");
             return LoggerFactory.getLogger(aClass);
-        } catch (Throwable e) {
+        } catch (ClassNotFoundException e) {
             return null;
         }
     }
@@ -165,7 +173,6 @@ public abstract class Utils {
         }
     }
 
-
     public static List<String> names(Collection<Class<?>> types) {
         return types.stream().map(Utils::name).collect(Collectors.toList());
     }
@@ -186,7 +193,9 @@ public abstract class Utils {
         return field.getDeclaringClass().getName() + "." + field.getName();
     }
 
-    public static String index(Class<?> scannerClass) { return scannerClass.getSimpleName(); }
+    public static String index(Class<?> scannerClass) {
+        return scannerClass.getSimpleName();
+    }
 
     public static <T> Predicate<T> and(Predicate... predicates) {
         return Arrays.stream(predicates).reduce(t -> true, Predicate::and);

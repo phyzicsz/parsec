@@ -1,9 +1,8 @@
 package com.phyzicsz.parsec.reflections.vfs;
 
-import org.jboss.vfs.VirtualFile;
-
 import java.io.IOException;
 import java.io.InputStream;
+import org.jboss.vfs.VirtualFile;
 
 public class JbossFile implements Vfs.File {
 
@@ -22,8 +21,8 @@ public class JbossFile implements Vfs.File {
 
     @Override
     public String getRelativePath() {
-        String filepath  = virtualFile.getPathName();
-        if(filepath.startsWith(root.getPath())) {
+        String filepath = virtualFile.getPathName();
+        if (filepath.startsWith(root.getPath())) {
             return filepath.substring(root.getPath().length() + 1);
         }
 
