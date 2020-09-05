@@ -86,6 +86,7 @@ public class ConfigurationBuilder implements Configuration {
      * @param params
      * @return
      */
+     @SuppressWarnings({"unchecked","rawtypes"})
     public static ConfigurationBuilder build(final Object... params) {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
@@ -131,7 +132,7 @@ public class ConfigurationBuilder implements Configuration {
             } else if (param instanceof Class) {
                 if (Scanner.class.isAssignableFrom((Class) param)) {
                     try {
-                        builder.addScanners(((Scanner) ((Class) param).getDeclaredConstructor().newInstance()));
+                        builder.addScanners(((Scanner) ((Class<?>) param).getDeclaredConstructor().newInstance()));
                     }  catch (IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
                         //fallback
                     }
@@ -143,7 +144,8 @@ public class ConfigurationBuilder implements Configuration {
             } else if (param instanceof URL) {
                 builder.addUrls((URL) param);
             } else if (param instanceof ClassLoader) {
-                /* already taken care */ } else if (param instanceof Predicate) {
+                /* already taken care */ 
+            } else if (param instanceof Predicate) {
                 filter.add((Predicate<String>) param);
             } else if (param instanceof ExecutorService) {
                 builder.setExecutorService((ExecutorService) param);
@@ -278,7 +280,7 @@ public class ConfigurationBuilder implements Configuration {
      * class loading.
      */
     @Override
-    public MetadataAdapter getMetadataAdapter() {
+    public MetadataAdapter<?,?,?> getMetadataAdapter() {
         if (metadataAdapter != null) {
             return metadataAdapter;
         } else {
@@ -299,7 +301,7 @@ public class ConfigurationBuilder implements Configuration {
      * @param metadataAdapter
      * @return
      */
-    public ConfigurationBuilder setMetadataAdapter(final MetadataAdapter metadataAdapter) {
+    public ConfigurationBuilder setMetadataAdapter(final MetadataAdapter<?,?,?> metadataAdapter) {
         this.metadataAdapter = metadataAdapter;
         return this;
     }

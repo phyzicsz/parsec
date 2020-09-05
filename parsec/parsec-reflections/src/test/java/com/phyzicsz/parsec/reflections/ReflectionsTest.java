@@ -58,6 +58,7 @@ import org.junit.jupiter.api.Test;
 /**
  *
  */
+@SuppressWarnings("unchecked")
 public class ReflectionsTest {
     public static final FilterBuilder TestModelFilter = new FilterBuilder().include("com.phyzicsz.parsec.reflections.TestModel\\$.*");
     static Reflections reflections;
