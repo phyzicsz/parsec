@@ -71,6 +71,7 @@ public abstract class AbstractScanner implements Scanner {
         return fqn != null && resultFilter.test(fqn);
     }
 
+    @SuppressWarnings({"unchecked","rawtypes"})
     protected MetadataAdapter getMetadataAdapter() {
         return configuration.getMetadataAdapter();
     }

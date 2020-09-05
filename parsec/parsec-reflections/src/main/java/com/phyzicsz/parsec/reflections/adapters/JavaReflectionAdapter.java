@@ -18,15 +18,15 @@ import java.util.stream.Collectors;
 
 /**
  *  */
-public class JavaReflectionAdapter implements MetadataAdapter<Class, Field, Member> {
+public class JavaReflectionAdapter implements MetadataAdapter<Class<?>, Field, Member> {
 
     @Override
-    public List<Field> getFields(Class cls) {
+    public List<Field> getFields(Class<?>cls) {
         return Arrays.asList(cls.getDeclaredFields());
     }
 
     @Override
-    public List<Member> getMethods(Class cls) {
+    public List<Member> getMethods(Class<?> cls) {
         List<Member> methods = new ArrayList<>();
         methods.addAll(Arrays.asList(cls.getDeclaredMethods()));
         methods.addAll(Arrays.asList(cls.getDeclaredConstructors()));
@@ -48,7 +48,7 @@ public class JavaReflectionAdapter implements MetadataAdapter<Class, Field, Memb
     }
 
     @Override
-    public List<String> getClassAnnotationNames(Class aClass) {
+    public List<String> getClassAnnotationNames(Class<?> aClass) {
         return getAnnotationNames(aClass.getDeclaredAnnotations());
     }
 
@@ -79,16 +79,17 @@ public class JavaReflectionAdapter implements MetadataAdapter<Class, Field, Memb
         return ((Method) method).getReturnType().getName();
     }
 
+    @Override
     public String getFieldName(Field field) {
         return field.getName();
     }
 
     @Override
-    public Class getOrCreateClassObject(Vfs.File file) throws Exception {
-        return getOrCreateClassObject(file, null);
+    public Class<?> getOrCreateClassObject(Vfs.File file) throws Exception {
+        return getOrCreateClassObject(file, (ClassLoader[])null);
     }
 
-    public Class getOrCreateClassObject(Vfs.File file, ClassLoader... loaders) throws Exception {
+    public Class<?> getOrCreateClassObject(Vfs.File file, ClassLoader... loaders) throws Exception {
         String name = file.getRelativePath().replace("/", ".").replace(".class", "");
         return forName(name, loaders);
     }
@@ -99,12 +100,12 @@ public class JavaReflectionAdapter implements MetadataAdapter<Class, Field, Memb
     }
 
     @Override
-    public String getMethodKey(Class cls, Member method) {
+    public String getMethodKey(Class<?> cls, Member method) {
         return getMethodName(method) + "(" + join(getParameterNames(method), ", ") + ")";
     }
 
     @Override
-    public String getMethodFullKey(Class cls, Member method) {
+    public String getMethodFullKey(Class<?> cls, Member method) {
         return getClassName(cls) + "." + getMethodKey(cls, method);
     }
 
@@ -119,20 +120,20 @@ public class JavaReflectionAdapter implements MetadataAdapter<Class, Field, Memb
     }
 
     @Override
-    public String getClassName(Class cls) {
+    public String getClassName(Class<?> cls) {
         return cls.getName();
     }
 
     @Override
-    public String getSuperclassName(Class cls) {
-        Class superclass = cls.getSuperclass();
+    public String getSuperclassName(Class<?> cls) {
+        Class<?> superclass = cls.getSuperclass();
         return superclass != null ? superclass.getName() : "";
     }
 
     @Override
-    public List<String> getInterfacesNames(Class cls) {
-        Class[] classes = cls.getInterfaces();
-        return classes != null ? Arrays.stream(classes).map(Class::getName).collect(Collectors.toList()) : Collections.emptyList();
+    public List<String> getInterfacesNames(Class<?> cls) {
+        Class<?>[] classes = cls.getInterfaces();
+        return classes != null ? Arrays.stream(classes).map(Class<?>::getName).collect(Collectors.toList()) : Collections.emptyList();
     }
 
     @Override
@@ -145,10 +146,10 @@ public class JavaReflectionAdapter implements MetadataAdapter<Class, Field, Memb
         return Arrays.stream(annotations).map(annotation -> annotation.annotationType().getName()).collect(Collectors.toList());
     }
 
-    public static String getName(Class type) {
+    public static String getName(Class<?> type) {
         if (type.isArray()) {
             try {
-                Class cl = type;
+                Class<?> cl = type;
                 int dim = 0;
                 while (cl.isArray()) {
                     dim++;

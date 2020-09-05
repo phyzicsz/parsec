@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 /**
  * @author mamo
  */
-@SuppressWarnings("unchecked")
 public class ReflectionUtilsTest {
 
     @Test

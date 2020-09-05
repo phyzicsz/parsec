@@ -11,6 +11,7 @@ import com.phyzicsz.parsec.reflections.scanners.SubTypesScanner;
 import com.phyzicsz.parsec.reflections.scanners.TypeAnnotationsScanner;
 import com.phyzicsz.parsec.reflections.serializers.Serializer;
 import com.phyzicsz.parsec.reflections.serializers.XmlSerializer;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +49,7 @@ public class ConfigurationBuilder implements Configuration {
 
     private final Set<Scanner> scanners;
     private Set<URL> urls;
-    /*lazy*/ protected MetadataAdapter metadataAdapter;
+    /*lazy*/ protected MetadataAdapter<?,?,?> metadataAdapter;
     private Predicate<String> inputsFilter;
     /*lazy*/ private Serializer serializer;
     private ExecutorService executorService;
@@ -85,7 +86,6 @@ public class ConfigurationBuilder implements Configuration {
      * @param params
      * @return
      */
-    @SuppressWarnings("unchecked")
     public static ConfigurationBuilder build(final Object... params) {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
@@ -131,9 +131,10 @@ public class ConfigurationBuilder implements Configuration {
             } else if (param instanceof Class) {
                 if (Scanner.class.isAssignableFrom((Class) param)) {
                     try {
-                        builder.addScanners(((Scanner) ((Class) param).newInstance()));
-                    } catch (IllegalAccessException | InstantiationException e) {
-                        /*fallback*/ }
+                        builder.addScanners(((Scanner) ((Class) param).getDeclaredConstructor().newInstance()));
+                    }  catch (IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
+                        //fallback
+                    }
                 }
                 builder.addUrls(ClasspathHelper.forClass((Class) param, classLoaders));
                 filter.includePackage(((Class) param));

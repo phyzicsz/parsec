@@ -275,7 +275,7 @@ public final class Reflections {
         }
 
         if (executorService != null) {
-            for (Future future : futures) {
+            for (Future<?> future : futures) {
                 try {
                     future.get();
                 } catch (InterruptedException | ExecutionException e) {
@@ -633,7 +633,7 @@ public final class Reflections {
      * @param returnType
      * @return 
      */
-    public Set<Method> getMethodsReturn(Class returnType) {
+    public Set<Method> getMethodsReturn(Class<?> returnType) {
         return getMethodsFromDescriptors(store.get(MethodParameterScanner.class, names(returnType)), loaders());
     }
 
@@ -779,7 +779,7 @@ public final class Reflections {
      * @param constructor
      * @return 
      */
-    public List<String> getConstructorParamNames(Constructor constructor) {
+    public List<String> getConstructorParamNames(Constructor<?> constructor) {
         Set<String> names = store.get(MethodParameterNamesScanner.class, Utils.name(constructor));
         return names.size() == 1 ? Arrays.asList(names.iterator().next().split(", ")) : Collections.emptyList();
     }
@@ -813,7 +813,7 @@ public final class Reflections {
      * @param constructor
      * @return 
      */
-    public Set<Member> getConstructorUsage(Constructor constructor) {
+    public Set<Member> getConstructorUsage(Constructor<?> constructor) {
         return getMembersFromDescriptors(store.get(MemberUsageScanner.class, name(constructor)));
     }
 

@@ -8,10 +8,10 @@ import java.util.List;
  * scans methods/constructors and indexes parameters, return type and parameter
  * annotations
  */
-@SuppressWarnings("unchecked")
 public class MethodParameterScanner extends AbstractScanner {
 
     @Override
+    @SuppressWarnings({"unchecked","rawtypes"})
     public void scan(Object cls, Store store) {
         final MetadataAdapter md = getMetadataAdapter();
 

@@ -34,8 +34,7 @@ public interface Configuration {
      *
      * @return
      */
-    @SuppressWarnings({"RawUseOfParameterizedType"})
-    MetadataAdapter getMetadataAdapter();
+    MetadataAdapter<?,?,?> getMetadataAdapter();
 
     /**
      * get the fully qualified name filter used to filter types to be scanned

@@ -272,7 +272,7 @@ public class JavaCodeSerializer implements Serializer {
     }
 
     //
-    public static Class<?> resolveClassOf(final Class element) throws ClassNotFoundException {
+    public static Class<?> resolveClassOf(final Class<?> element) throws ClassNotFoundException {
         Class<?> cursor = element;
         LinkedList<String> ognl = new LinkedList<>();
 
@@ -285,7 +285,7 @@ public class JavaCodeSerializer implements Serializer {
         return Class.forName(classOgnl);
     }
 
-    public static Class<?> resolveClass(final Class aClass) {
+    public static Class<?> resolveClass(final Class<?> aClass) {
         try {
             return resolveClassOf(aClass);
         } catch (ClassNotFoundException e) {
@@ -293,7 +293,7 @@ public class JavaCodeSerializer implements Serializer {
         }
     }
 
-    public static Field resolveField(final Class aField) {
+    public static Field resolveField(final Class<?> aField) {
         try {
             String name = aField.getSimpleName();
             Class<?> declaringClass = aField.getDeclaringClass().getDeclaringClass();
@@ -303,12 +303,13 @@ public class JavaCodeSerializer implements Serializer {
         }
     }
 
-    public static Annotation resolveAnnotation(Class annotation) {
+    @SuppressWarnings({"unchecked","rawtypes"})
+    public static Annotation resolveAnnotation(Class<? extends Annotation> annotation) {
         try {
             String name = annotation.getSimpleName().replace(pathSeparator, dotSeparator);
             Class<?> declaringClass = annotation.getDeclaringClass().getDeclaringClass();
             Class<?> aClass = resolveClassOf(declaringClass);
-            Class<? extends Annotation> aClass1 = (Class<? extends Annotation>) ReflectionUtils.forName(name);
+            Class<Annotation> aClass1 = (Class<Annotation>) ReflectionUtils.forName(name);
             Annotation annotation1 = aClass.getAnnotation(aClass1);
             return annotation1;
         } catch (ClassNotFoundException | SecurityException e) {
@@ -316,7 +317,7 @@ public class JavaCodeSerializer implements Serializer {
         }
     }
 
-    public static Method resolveMethod(final Class aMethod) {
+    public static Method resolveMethod(final Class<?> aMethod) {
         String methodOgnl = aMethod.getSimpleName();
 
         try {

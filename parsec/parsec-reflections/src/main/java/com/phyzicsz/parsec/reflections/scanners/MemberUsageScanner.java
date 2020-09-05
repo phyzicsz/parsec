@@ -23,12 +23,12 @@ import javassist.expr.NewExpr;
  * <i> depends on
  * {@link com.phyzicsz.parsec.reflections.adapters.JavassistAdapter} configured </i>
  */
-@SuppressWarnings("unchecked")
 public class MemberUsageScanner extends AbstractScanner {
 
     private ClassPool classPool;
 
     @Override
+    @SuppressWarnings({"unchecked","rawtypes"})
     public void scan(Object cls, Store store) {
         try {
             CtClass ctClass = getClassPool().get(getMetadataAdapter().getClassName(cls));
@@ -96,6 +96,7 @@ public class MemberUsageScanner extends AbstractScanner {
         }
     }
 
+    @SuppressWarnings({"unchecked","rawtypes"})
     String parameterNames(MethodInfo info) {
         return join(getMetadataAdapter().getParameterNames(info), ", ");
     }

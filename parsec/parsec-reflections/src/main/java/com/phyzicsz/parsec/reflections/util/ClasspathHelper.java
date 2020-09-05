@@ -282,7 +282,7 @@ public abstract class ClasspathHelper {
             if (path != null) {
                 final File file = new File(path);
                 if (file.exists()) {
-                    return file.toURL();
+                    return file.toURI().toURL();
                 }
             } else {
                 return servletContext.getResource("/WEB-INF/classes");

@@ -12,10 +12,10 @@ import javassist.bytecode.MethodInfo;
 /**
  * scans methods/constructors and indexes parameter names
  */
-@SuppressWarnings("unchecked")
 public class MethodParameterNamesScanner extends AbstractScanner {
 
     @Override
+    @SuppressWarnings({"unchecked","rawtypes"})
     public void scan(Object cls, Store store) {
         final MetadataAdapter md = getMetadataAdapter();
 
