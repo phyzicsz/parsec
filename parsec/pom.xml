@@ -6,10 +6,10 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     
-    <name>rocket-symbol-service</name>
+    <name>parsec</name>
     
     <inceptionYear>2020</inceptionYear>
-    <description>mil-std 2525 symbol services</description>
+    <description>services for services</description>
     
     <licenses>
         <license>
