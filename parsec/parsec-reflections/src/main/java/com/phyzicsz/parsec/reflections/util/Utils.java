@@ -95,11 +95,11 @@ public abstract class Utils {
         return result;
     }
 
-    public static Set<Constructor> getConstructorsFromDescriptors(Iterable<String> annotatedWith, ClassLoader... classLoaders) {
-        Set<Constructor> result = new HashSet<>();
+    public static Set<Constructor<?>> getConstructorsFromDescriptors(Iterable<String> annotatedWith, ClassLoader... classLoaders) {
+        Set<Constructor<?>> result = new HashSet<>();
         for (String annotated : annotatedWith) {
             if (isConstructor(annotated)) {
-                Constructor member = (Constructor) getMemberFromDescriptor(annotated, classLoaders);
+                Constructor<?> member = (Constructor<?>) getMemberFromDescriptor(annotated, classLoaders);
                 if (member != null) {
                     result.add(member);
                 }
@@ -160,7 +160,7 @@ public abstract class Utils {
         return fqn.contains("init>");
     }
 
-    public static String name(Class type) {
+    public static String name(Class<?> type) {
         if (!type.isArray()) {
             return type.getName();
         } else {
@@ -181,7 +181,7 @@ public abstract class Utils {
         return names(Arrays.asList(types));
     }
 
-    public static String name(Constructor constructor) {
+    public static String name(Constructor<?> constructor) {
         return constructor.getName() + "." + "<init>" + "(" + join(names(constructor.getParameterTypes()), ", ") + ")";
     }
 
@@ -197,6 +197,7 @@ public abstract class Utils {
         return scannerClass.getSimpleName();
     }
 
+    @SuppressWarnings({"unchecked","rawtypes"})
     public static <T> Predicate<T> and(Predicate... predicates) {
         return Arrays.stream(predicates).reduce(t -> true, Predicate::and);
     }
@@ -205,6 +206,7 @@ public abstract class Utils {
         return elements.stream().map(Object::toString).collect(Collectors.joining(delimiter));
     }
 
+    @SafeVarargs
     public static <T> Set<T> filter(Collection<T> result, Predicate<? super T>... predicates) {
         return result.stream().filter(and(predicates)).collect(Collectors.toSet());
     }
@@ -213,6 +215,7 @@ public abstract class Utils {
         return result.stream().filter(predicate).collect(Collectors.toSet());
     }
 
+    @SafeVarargs
     public static <T> Set<T> filter(T[] result, Predicate<? super T>... predicates) {
         return Arrays.stream(result).filter(and(predicates)).collect(Collectors.toSet());
     }

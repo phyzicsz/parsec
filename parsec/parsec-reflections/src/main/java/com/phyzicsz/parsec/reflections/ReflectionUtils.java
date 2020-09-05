@@ -150,6 +150,7 @@ public abstract class ReflectionUtils {
      * @param predicates
      * @return 
      */
+    @SuppressWarnings({"unchecked","rawtypes"})
     public static Set<Constructor> getAllConstructors(final Class<?> type, Predicate<? super Constructor>... predicates) {
         Set<Constructor> result = new HashSet<>();
         for (Class<?> t : getAllSuperTypes(type)) {
@@ -165,7 +166,7 @@ public abstract class ReflectionUtils {
      * @param predicates
      * @return 
      */
-    public static Set<Constructor> getConstructors(Class<?> t, Predicate<? super Constructor>... predicates) {
+    public static Set<Constructor<?>> getConstructors(Class<?> t, Predicate<? super Constructor<?>>... predicates) {
         return filter(t.getDeclaredConstructors(), predicates);
     }
 
@@ -205,7 +206,7 @@ public abstract class ReflectionUtils {
      */
     public static <T extends AnnotatedElement> Set<Annotation> getAllAnnotations(T type, Predicate<Annotation>... predicates) {
         Set<Annotation> result = new LinkedHashSet<>();
-        List<AnnotatedElement> keys = new ArrayList();
+        List<AnnotatedElement> keys = new ArrayList<>();
         if (type instanceof Class) {
             keys.addAll(getAllSuperTypes((Class<?>) type));
         }
@@ -345,7 +346,7 @@ public abstract class ReflectionUtils {
      * @param types
      * @return 
      */
-    public static Predicate<Member> withParametersAssignableTo(final Class... types) {
+    public static Predicate<Member> withParametersAssignableTo(final Class<?>... types) {
         return input -> isAssignable(types, parameterTypes(input));
     }
 
@@ -355,7 +356,7 @@ public abstract class ReflectionUtils {
      * @param types
      * @return 
      */
-    public static Predicate<Member> withParametersAssignableFrom(final Class... types) {
+    public static Predicate<Member> withParametersAssignableFrom(final Class<?>... types) {
         return input -> isAssignable(parameterTypes(input), types);
     }
 
@@ -531,7 +532,7 @@ public abstract class ReflectionUtils {
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    private static Class[] parameterTypes(Member member) {
+    private static Class<?>[] parameterTypes(Member member) {
         return member != null
                 ? member.getClass() == Method.class ? ((Method) member).getParameterTypes()
                 : member.getClass() == Constructor.class ? ((Constructor) member).getParameterTypes() : null : null;
@@ -554,7 +555,7 @@ public abstract class ReflectionUtils {
 
     //
     private static List<String> primitiveNames;
-    private static List<Class> primitiveTypes;
+    private static List<Class<?>> primitiveTypes;
     private static List<String> primitiveDescriptors;
 
     private static void initPrimitives() {
@@ -570,7 +571,7 @@ public abstract class ReflectionUtils {
         return primitiveNames;
     }
 
-    private static List<Class> getPrimitiveTypes() {
+    private static List<Class<?>> getPrimitiveTypes() {
         initPrimitives();
         return primitiveTypes;
     }
@@ -597,7 +598,7 @@ public abstract class ReflectionUtils {
         return false;
     }
 
-    private static boolean isAssignable(Class[] childClasses, Class[] parentClasses) {
+    private static boolean isAssignable(Class<?>[] childClasses, Class<?>[] parentClasses) {
         if (childClasses == null) {
             return parentClasses == null || parentClasses.length == 0;
         }

@@ -664,7 +664,7 @@ public final class Reflections {
      * @param annotation
      * @return 
      */
-    public Set<Constructor> getConstructorsAnnotatedWith(final Class<? extends Annotation> annotation) {
+    public Set<Constructor<?>> getConstructorsAnnotatedWith(final Class<? extends Annotation> annotation) {
         return getConstructorsFromDescriptors(store.get(MethodAnnotationsScanner.class, annotation.getName()), loaders());
     }
 
@@ -676,7 +676,7 @@ public final class Reflections {
      * @param annotation
      * @return 
      */
-    public Set<Constructor> getConstructorsAnnotatedWith(final Annotation annotation) {
+    public Set<Constructor<?>> getConstructorsAnnotatedWith(final Annotation annotation) {
         return filter(getConstructorsAnnotatedWith(annotation.annotationType()), withAnnotation(annotation));
     }
 
@@ -685,7 +685,7 @@ public final class Reflections {
      * @param types
      * @return 
      */
-    public Set<Constructor> getConstructorsMatchParams(Class<?>... types) {
+    public Set<Constructor<?>> getConstructorsMatchParams(Class<?>... types) {
         return getConstructorsFromDescriptors(store.get(MethodParameterScanner.class, names(types).toString()), loaders());
     }
 
@@ -694,7 +694,7 @@ public final class Reflections {
      * @param annotation
      * @return 
      */
-    public Set<Constructor> getConstructorsWithAnyParamAnnotated(Class<? extends Annotation> annotation) {
+    public Set<Constructor<?>> getConstructorsWithAnyParamAnnotated(Class<? extends Annotation> annotation) {
         return getConstructorsFromDescriptors(store.get(MethodParameterScanner.class, annotation.getName()), loaders());
     }
 
@@ -704,7 +704,7 @@ public final class Reflections {
      * @param annotation
      * @return 
      */
-    public Set<Constructor> getConstructorsWithAnyParamAnnotated(Annotation annotation) {
+    public Set<Constructor<?>> getConstructorsWithAnyParamAnnotated(Annotation annotation) {
         return filter(getConstructorsWithAnyParamAnnotated(annotation.annotationType()), withAnyParameterAnnotation(annotation));
     }
 
