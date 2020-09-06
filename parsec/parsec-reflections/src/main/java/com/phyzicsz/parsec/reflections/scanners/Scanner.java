@@ -6,7 +6,8 @@ import com.phyzicsz.parsec.reflections.vfs.Vfs;
 import java.util.function.Predicate;
 
 /**
- *
+ * Interface for a Scanner.
+ * 
  */
 public interface Scanner {
 

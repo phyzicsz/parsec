@@ -112,17 +112,18 @@ public abstract class Vfs {
      * the default url types that will be used when issuing
      * {@link org.reflections.vfs.Vfs#fromURL(java.net.URL)}
      *
-     * @return
+     * @return a List of UrlType
      */
     public static List<UrlType> getDefaultUrlTypes() {
         return defaultUrlTypes;
     }
 
     /**
-     * * sets the static default url types.can be used to statically plug in
-     * urlTypes
+     * Sets the static default url types.
+     * 
+     * can be used to statically plug in urlTypes
      *
-     * @param urlTypes
+     * @param urlTypes the static default URLType's
      */
     public static void setDefaultURLTypes(final List<UrlType> urlTypes) {
         defaultUrlTypes = urlTypes;
@@ -132,7 +133,7 @@ public abstract class Vfs {
      * * add a static default url types to the beginning of the default url
      * types list.can be used to statically plug in urlTypes
      *
-     * @param urlType
+     * @param urlType the default URLType
      */
     public static void addDefaultURLTypes(UrlType urlType) {
         defaultUrlTypes.add(0, urlType);
@@ -141,8 +142,8 @@ public abstract class Vfs {
     /**
      * tries to create a Dir from the given url, using the defaultUrlTypes
      *
-     * @param url
-     * @return
+     * @param url the URL to create the Dir from
+     * @return the created Dir
      */
     public static Dir fromURL(final URL url) {
         return fromURL(url, defaultUrlTypes);
@@ -151,9 +152,9 @@ public abstract class Vfs {
     /**
      * tries to create a Dir from the given url, using the given urlType
      *
-     * @param url
-     * @param urlTypes
-     * @return
+     * @param url the URL
+     * @param urlTypes the URLTYpe
+     * @return the created Dir
      */
     public static Dir fromURL(final URL url, final List<UrlType> urlTypes) {
         for (UrlType type : urlTypes) {
@@ -176,11 +177,11 @@ public abstract class Vfs {
     }
 
     /**
-     * tries to create a Dir from the given url, using the given urlType
+     * Tries to create a Dir from the given url, using the given urlType.
      *
-     * @param url
-     * @param urlTypes
-     * @return
+     * @param url the url path
+     * @param urlTypes The URLType
+     * @return the created Dir
      */
     public static Dir fromURL(final URL url, final UrlType... urlTypes) {
         return fromURL(url, Arrays.asList(urlTypes));
@@ -190,10 +191,10 @@ public abstract class Vfs {
      * return an iterable of all {@link org.reflections.vfs.Vfs.File} in given
      * urls, starting with given packagePrefix and matching nameFilter
      *
-     * @param inUrls
-     * @param packagePrefix
-     * @param nameFilter
-     * @return
+     * @param inUrls collection of URLs
+     * @param packagePrefix the package prefix
+     * @param nameFilter a mathing filter
+     * @return an iterable of Files
      */
     public static Iterable<File> findFiles(final Collection<URL> inUrls, final String packagePrefix, final Predicate<String> nameFilter) {
         Predicate<File> fileNamePredicate = file -> {
@@ -213,9 +214,9 @@ public abstract class Vfs {
      * return an iterable of all {@link org.reflections.vfs.Vfs.File} in given
      * urls, matching filePredicate
      *
-     * @param urls
-     * @param filePredicate
-     * @return
+     * @param urls a colleciton of URL paths
+     * @param filePredicate a mathing predicate
+     * @return an iterable of Files
      */
     public static Iterable<File> findFiles(final Collection<URL> urls, final Predicate<File> filePredicate) {
         return () -> urls.stream()
@@ -231,10 +232,10 @@ public abstract class Vfs {
     }
 
     /**
-     * try to get {@link java.io.File} from ur
+     * try to get {@link java.io.File} from url
      *
-     * @param url
-     * @return
+     * @param url the input URL
+     * @return a File for the URL
      */
     public static java.io.File getFile(URL url) {
         java.io.File file;
@@ -246,6 +247,7 @@ public abstract class Vfs {
                 return file;
             }
         } catch (URISyntaxException ignored) {
+            logger.debug("could not create the File from the URL...trying decoding");
         }
 
         try {
@@ -258,6 +260,7 @@ public abstract class Vfs {
             }
 
         } catch (UnsupportedEncodingException ignored) {
+            logger.debug("could not create the File from the decoded URL...trying other methods");
         }
 
         try {
@@ -287,6 +290,7 @@ public abstract class Vfs {
             }
 
         } catch (Exception ignored) {
+            logger.debug("could not create the File from the URL - returning null");
         }
 
         return null;

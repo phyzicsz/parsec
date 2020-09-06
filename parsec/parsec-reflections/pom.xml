@@ -23,6 +23,10 @@
             <version>${javassist.version}</version>
             <optional>false</optional> <!-- case: when not actually scanning with javassist or if using {@link Reflections.collect()} -->
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>

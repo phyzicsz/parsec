@@ -1,5 +1,6 @@
 package com.phyzicsz.parsec.reflections.vfs;
 
+import com.google.common.collect.ImmutableList;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import com.phyzicsz.parsec.reflections.vfs.Vfs.Dir;
 import com.phyzicsz.parsec.reflections.vfs.Vfs.UrlType;
@@ -30,7 +31,14 @@ public class UrlTypeVFS implements UrlType {
 
     private static final Logger logger = LoggerFactory.getLogger(UrlTypeVFS.class);
     
-    public final static String[] REPLACE_EXTENSION = new String[]{".ear/", ".jar/", ".war/", ".sar/", ".har/", ".par/"};
+    private final ImmutableList<String> REPLACE_EXTENSION = ImmutableList.<String>builder()
+            .add(".ear/")
+            .add(".jar/")
+            .add(".war/")
+            .add(".sar/")
+            .add(".har/")
+            .add(".par/")
+            .build();
 
     final String VFSZIP = "vfszip";
     final String VFSFILE = "vfsfile";

@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * 2. some helper methods to get all
  * types/methods/fields/constructors/properties matching some predicates,
  * generally:
- * <pre> Set&#60?> result = getAllXXX(type/s, withYYY) </pre>
+ * <pre>{@code Set&#60?> result = getAllXXX(type/s, withYYY) }</pre>
  * <p>
  * where get methods are:
  * <ul>
@@ -62,12 +62,13 @@ import org.slf4j.LoggerFactory;
  * <p>
  * <br>
  * for example, getting all getters would be:
- * <pre>
+ * <pre>{@code
  *      Set&#60Method> getters = getAllMethods(someClasses,
  *              Predicates.and(
  *                      withModifier(Modifier.PUBLIC),
  *                      withPrefix("get"),
  *                      withParametersCount(0)));
+ * }
  * </pre>
  *
  */
