@@ -15,56 +15,56 @@ import java.util.function.Predicate;
 public interface Configuration {
 
     /**
-     * the scanner instances used for scanning different metadata
+     * The scanner instances used for scanning different metadata.
      *
-     * @return
+     * @return the scanners
      */
     Set<Scanner> getScanners();
 
     /**
-     * the urls to be scanned
+     * The urls to be scanned.
      *
-     * @return
+     * @return the URLs
      */
     Set<URL> getUrls();
 
     /**
-     * the metadata adapter used to fetch metadata from classes
+     * The metadata adapter used to fetch metadata from classes.
      *
-     * @return
+     * @return the metadata adapter
      */
     MetadataAdapter<?,?,?> getMetadataAdapter();
 
     /**
-     * get the fully qualified name filter used to filter types to be scanned
+     * Tet the fully qualified name filter used to filter types to be scanned.
      *
-     * @return
+     * @return the input filters
      */
     Predicate<String> getInputsFilter();
 
     /**
-     * * executor service used to scan files.if null, scanning is done in a
-     * simple for loop
+     * Executor service used to scan files.if null, scanning is done in a
+     * simple for loop.
      *
-     * @return
+     * @return the executor service
      */
     ExecutorService getExecutorService();
 
 
     /**
-     * get class loaders, might be used for resolving methods/fields
+     * Get class loaders, might be used for resolving methods/fields.
      *
-     * @return
+     * @return the class loaders
      */
     ClassLoader[] getClassLoaders();
 
     /**
-     * if true (default), expand super types after scanning, for super types
+     * If true (default), expand super types after scanning, for super types
      * that were not scanned.
      * <p>
-     * see {@link org.reflections.Reflections#expandSuperTypes()
+     * see {@link org.reflections.Reflections#expandSuperTypes()}
      *
-     * @return }
+     * @return true if should expand super types
      */
     boolean shouldExpandSuperTypes();
 }

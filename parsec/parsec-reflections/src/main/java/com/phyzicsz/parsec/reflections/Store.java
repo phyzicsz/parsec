@@ -36,16 +36,18 @@ public class Store {
     }
 
     /**
-     * return all indices
-     * @return 
+     * Return all indices.
+     * 
+     * @return the keys in the store
      */
     public Set<String> keySet() {
         return storeMap.keySet();
     }
 
     /**
-     * * get the multimap object for the given {@code index}, otherwise throws a
-     * {@link com.phyzicsz.parsec.reflections.ReflectionsException}
+     * Get the multimap object for the given {@code index}, otherwise throws a
+     * {@link com.phyzicsz.parsec.reflections.ReflectionsException},
+     * 
      */
     private Map<String, Collection<String>> get(String index) {
         Map<String, Collection<String>> mmap = storeMap.get(index);
@@ -56,37 +58,41 @@ public class Store {
     }
 
     /**
-     * get the values stored for the given {@code index} and {@code keys}
-     * @param scannerClass
-     * @param key
-     * @return 
+     * Get the values stored for the given {@code index} and {@code key}.
+     * 
+     * @param scannerClass the scanner class
+     * @param key the key
+     * @return the matching values
      */
     public Set<String> get(Class<?> scannerClass, String key) {
         return get(index(scannerClass), Collections.singletonList(key));
     }
 
     /**
-     * get the values stored for the given {@code index} and {@code keys}
-     * @param index
-     * @param key
-     * @return 
+     * Get the values stored for the given {@code index} and {@code key}.
+     * 
+     * @param index the index
+     * @param key the key
+     * @return the matching values
      */
     public Set<String> get(String index, String key) {
         return get(index, Collections.singletonList(key));
     }
 
     /**
-     * get the values stored for the given {@code index} and {@code keys}
-     * @param scannerClass
-     * @param keys
-     * @return 
+     * Get the values stored for the given {@code index} and {@code keys}.
+     * 
+     * @param scannerClass the scanner class
+     * @param keys the keys
+     * @return the matching values
      */
     public Set<String> get(Class<?> scannerClass, Collection<String> keys) {
         return get(index(scannerClass), keys);
     }
 
     /**
-     * get the values stored for the given {@code index} and {@code keys}
+     * Get the values stored for the given {@code index} and {@code keys}.
+     * 
      */
     private Set<String> get(String index, Collection<String> keys) {
         Map<String, Collection<String>> mmap = get(index);
@@ -101,11 +107,12 @@ public class Store {
     }
 
     /**
-     * recursively get the values stored for the given {@code index} and
-     * {@code keys}, including keys
-     * @param scannerClass
-     * @param keys
-     * @return 
+     * Recursively get the values stored for the given {@code index} and
+     * {@code keys}, including keys.
+     * 
+     * @param scannerClass the scanner class
+     * @param keys the keys
+     * @return the matching values
      */
     public Set<String> getAllIncluding(Class<?> scannerClass, Collection<String> keys) {
         String index = index(scannerClass);
@@ -126,22 +133,24 @@ public class Store {
     }
 
     /**
-     * recursively get the values stored for the given {@code index} and
-     * {@code keys}, not including keys
-     * @param scannerClass
-     * @param key
-     * @return 
+     * Recursively get the values stored for the given {@code index} and
+     * {@code key}, not including keys.
+     * 
+     * @param scannerClass the scanner class
+     * @param key the key
+     * @return the matching values
      */
     public Set<String> getAll(Class<?> scannerClass, String key) {
         return getAllIncluding(scannerClass, get(scannerClass, key));
     }
 
     /**
-     * recursively get the values stored for the given {@code index} and
-     * {@code keys}, not including keys
-     * @param scannerClass
-     * @param keys
-     * @return 
+     * Recursively get the values stored for the given {@code index} and
+     * {@code keys}, not including keys.
+     * 
+     * @param scannerClass the scanner class
+     * @param keys the keys
+     * @return the matching values
      */
     public Set<String> getAll(Class<?> scannerClass, Collection<String> keys) {
         return getAllIncluding(scannerClass, get(scannerClass, keys));
