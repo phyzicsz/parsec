@@ -1,7 +1,6 @@
 package com.phyzicsz.parsec.reflections.util;
 
 import static com.phyzicsz.parsec.reflections.ReflectionUtils.forName;
-import com.phyzicsz.parsec.reflections.Reflections;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +24,7 @@ import org.slf4j.LoggerFactory;
  * a garbage can of convenient methods
  */
 public abstract class Utils {
+    private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
     public static String repeat(String string, int times) {
         return IntStream.range(0, times).mapToObj(i -> string).collect(Collectors.joining());
@@ -137,22 +137,7 @@ public abstract class Utils {
                 closeable.close();
             }
         } catch (IOException e) {
-            if (Reflections.log != null) {
-                Reflections.log.warn("Could not close InputStream", e);
-            }
-        }
-    }
-
-    public static Logger findLogger(Class<?> aClass) {
-        try {
-            // This is to check whether an optional SLF4J binding is available. While SLF4J recommends that libraries
-            // "should not declare a dependency on any SLF4J binding but only depend on slf4j-api", doing so forces
-            // users of the library to either add a binding to the classpath (even if just slf4j-nop) or to set the
-            // "slf4j.suppressInitError" system property in order to avoid the warning, which both is inconvenient.
-            Class.forName("org.slf4j.impl.StaticLoggerBinder");
-            return LoggerFactory.getLogger(aClass);
-        } catch (ClassNotFoundException e) {
-            return null;
+            logger.warn("Could not close InputStream", e);
         }
     }
 

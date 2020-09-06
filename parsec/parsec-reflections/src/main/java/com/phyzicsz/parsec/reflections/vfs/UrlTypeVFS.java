@@ -1,6 +1,5 @@
 package com.phyzicsz.parsec.reflections.vfs;
 
-import com.phyzicsz.parsec.reflections.Reflections;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import com.phyzicsz.parsec.reflections.vfs.Vfs.Dir;
 import com.phyzicsz.parsec.reflections.vfs.Vfs.UrlType;
@@ -12,6 +11,8 @@ import java.util.function.Predicate;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * UrlType to be used by Reflections library. This class handles the vfszip and
@@ -27,6 +28,8 @@ import java.util.regex.Pattern;
  */
 public class UrlTypeVFS implements UrlType {
 
+    private static final Logger logger = LoggerFactory.getLogger(UrlTypeVFS.class);
+    
     public final static String[] REPLACE_EXTENSION = new String[]{".ear/", ".jar/", ".war/", ".sar/", ".har/", ".par/"};
 
     final String VFSZIP = "vfszip";
@@ -46,9 +49,7 @@ public class UrlTypeVFS implements UrlType {
             try {
                 return new ZipDir(new JarFile(url.getFile()));
             } catch (IOException e1) {
-                if (Reflections.log != null) {
-                    Reflections.log.warn("Could not get URL", e);
-                }
+                logger.warn("Could not get URL", e);
             }
         }
         return null;

@@ -1,14 +1,17 @@
 package com.phyzicsz.parsec.reflections.vfs;
 
-import com.phyzicsz.parsec.reflections.Reflections;
 import java.io.IOException;
 import java.util.jar.JarFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * an implementation of {@link org.reflections.vfs.Vfs.Dir} for
  * {@link java.util.zip.ZipFile}
  */
 public class ZipDir implements Vfs.Dir {
+    
+    private static final Logger logger = LoggerFactory.getLogger(ZipDir.class);
 
     final java.util.zip.ZipFile jarFile;
 
@@ -37,9 +40,7 @@ public class ZipDir implements Vfs.Dir {
         try {
             jarFile.close();
         } catch (IOException e) {
-            if (Reflections.log != null) {
-                Reflections.log.warn("Could not close JarFile", e);
-            }
+            logger.warn("Could not close JarFile", e);
         }
     }
 

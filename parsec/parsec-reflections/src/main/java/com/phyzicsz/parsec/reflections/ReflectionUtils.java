@@ -21,6 +21,8 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * convenient java reflection helper methods
@@ -72,6 +74,8 @@ import java.util.stream.IntStream;
 @SuppressWarnings("unchecked")
 public abstract class ReflectionUtils {
 
+    private static final Logger logger = LoggerFactory.getLogger(ReflectionUtils.class);
+    
     /**
      * would include {@code Object.class} when
      * {@link #getAllSuperTypes(Class, java.util.function.Predicate[])}. default
@@ -507,9 +511,9 @@ public abstract class ReflectionUtils {
                 }
             }
 
-            if (Reflections.log != null && Reflections.log.isTraceEnabled()) {
+            if (logger.isTraceEnabled()) {
                 for (ReflectionsException reflectionsException : reflectionsExceptions) {
-                    Reflections.log.trace("could not get type for name " + typeName + " from any class loader", reflectionsException);
+                    logger.trace("could not get type for name " + typeName + " from any class loader", reflectionsException);
                 }
             }
 

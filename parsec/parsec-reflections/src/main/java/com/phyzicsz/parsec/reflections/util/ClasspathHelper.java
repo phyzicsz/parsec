@@ -20,11 +20,15 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import javax.servlet.ServletContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Helper methods for working with the classpath.
  */
 public abstract class ClasspathHelper {
+    
+    private static final Logger logger = LoggerFactory.getLogger(ClasspathHelper.class);
 
     /**
      * Gets the current thread context class loader.
@@ -126,9 +130,7 @@ public abstract class ClasspathHelper {
                     }
                 }
             } catch (IOException e) {
-                if (Reflections.log != null) {
-                    Reflections.log.error("error getting resources for " + resourceName, e);
-                }
+                logger.error("error getting resources for " + resourceName, e);
             }
         }
         return distinctUrls(result);
@@ -159,9 +161,7 @@ public abstract class ClasspathHelper {
                     return new URL(normalizedUrl);
                 }
             } catch (MalformedURLException e) {
-                if (Reflections.log != null) {
-                    Reflections.log.warn("Could not get URL", e);
-                }
+                logger.warn("Could not get URL", e);
             }
         }
         return null;
@@ -233,9 +233,7 @@ public abstract class ClasspathHelper {
                 try {
                     urls.add(new File(path).toURI().toURL());
                 } catch (MalformedURLException e) {
-                    if (Reflections.log != null) {
-                        Reflections.log.warn("Could not get URL", e);
-                    }
+                    logger.warn("Could not get URL", e);
                 }
             }
         }

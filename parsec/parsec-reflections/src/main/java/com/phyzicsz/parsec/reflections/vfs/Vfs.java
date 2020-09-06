@@ -1,6 +1,5 @@
 package com.phyzicsz.parsec.reflections.vfs;
 
-import com.phyzicsz.parsec.reflections.Reflections;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
 import com.phyzicsz.parsec.reflections.util.Utils;
@@ -20,6 +19,8 @@ import java.util.function.Predicate;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * a simple virtual file system bridge
@@ -68,6 +69,8 @@ import java.util.stream.StreamSupport;
  * urls
  */
 public abstract class Vfs {
+    
+    private static final Logger logger = LoggerFactory.getLogger(Vfs.class);
 
     private static List<UrlType> defaultUrlTypes = new ArrayList<>(Arrays.asList(DefaultUrlTypes.values()));
 
@@ -162,9 +165,7 @@ public abstract class Vfs {
                     }
                 }
             } catch (Exception e) {
-                if (Reflections.log != null) {
-                    Reflections.log.warn("could not create Dir using " + type + " from url " + url.toExternalForm() + ". skipping.", e);
-                }
+                logger.warn("could not create Dir using {}  from url {}",type,url.toExternalForm(),e);
             }
         }
 
@@ -222,9 +223,7 @@ public abstract class Vfs {
                     try {
                         return StreamSupport.stream(fromURL(url).getFiles().spliterator(), false);
                     } catch (Throwable e) {
-                        if (Reflections.log != null) {
-                            Reflections.log.error("could not findFiles for url. continuing. [" + url + "]", e);
-                        }
+                        logger.error("could not findFiles for url: {}",url, e);
                         return Stream.of();
                     }
                 })

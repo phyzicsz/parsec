@@ -1,7 +1,6 @@
 package com.phyzicsz.parsec.reflections.util;
 
 import com.phyzicsz.parsec.reflections.Configuration;
-import com.phyzicsz.parsec.reflections.Reflections;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import com.phyzicsz.parsec.reflections.adapters.JavaReflectionAdapter;
 import com.phyzicsz.parsec.reflections.adapters.JavassistAdapter;
@@ -23,6 +22,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * a fluent builder for {@link org.reflections.Configuration}, to be used for
@@ -44,6 +45,7 @@ import java.util.stream.Stream;
  * {@link com.phyzicsz.parsec.reflections.serializers.XmlSerializer}
  */
 public class ConfigurationBuilder implements Configuration {
+    private static final Logger logger = LoggerFactory.getLogger(ConfigurationBuilder.class);
 
     private final Set<Scanner> scanners;
     private Set<URL> urls;
@@ -284,9 +286,7 @@ public class ConfigurationBuilder implements Configuration {
             try {
                 return (metadataAdapter = new JavassistAdapter());
             } catch (Throwable e) {
-                if (Reflections.log != null) {
-                    Reflections.log.warn("could not create JavassistAdapter, using JavaReflectionAdapter", e);
-                }
+                    logger.warn("could not create JavassistAdapter, using JavaReflectionAdapter", e);
                 return (metadataAdapter = new JavaReflectionAdapter());
             }
         }
