@@ -85,13 +85,13 @@ public abstract class ReflectionUtils {
     public static boolean includeObject = false;
 
     /**
-     * get all super types of given {@code type}, including, optionally filtered
-     * by {@code predicates}
+     * Get all super types of given {@code type}, including, optionally filtered
+     * by {@code predicates}.
      * <p>
      * include {@code Object.class} if {@link #includeObject} is true
-     * @param type
-     * @param predicates
-     * @return 
+     * @param type type information
+     * @param predicates the predicates to match
+     * @return the super types for the matching predicates
      */
     public static Set<Class<?>> getAllSuperTypes(final Class<?> type, Predicate<? super Class<?>>... predicates) {
         Set<Class<?>> result = new LinkedHashSet<>();
@@ -105,9 +105,9 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * get the immediate supertype and interfaces of the given {@code type}
-     * @param type
-     * @return 
+     * Get the immediate supertype and interfaces of the given {@code type}.
+     * @param type type information
+     * @return the supertypes for the class
      */
     public static Set<Class<?>> getSuperTypes(Class<?> type) {
         Set<Class<?>> result = new LinkedHashSet<>();
@@ -123,11 +123,11 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * get all methods of given {@code type}, up the super class hierarchy,
-     * optionally filtered by {@code predicates}
-     * @param type
-     * @param predicates
-     * @return 
+     * Get all methods of given {@code type}, up the super class hierarchy,
+     * optionally filtered by {@code predicates}.
+     * @param type type information
+     * @param predicates predicates to match
+     * @return the methods for the matching predicates
      */
     public static Set<Method> getAllMethods(final Class<?> type, Predicate<? super Method>... predicates) {
         Set<Method> result = new HashSet<>();
@@ -138,22 +138,22 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * get methods of given {@code type}, optionally filtered by
-     * {@code predicates}
-     * @param t
-     * @param predicates
-     * @return 
+     * Get methods of given {@code type}, optionally filtered by
+     * {@code predicates}.
+     * @param t type information
+     * @param predicates predicates to match
+     * @return the methods for the matching predictes
      */
     public static Set<Method> getMethods(Class<?> t, Predicate<? super Method>... predicates) {
         return filter(t.isInterface() ? t.getMethods() : t.getDeclaredMethods(), predicates);
     }
 
     /**
-     * get all constructors of given {@code type}, up the super class hierarchy,
-     * optionally filtered by {@code predicates}
-     * @param type
-     * @param predicates
-     * @return 
+     * Get all constructors of given {@code type}, up the super class hierarchy,
+     * optionally filtered by {@code predicates}.
+     * @param type type information
+     * @param predicates the matching predicates
+     * @return the constuctors for the matching predicates
      */
     @SuppressWarnings({"unchecked","rawtypes"})
     public static Set<Constructor> getAllConstructors(final Class<?> type, Predicate<? super Constructor>... predicates) {
@@ -165,22 +165,24 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * get constructors of given {@code type}, optionally filtered by
-     * {@code predicates}
-     * @param t
-     * @param predicates
-     * @return 
+     * Get constructors of given {@code type}, optionally filtered by
+     * {@code predicates}.
+     * 
+     * @param t type information
+     * @param predicates the matching predicates
+     * @return the constuctors for the matching predicates
      */
     public static Set<Constructor<?>> getConstructors(Class<?> t, Predicate<? super Constructor<?>>... predicates) {
         return filter(t.getDeclaredConstructors(), predicates);
     }
 
     /**
-     * get all fields of given {@code type}, up the super class hierarchy,
-     * optionally filtered by {@code predicates}
-     * @param type
-     * @param predicates
-     * @return 
+     * Get all fields of given {@code type}, up the super class hierarchy,
+     * optionally filtered by {@code predicates}.
+     * 
+     * @param type the type information
+     * @param predicates the matching predicates
+     * @return the fields for the matching predicates
      */
     public static Set<Field> getAllFields(final Class<?> type, Predicate<? super Field>... predicates) {
         Set<Field> result = new HashSet<>();
@@ -191,23 +193,23 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * get fields of given {@code type}, optionally filtered by
-     * {@code predicates}
-     * @param type
-     * @param predicates
-     * @return 
+     * Get fields of given {@code type}, optionally filtered by
+     * {@code predicates}.
+     * @param type the type information
+     * @param predicates the matching predicates
+     * @return the fields for the matching predicates
      */
     public static Set<Field> getFields(Class<?> type, Predicate<? super Field>... predicates) {
         return filter(type.getDeclaredFields(), predicates);
     }
 
     /**
-     * get all annotations of given {@code type}, up the super class hierarchy,
-     * optionally filtered by {@code predicates}
-     * @param <T>
-     * @param type
-     * @param predicates
-     * @return 
+     * Get all annotations of given {@code type}, up the super class hierarchy,
+     * optionally filtered by {@code predicates}.
+     * @param <T> the class information
+     * @param type type information
+     * @param predicates the matching predicates
+     * @return  the annotations for the matching predicates
      */
     public static <T extends AnnotatedElement> Set<Annotation> getAllAnnotations(T type, Predicate<Annotation>... predicates) {
         Set<Annotation> result = new LinkedHashSet<>();
@@ -226,91 +228,96 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * get annotations of given {@code type}, optionally honorInherited,
+     * Get annotations of given {@code type}, optionally honorInherited,
      * optionally filtered by {@code predicates}
-     * @param <T>
-     * @param type
-     * @param predicates
-     * @return 
+     * @param <T> class information
+     * @param type type information
+     * @param predicates the matching predicates
+     * @return the annotations for the matching predicates
      */
     public static <T extends AnnotatedElement> Set<Annotation> getAnnotations(T type, Predicate<Annotation>... predicates) {
         return filter(type.getDeclaredAnnotations(), predicates);
     }
 
     /**
-     * filter all given {@code elements} with {@code predicates}, if given
-     * @param <T>
-     * @param elements
-     * @param predicates
-     * @return 
+     * Filter all given {@code elements} with {@code predicates}.
+     * 
+     * @param <T> class information
+     * @param elements elements to filter
+     * @param predicates matching predicates
+     * @return all elements matching predicates
      */
     public static <T extends AnnotatedElement> Set<T> getAll(final Set<T> elements, Predicate<? super T>... predicates) {
         return filter(elements, predicates);
     }
 
-    //predicates
+
     /**
-     * where member name equals given {@code name}
-     * @param <T>
-     * @param name
-     * @return 
+     * Find member name equals given {@code name}.
+     * @param <T> the class information
+     * @param name the member name
+     * @return the member with name
      */
     public static <T extends Member> Predicate<T> withName(final String name) {
         return input -> input != null && input.getName().equals(name);
     }
 
     /**
-     * where member name startsWith given {@code prefix}
-     * @param <T>
-     * @param prefix
-     * @return 
+     * Where member name startsWith given {@code prefix}.
+     * 
+     * @param <T> class information
+     * @param prefix the prefix for the member name
+     * @return the member with the given prefix
      */
     public static <T extends Member> Predicate<T> withPrefix(final String prefix) {
         return input -> input != null && input.getName().startsWith(prefix);
     }
 
     /**
-     * where member's {@code toString} matches given {@code regex}
+     * Find member's {@code toString} matching a given {@code regex}
      * <p>
      * for example:
      * <pre>
      *  getAllMethods(someClass, withPattern("public void .*"))
      * </pre>
      *
-     * @param <T>
-     * @param regex
-     * @return 
+     * @param <T> class information
+     * @param regex the regex to match
+     * @return the member matched from regex
      */
     public static <T extends AnnotatedElement> Predicate<T> withPattern(final String regex) {
         return input -> Pattern.matches(regex, input.toString());
     }
 
     /**
-     * where element is annotated with given {@code annotation}
-     * @param <T>
-     * @param annotation
-     * @return 
+     * FInd element annotated with given {@code annotation}.
+     * 
+     * @param <T> class information
+     * @param annotation the annotation
+     * @return find element annotated with matching annotation
      */
     public static <T extends AnnotatedElement> Predicate<T> withAnnotation(final Class<? extends Annotation> annotation) {
         return input -> input != null && input.isAnnotationPresent(annotation);
     }
 
     /**
-     * where element is annotated with given {@code annotations}
-     * @param <T>
-     * @param annotations
-     * @return 
+     * Find element annotated with given {@code annotations}.
+     * 
+     * @param <T> class information
+     * @param annotations the annotations to match
+     * @return the elements with annotated with matching annotation
      */
     public static <T extends AnnotatedElement> Predicate<T> withAnnotations(final Class<? extends Annotation>... annotations) {
         return input -> input != null && Arrays.equals(annotations, annotationTypes(input.getAnnotations()));
     }
 
     /**
-     * where element is annotated with given {@code annotation}, including
-     * member matching
-     * @param <T>
-     * @param annotation
-     * @return 
+     * Find element annotated with given {@code annotation}, including
+     * member matching.
+     * 
+     * @param <T> class information
+     * @param annotation the annotation to match
+     * @return  the element annotated with matching annotation
      */
     public static <T extends AnnotatedElement> Predicate<T> withAnnotation(final Annotation annotation) {
         return input -> input != null && input.isAnnotationPresent(annotation.annotationType())
@@ -318,11 +325,12 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * where element is annotated with given {@code annotations}, including
-     * member matching
-     * @param <T>
-     * @param annotations
-     * @return 
+     * Find element annotated with given {@code annotations}, including
+     * member matching.
+     * 
+     * @param <T> class information
+     * @param annotations the annotations to match
+     * @return the elements with matching annotations
      */
     public static <T extends AnnotatedElement> Predicate<T> withAnnotations(final Annotation... annotations) {
         return input -> {
@@ -338,142 +346,147 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * when method/constructor parameter types equals given {@code types}
-     * @param types
-     * @return 
+     * Find method/constructor parameter types equals given {@code types}.
+     * 
+     * @param types type information
+     * @return the method/constructor with matching parameter types
      */
     public static Predicate<Member> withParameters(final Class<?>... types) {
         return input -> Arrays.equals(parameterTypes(input), types);
     }
 
     /**
-     * when member parameter types assignable to given {@code types}
-     * @param types
-     * @return 
+     * Find member parameter types assignable to given {@code types}.
+     * 
+     * @param types the type information
+     * @return the members matching the assignable type
      */
     public static Predicate<Member> withParametersAssignableTo(final Class<?>... types) {
         return input -> isAssignable(types, parameterTypes(input));
     }
 
     /**
-     * when method/constructor parameter types assignable from given
-     * {@code types}
-     * @param types
-     * @return 
+     * Find method/constructor parameter types assignable from given
+     * {@code types}.
+     * 
+     * @param types type information
+     * @return the method/constuctor matching the assignable types
      */
     public static Predicate<Member> withParametersAssignableFrom(final Class<?>... types) {
         return input -> isAssignable(parameterTypes(input), types);
     }
 
     /**
-     * when method/constructor parameters count equal given {@code count}
-     * @param count
-     * @return 
+     * Find method/constructor parameters count equal given {@code count}
+     * @param count.
+     * 
+     * @return the method/consrtuctors with matching parameter count.
      */
     public static Predicate<Member> withParametersCount(final int count) {
         return input -> input != null && parameterTypes(input).length == count;
     }
 
     /**
-     * when method/constructor has any parameter with an annotation matches
-     * given {@code annotations}
-     * @param annotationClass
-     * @return 
+     * Find method/constructor has any parameter with an annotation matches
+     * given {@code annotations}.
+     * 
+     * @param annotationClass the annotation class to match
+     * @return the method/constuctors with matching annotations
      */
     public static Predicate<Member> withAnyParameterAnnotation(final Class<? extends Annotation> annotationClass) {
         return input -> input != null && annotationTypes(parameterAnnotations(input)).stream().anyMatch(input1 -> input1.equals(annotationClass));
     }
 
     /**
-     * when method/constructor has any parameter with an annotation matches
-     * given {@code annotations}, including member matching
-     * @param annotation
-     * @return 
+     * Find method/constructor has any parameter with an annotation matches
+     * given {@code annotation}, including member matching
+     * @param annotation the matching annotation
+     * @return the method/constuctor with matching annotation
      */
     public static Predicate<Member> withAnyParameterAnnotation(final Annotation annotation) {
         return input -> input != null && parameterAnnotations(input).stream().anyMatch(input1 -> areAnnotationMembersMatching(annotation, input1));
     }
 
     /**
-     * when field type equal given {@code type}
-     * @param <T>
-     * @param type
-     * @return 
+     * Find field type equal given {@code type}.
+     * 
+     * @param <T> class information
+     * @param type type information
+     * @return the field with matching types
      */
     public static <T> Predicate<Field> withType(final Class<T> type) {
         return input -> input != null && input.getType().equals(type);
     }
 
     /**
-     * when field type assignable to given {@code type}
-     * @param <T>
-     * @param type
-     * @return 
+     * Find field type assignable to given {@code type}
+     * @param <T> class information
+     * @param type type information
+     * @return the field with matching type
      */
     public static <T> Predicate<Field> withTypeAssignableTo(final Class<T> type) {
         return input -> input != null && type.isAssignableFrom(input.getType());
     }
 
     /**
-     * when method return type equal given {@code type}
-     * @param <T>
-     * @param type
-     * @return 
+     * Find method return type equal given {@code type}
+     * @param <T> class information
+     * @param type type information
+     * @return the method with matching type
      */
     public static <T> Predicate<Method> withReturnType(final Class<T> type) {
         return input -> input != null && input.getReturnType().equals(type);
     }
 
     /**
-     * when method return type assignable from given {@code type}
-     * @param <T>
-     * @param type
-     * @return 
+     * Find method return type assignable from given {@code type}
+     * @param <T> class information
+     * @param type type information
+     * @return the method with matching type
      */
     public static <T> Predicate<Method> withReturnTypeAssignableTo(final Class<T> type) {
         return input -> input != null && type.isAssignableFrom(input.getReturnType());
     }
 
     /**
-     * when member modifier matches given {@code mod}
+     * Find member modifier matches given {@code mod}
      * <p>
      * for example:
      * <pre>
      * withModifier(Modifier.PUBLIC)
      * </pre>
-     * @param <T>
-     * @param mod
-     * @return 
+     * @param <T> class information
+     * @param mod the modifier
+     * @return member with matching modifier
      */
     public static <T extends Member> Predicate<T> withModifier(final int mod) {
         return input -> input != null && (input.getModifiers() & mod) != 0;
     }
 
     /**
-     * when class modifier matches given {@code mod}
+     * Find class modifier matches given {@code mod}
      * <p>
      * for example:
      * <pre>
      * withModifier(Modifier.PUBLIC)
      * </pre>
-     * @param mod
-     * @return 
+     * @param mod modifier
+     * @return the class with matching modifier
      */
     public static Predicate<Class<?>> withClassModifier(final int mod) {
         return input -> input != null && (input.getModifiers() & mod) != 0;
     }
 
-    //
     /**
-     * tries to resolve a java type name to a Class
+     * Resolve a java type name to a Class.
      * <p>
      * if optional {@link ClassLoader}s are not specified, then both
      * {@link org.reflections.util.ClasspathHelper#contextClassLoader()} and
      * {@link org.reflections.util.ClasspathHelper#staticClassLoader()} are used
      *
-     * @param typeName
-     * @param classLoaders
-     * @return 
+     * @param typeName type name
+     * @param classLoaders class loader
+     * @return resolved java type to class name
      */
     public static Class<?> forName(String typeName, ClassLoader... classLoaders) {
         if (getPrimitiveNames().contains(typeName)) {
@@ -523,12 +536,13 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * try to resolve all given string representation of types to a list of java
-     * types
-     * @param <T>
-     * @param classes
-     * @param classLoaders
-     * @return 
+     * Resolve all given string representation of types to a list of java
+     * types.
+     * 
+     * @param <T> class information
+     * @param classes the classes to resolve
+     * @param classLoaders class loader
+     * @return the resolved names of the java types
      */
     public static <T> Set<Class<? extends T>> forNames(final Collection<String> classes, ClassLoader... classLoaders) {
         return classes.stream()
@@ -612,6 +626,6 @@ public abstract class ReflectionUtils {
         }
         return IntStream.range(0, childClasses.length)
                 .noneMatch(i -> !parentClasses[i].isAssignableFrom(childClasses[i])
-                || parentClasses[i] == Object.class && childClasses[i] != Object.class);
+                || (parentClasses[i] == Object.class && childClasses[i] != Object.class));
     }
 }

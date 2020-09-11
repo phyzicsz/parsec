@@ -2,7 +2,6 @@ package com.phyzicsz.parsec.reflections.vfs;
 
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
-import com.phyzicsz.parsec.reflections.util.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -201,7 +200,7 @@ public abstract class Vfs {
             String path = file.getRelativePath();
             if (path.startsWith(packagePrefix)) {
                 String filename = path.substring(path.indexOf(packagePrefix) + packagePrefix.length());
-                return !Utils.isEmpty(filename) && nameFilter.test(filename.substring(1));
+                return !filename.isEmpty() && nameFilter.test(filename.substring(1));
             } else {
                 return false;
             }
