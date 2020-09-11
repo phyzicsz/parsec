@@ -315,12 +315,6 @@ public abstract class Vfs {
      * {@link com.phyzicsz.parsec.reflections.vfs.SystemDir} over a file system
      * directory
      * <p>
-     * jboss vfs - for protocols vfs, using jboss vfs (should be provided in
-     * classpath)
-     * <p>
-     * jboss vfsfile - creates a {@link UrlTypeVFS} for protocols vfszip and
-     * vfsfile.
-     * <p>
      * bundle - for bundle protocol, using eclipse FileLocator (should be
      * provided in classpath)
      * <p>
@@ -377,28 +371,6 @@ public abstract class Vfs {
             @Override
             public Dir createDir(final URL url) throws Exception {
                 return new SystemDir(getFile(url));
-            }
-        },
-        jboss_vfs {
-            @Override
-            public boolean matches(URL url) {
-                return url.getProtocol().equals("vfs");
-            }
-
-            @Override
-            public Vfs.Dir createDir(URL url) throws Exception {
-                return JbossDir.createDir(url);
-            }
-        },
-        jboss_vfsfile {
-            @Override
-            public boolean matches(URL url) throws Exception {
-                return "vfszip".equals(url.getProtocol()) || "vfsfile".equals(url.getProtocol());
-            }
-
-            @Override
-            public Dir createDir(URL url) throws Exception {
-                return new UrlTypeVFS().createDir(url);
             }
         },
         bundle {
