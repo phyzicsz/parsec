@@ -4,10 +4,11 @@ import com.phyzicsz.parsec.reflections.vfs.Vfs;
 import java.util.List;
 
 /**
- *
- * @param <C>
- * @param <F>
- * @param <M>
+ * Interface for metadata adaptation.
+ * 
+ * @param <C> class information
+ * @param <F> field information
+ * @param <M> method information
  */
 public interface MetadataAdapter<C,F,M> {
 

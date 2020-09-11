@@ -9,11 +9,13 @@ import java.util.regex.Pattern;
 
 /**
  * Builds include/exclude filters for Reflections.
+ * 
  * <p>
  * For example:
- * <pre>
+ * <pre>{@code
  * Predicate<String> filter1 = FilterBuilder.parsePackages("-java, "-javax");
  * Predicate<String> filter2 = new FilterBuilder().include(".*").exclude("java.*");
+ * }
  * </pre>
  */
 public class FilterBuilder implements Predicate<String> {
@@ -205,7 +207,7 @@ public class FilterBuilder implements Predicate<String> {
     public static FilterBuilder parse(String includeExcludeString) {
         List<Predicate<String>> filters = new ArrayList<>();
 
-        if (!Utils.isEmpty(includeExcludeString)) {
+        if (!includeExcludeString.isEmpty()) {
             for (String string : includeExcludeString.split(",")) {
                 String trimmed = string.trim();
                 char prefix = trimmed.charAt(0);
@@ -250,7 +252,7 @@ public class FilterBuilder implements Predicate<String> {
     public static FilterBuilder parsePackages(String includeExcludeString) {
         List<Predicate<String>> filters = new ArrayList<>();
 
-        if (!Utils.isEmpty(includeExcludeString)) {
+        if (!includeExcludeString.isEmpty()) {
             for (String string : includeExcludeString.split(",")) {
                 String trimmed = string.trim();
                 char prefix = trimmed.charAt(0);

@@ -30,16 +30,6 @@ public abstract class Utils {
         return IntStream.range(0, times).mapToObj(i -> string).collect(Collectors.joining());
     }
 
-    /**
-     * isEmpty compatible with Java 5
-     *
-     * @param s
-     * @return
-     */
-    public static boolean isEmpty(String s) {
-        return s == null || s.length() == 0;
-    }
-
     public static File prepareFile(String filename) {
         File file = new File(filename);
         File parent = file.getAbsoluteFile().getParentFile();
@@ -60,7 +50,7 @@ public abstract class Utils {
         String memberName = memberKey.substring(p1 + 1);
 
         Class<?>[] parameterTypes = null;
-        if (!isEmpty(methodParameters)) {
+        if (!methodParameters.isEmpty()) {
             String[] parameterNames = methodParameters.split(",");
             parameterTypes = Arrays.stream(parameterNames).map(name -> forName(name.trim(), classLoaders)).toArray(Class<?>[]::new);
         }
