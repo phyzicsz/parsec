@@ -1,5 +1,6 @@
 package com.phyzicsz.parsec.reflections.util;
 
+import com.google.common.base.Splitter;
 import com.phyzicsz.parsec.reflections.Reflections;
 import java.io.File;
 import java.io.IOException;
@@ -52,11 +53,12 @@ public abstract class ClasspathHelper {
 
     /**
      * Returns an array of class Loaders initialized from the specified array.
+     * 
      * <p>
      * If the input is null or empty, it defaults to both
      * {@link #contextClassLoader()} and {@link #staticClassLoader()}
      *
-     * @param classLoaders
+     * @param classLoaders class loaders
      * @return the array of class loaders, not null
      */
     public static ClassLoader[] classLoaders(ClassLoader... classLoaders) {
@@ -75,6 +77,7 @@ public abstract class ClasspathHelper {
 
     /**
      * Returns a distinct collection of URLs based on a package name.
+     * 
      * <p>
      * This searches for the package name as a resource, using
      * {@link ClassLoader#getResources(String)}. For example,
@@ -87,8 +90,8 @@ public abstract class ClasspathHelper {
      * <p>
      * The returned URLs retainsthe order of the given {@code classLoaders}.
      *
-     * @param name
-     * @param classLoaders
+     * @param name the package name to search for
+     * @param classLoaders class loaders
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forPackage(String name, ClassLoader... classLoaders) {
@@ -97,6 +100,7 @@ public abstract class ClasspathHelper {
 
     /**
      * Returns a distinct collection of URLs based on a resource.
+     * 
      * <p>
      * This searches for the resource name, using
      * {@link ClassLoader#getResources(String)}. For example,
@@ -109,10 +113,11 @@ public abstract class ClasspathHelper {
      * <p>
      * The returned URLs retains the order of the given {@code classLoaders}.
      *
-     * @param resourceName
-     * @param classLoaders
+     * @param resourceName the resource name to search for
+     * @param classLoaders class loader
      * @return the collection of URLs, not null
      */
+    @SuppressWarnings("JdkObsolete")
     public static Collection<URL> forResource(String resourceName, ClassLoader... classLoaders) {
         final List<URL> result = new ArrayList<>();
         final ClassLoader[] loaders = classLoaders(classLoaders);
@@ -146,8 +151,8 @@ public abstract class ClasspathHelper {
      * {@link #contextClassLoader()} and {@link #staticClassLoader()} are used
      * for {@link ClassLoader#getResources(String)}.
      *
-     * @param aClass
-     * @param classLoaders
+     * @param aClass the class to search for
+     * @param classLoaders class loader
      * @return the URL containing the class, null if not found
      */
     public static URL forClass(Class<?> aClass, ClassLoader... classLoaders) {
@@ -170,6 +175,7 @@ public abstract class ClasspathHelper {
     /**
      * Returns a distinct collection of URLs based on URLs derived from class
      * loaders.
+     * 
      * <p>
      * This finds the URLs using {@link URLClassLoader#getURLs()} using both
      * {@link #contextClassLoader()} and {@link #staticClassLoader()}.
@@ -185,6 +191,7 @@ public abstract class ClasspathHelper {
     /**
      * Returns a distinct collection of URLs based on URLs derived from class
      * loaders.
+     * 
      * <p>
      * This finds the URLs using {@link URLClassLoader#getURLs()} using the
      * specified class loader, searching up the parent hierarchy.
@@ -195,7 +202,7 @@ public abstract class ClasspathHelper {
      * <p>
      * The returned URLs retains the order of the given {@code classLoaders}.
      *
-     * @param classLoaders
+     * @param classLoaders class loader
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forClassLoader(ClassLoader... classLoaders) {
@@ -216,8 +223,8 @@ public abstract class ClasspathHelper {
     }
 
     /**
-     * Returns a distinct collection of URLs based on the
-     * {@code java.class.path} system property.
+     * Returns a distinct collection of URLs based on the {@code java.class.path} system property.
+     * 
      * <p>
      * This finds the URLs using the {@code java.class.path} system property.
      * <p>
@@ -229,7 +236,7 @@ public abstract class ClasspathHelper {
         Collection<URL> urls = new ArrayList<>();
         String javaClassPath = System.getProperty("java.class.path");
         if (javaClassPath != null) {
-            for (String path : javaClassPath.split(File.pathSeparator)) {
+            for (String path : Splitter.onPattern(File.pathSeparator).split(javaClassPath)) {
                 try {
                     urls.add(new File(path).toURI().toURL());
                 } catch (MalformedURLException e) {
@@ -243,12 +250,13 @@ public abstract class ClasspathHelper {
     /**
      * Returns a distinct collection of URLs based on the {@code WEB-INF/lib}
      * folder.
+     * 
      * <p>
      * This finds the URLs using the {@link ServletContext}.
      * <p>
      * The returned URLs retains the order of the given {@code classLoaders}.
      *
-     * @param servletContext
+     * @param servletContext the servlet context
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forWebInfLib(final ServletContext servletContext) {
@@ -268,10 +276,11 @@ public abstract class ClasspathHelper {
 
     /**
      * Returns the URL of the {@code WEB-INF/classes} folder.
+     * 
      * <p>
      * This finds the URLs using the {@link ServletContext}.
      *
-     * @param servletContext
+     * @param servletContext servlet context
      * @return the collection of URLs, not null
      */
     public static URL forWebInfClasses(final ServletContext servletContext) {
@@ -293,6 +302,7 @@ public abstract class ClasspathHelper {
     /**
      * Returns a distinct collection of URLs based on URLs derived from class
      * loaders expanded with Manifest information.
+     * 
      * <p>
      * The {@code MANIFEST.MF} file can contain a {@code Class-Path} entry that
      * defines additional jar files to be included on the classpath. This method
@@ -309,6 +319,7 @@ public abstract class ClasspathHelper {
     /**
      * Returns a distinct collection of URLs from a single URL based on the
      * Manifest information.
+     * 
      * <p>
      * The {@code MANIFEST.MF} file can contain a {@code Class-Path} entry that
      * defines additional jar files to be included on the classpath. This method
@@ -316,7 +327,7 @@ public abstract class ClasspathHelper {
      * any additional manifest classpaths. The returned collection of URLs will
      * always contain the input URL.
      *
-     * @param url
+     * @param url the url
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forManifest(final URL url) {
@@ -334,7 +345,7 @@ public abstract class ClasspathHelper {
             if (manifest != null) {
                 final String classPath = manifest.getMainAttributes().getValue(new Attributes.Name("Class-Path"));
                 if (classPath != null) {
-                    for (String jar : classPath.split(" ")) {
+                    for (String jar : Splitter.on(' ').split(classPath)) {
                         validUrl = tryToGetValidUrl(jarFile.getPath(), new File(part).getParent(), jar);
                         if (validUrl != null) {
                             result.add(validUrl);
@@ -351,6 +362,7 @@ public abstract class ClasspathHelper {
     /**
      * Returns a distinct collection of URLs by expanding the specified URLs
      * with Manifest information.
+     * 
      * <p>
      * The {@code MANIFEST.MF} file can contain a {@code Class-Path} entry that
      * defines additional jar files to be included on the classpath. This method
@@ -360,7 +372,7 @@ public abstract class ClasspathHelper {
      * <p>
      * The returned URLs retains the input order.
      *
-     * @param urls
+     * @param urls the urls to search
      * @return the collection of URLs, not null
      */
     public static Collection<URL> forManifest(final Iterable<URL> urls) {

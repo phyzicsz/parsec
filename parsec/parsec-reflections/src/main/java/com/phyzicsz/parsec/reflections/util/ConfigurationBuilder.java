@@ -40,9 +40,7 @@ import org.slf4j.LoggerFactory;
  * <br>{@link #executorService} is used optionally used for parallel scanning.
  * if value is null then scanning is done in a simple for loop
  * <p>
- * defaults: accept all for {@link #inputsFilter},
- * {@link #executorService} is null, {@link #serializer} is
- * {@link com.phyzicsz.parsec.reflections.serializers.XmlSerializer}
+ * defaults: accept all for {@link #inputsFilter}
  */
 public class ConfigurationBuilder implements Configuration {
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationBuilder.class);

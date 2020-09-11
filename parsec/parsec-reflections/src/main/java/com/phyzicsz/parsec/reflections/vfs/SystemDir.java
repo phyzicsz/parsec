@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collections;
 
-/*
+/**
  * An implementation of {@link org.reflections.vfs.Vfs.Dir} for directory {@link java.io.File}.
+ * 
+ * @author phyzicsz <phyzics.z@gmail.com>
  */
 public class SystemDir implements Vfs.Dir {
 

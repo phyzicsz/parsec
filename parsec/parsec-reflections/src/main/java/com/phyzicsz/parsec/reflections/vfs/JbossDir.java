@@ -2,8 +2,9 @@ package com.phyzicsz.parsec.reflections.vfs;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.Stack;
 import java.util.jar.JarFile;
 import org.jboss.vfs.VirtualFile;
 
@@ -31,7 +32,7 @@ public class JbossDir implements Vfs.Dir {
     @Override
     public Iterable<Vfs.File> getFiles() {
         return () -> new Iterator<Vfs.File>() {
-            final Stack<VirtualFile> stack = new Stack<>();
+            final Deque<VirtualFile> stack = new ArrayDeque<>();
             Vfs.File entry = null;
 
             {
