@@ -17,11 +17,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *  */
+ * Adapter based on Java reflection.
+ * 
+ * @author phyzicsz <phyzics.z@gmail.com>
+ */
 public class JavaReflectionAdapter implements MetadataAdapter<Class<?>, Field, Member> {
 
     @Override
-    public List<Field> getFields(Class<?>cls) {
+    public List<Field> getFields(Class<?> cls) {
         return Arrays.asList(cls.getDeclaredFields());
     }
 
@@ -86,7 +89,7 @@ public class JavaReflectionAdapter implements MetadataAdapter<Class<?>, Field, M
 
     @Override
     public Class<?> getOrCreateClassObject(Vfs.File file) throws Exception {
-        return getOrCreateClassObject(file, (ClassLoader[])null);
+        return getOrCreateClassObject(file, (ClassLoader[]) null);
     }
 
     public Class<?> getOrCreateClassObject(Vfs.File file, ClassLoader... loaders) throws Exception {

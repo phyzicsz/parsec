@@ -1,5 +1,6 @@
 package com.phyzicsz.parsec.reflections.util;
 
+import com.google.common.base.Splitter;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,20 +32,20 @@ public class FilterBuilder implements Predicate<String> {
     }
 
     /**
-     * include a regular expression
+     * Include based on a regular expression.
      *
-     * @param regex
-     * @return
+     * @param regex the regex pattern
+     * @return fluent builder
      */
     public FilterBuilder include(final String regex) {
         return add(new Include(regex));
     }
 
     /**
-     * exclude a regular expressio
+     * Exclude based on a regular expression.
      *
-     * @param regex
-     * @return
+     * @param regex the regex pattern
+     * @return fluent builder
      */
     public FilterBuilder exclude(final String regex) {
         add(new Exclude(regex));
@@ -52,10 +53,10 @@ public class FilterBuilder implements Predicate<String> {
     }
 
     /**
-     * add a Predicate to the chain of predicate
+     * Add a Predicate to the chain of predicates.
      *
-     * @param filter
-     * @return
+     * @param filter the predicate filter
+     * @return fluent builder
      */
     public FilterBuilder add(Predicate<String> filter) {
         chain.add(filter);
@@ -63,30 +64,30 @@ public class FilterBuilder implements Predicate<String> {
     }
 
     /**
-     * include a package of a given class
+     * Include a package of a given class
      *
-     * @param aClass
-     * @return
+     * @param aClass the class to include
+     * @return fluent builder
      */
     public FilterBuilder includePackage(final Class<?> aClass) {
         return add(new Include(packageNameRegex(aClass)));
     }
 
     /**
-     * exclude a package of a given class
+     * Exclude a package of a given class.
      *
-     * @param aClass
-     * @return
+     * @param aClass the class to exclude
+     * @return fluent builder
      */
     public FilterBuilder excludePackage(final Class<?> aClass) {
         return add(new Exclude(packageNameRegex(aClass)));
     }
 
     /**
-     * include packages of given prefixes
+     * Include packages of given prefixes.
      *
-     * @param prefixes
-     * @return
+     * @param prefixes the prefixes to include
+     * @return fluent builder
      */
     public FilterBuilder includePackage(final String... prefixes) {
         for (String prefix : prefixes) {
@@ -96,10 +97,10 @@ public class FilterBuilder implements Predicate<String> {
     }
 
     /**
-     * exclude packages of a given prefix
+     * Exclude packages of a given prefix.
      *
-     * @param prefixes
-     * @return
+     * @param prefixes the prefixes to exclude
+     * @return fluent builder
      */
     public FilterBuilder excludePackage(final String... prefixes) {
         for (String prefix : prefixes) {
@@ -144,7 +145,7 @@ public class FilterBuilder implements Predicate<String> {
 
         final Pattern pattern;
 
-        public Matcher(final String regex) {
+        protected Matcher(final String regex) {
             pattern = Pattern.compile(regex);
         }
 
@@ -190,6 +191,7 @@ public class FilterBuilder implements Predicate<String> {
 
     /**
      * Parses a string representation of an include/exclude filter.
+     * 
      * <p>
      * The given includeExcludeString is a comma separated list of regexes, each
      * starting with either + or - to indicate include/exclude.
@@ -201,14 +203,14 @@ public class FilterBuilder implements Predicate<String> {
      * See also the more useful {@link FilterBuilder#parsePackages(String)}
      * method.
      *
-     * @param includeExcludeString
-     * @return
+     * @param includeExcludeString the string to include/exclude based on
+     * @return fluent builder
      */
     public static FilterBuilder parse(String includeExcludeString) {
         List<Predicate<String>> filters = new ArrayList<>();
 
         if (!includeExcludeString.isEmpty()) {
-            for (String string : includeExcludeString.split(",")) {
+            for (String string : Splitter.on(',').split(includeExcludeString)) {
                 String trimmed = string.trim();
                 char prefix = trimmed.charAt(0);
                 String pattern = trimmed.substring(1);
@@ -236,6 +238,7 @@ public class FilterBuilder implements Predicate<String> {
 
     /**
      * Parses a string representation of an include/exclude filter.
+     * 
      * <p>
      * The given includeExcludeString is a comma separated list of package name
      * segments, each starting with either + or - to indicate include/exclude.
@@ -246,14 +249,14 @@ public class FilterBuilder implements Predicate<String> {
      * <p>
      * The input strings "-java" and "-java." are equivalent.
      *
-     * @param includeExcludeString
-     * @return
+     * @param includeExcludeString the string to include/exclude based on
+     * @return fluent builder
      */
     public static FilterBuilder parsePackages(String includeExcludeString) {
         List<Predicate<String>> filters = new ArrayList<>();
 
         if (!includeExcludeString.isEmpty()) {
-            for (String string : includeExcludeString.split(",")) {
+            for (String string : Splitter.on(',').split(includeExcludeString)) {
                 String trimmed = string.trim();
                 char prefix = trimmed.charAt(0);
                 String pattern = trimmed.substring(1);

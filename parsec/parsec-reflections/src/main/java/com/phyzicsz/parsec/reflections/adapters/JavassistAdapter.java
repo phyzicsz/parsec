@@ -27,12 +27,14 @@ import javassist.bytecode.ParameterAnnotationsAttribute;
 import javassist.bytecode.annotation.Annotation;
 
 /**
- *
+ * Adapter based on Javaassist.
+ * 
+ * @author phyzicsz <phyzics.z@gmail.com>
  */
 public class JavassistAdapter implements MetadataAdapter<ClassFile, FieldInfo, MethodInfo> {
 
     /**
-     * setting this to false will result in returning only visible annotations
+     * Setting this to false will result in returning only visible annotations
      * from the relevant methods here (only {@link java.lang.annotation.RetentionPolicy#RUNTIME})
      */
     public static boolean includeInvisibleTag = true;
