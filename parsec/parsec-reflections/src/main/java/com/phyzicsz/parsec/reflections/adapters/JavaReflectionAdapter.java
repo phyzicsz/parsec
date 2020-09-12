@@ -1,8 +1,7 @@
 package com.phyzicsz.parsec.reflections.adapters;
 
-import static com.phyzicsz.parsec.reflections.ReflectionUtils.forName;
+import com.phyzicsz.parsec.reflections.ReflectionUtils;
 import com.phyzicsz.parsec.reflections.util.Utils;
-import static com.phyzicsz.parsec.reflections.util.Utils.join;
 import com.phyzicsz.parsec.reflections.vfs.Vfs;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -18,8 +17,8 @@ import java.util.stream.Collectors;
 
 /**
  * Adapter based on Java reflection.
- * 
- * @author phyzicsz <phyzics.z@gmail.com>
+ *
+ * @author phyzicsz (phyzics.z@gmail.com)
  */
 public class JavaReflectionAdapter implements MetadataAdapter<Class<?>, Field, Member> {
 
@@ -47,12 +46,14 @@ public class JavaReflectionAdapter implements MetadataAdapter<Class<?>, Field, M
         Class<?>[] parameterTypes = member instanceof Method ? ((Method) member).getParameterTypes()
                 : member instanceof Constructor ? ((Constructor) member).getParameterTypes() : null;
 
-        return parameterTypes != null ? Arrays.stream(parameterTypes).map(JavaReflectionAdapter::getName).collect(Collectors.toList()) : Collections.emptyList();
+        return parameterTypes != null ? Arrays.stream(parameterTypes)
+                .map(JavaReflectionAdapter::getName)
+                .collect(Collectors.toList()) : Collections.emptyList();
     }
 
     @Override
-    public List<String> getClassAnnotationNames(Class<?> aClass) {
-        return getAnnotationNames(aClass.getDeclaredAnnotations());
+    public List<String> getClassAnnotationNames(Class<?> classz) {
+        return getAnnotationNames(classz.getDeclaredAnnotations());
     }
 
     @Override
@@ -94,7 +95,7 @@ public class JavaReflectionAdapter implements MetadataAdapter<Class<?>, Field, M
 
     public Class<?> getOrCreateClassObject(Vfs.File file, ClassLoader... loaders) throws Exception {
         String name = file.getRelativePath().replace("/", ".").replace(".class", "");
-        return forName(name, loaders);
+        return ReflectionUtils.forName(name, loaders);
     }
 
     @Override
@@ -104,7 +105,7 @@ public class JavaReflectionAdapter implements MetadataAdapter<Class<?>, Field, M
 
     @Override
     public String getMethodKey(Class<?> cls, Member method) {
-        return getMethodName(method) + "(" + join(getParameterNames(method), ", ") + ")";
+        return getMethodName(method) + "(" + Utils.join(getParameterNames(method), ", ") + ")";
     }
 
     @Override
@@ -136,7 +137,8 @@ public class JavaReflectionAdapter implements MetadataAdapter<Class<?>, Field, M
     @Override
     public List<String> getInterfacesNames(Class<?> cls) {
         Class<?>[] classes = cls.getInterfaces();
-        return classes != null ? Arrays.stream(classes).map(Class<?>::getName).collect(Collectors.toList()) : Collections.emptyList();
+        return classes != null ? Arrays.stream(classes).map(Class<?>::getName)
+                .collect(Collectors.toList()) : Collections.emptyList();
     }
 
     @Override
@@ -146,9 +148,17 @@ public class JavaReflectionAdapter implements MetadataAdapter<Class<?>, Field, M
 
     //
     private List<String> getAnnotationNames(Annotation[] annotations) {
-        return Arrays.stream(annotations).map(annotation -> annotation.annotationType().getName()).collect(Collectors.toList());
+        return Arrays.stream(annotations)
+                .map(annotation -> annotation.annotationType().getName())
+                .collect(Collectors.toList());
     }
 
+    /**
+     * Gets the name for type.
+     * 
+     * @param type the type
+     * @return the name
+     */
     public static String getName(Class<?> type) {
         if (type.isArray()) {
             try {

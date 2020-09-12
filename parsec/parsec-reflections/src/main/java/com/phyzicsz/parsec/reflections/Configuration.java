@@ -8,9 +8,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.Predicate;
 
 /**
- * Configuration is used to create a configured instance of {@link Reflections}
- * <p>
- * it is preferred to use {@link org.reflections.util.ConfigurationBuilder}
+ * Configuration is used to create a configured instance of {@link Reflections}.
+ * 
+ * <p>It is preferred to use {@link org.reflections.util.ConfigurationBuilder}
  */
 public interface Configuration {
 
@@ -33,7 +33,7 @@ public interface Configuration {
      *
      * @return the metadata adapter
      */
-    MetadataAdapter<?,?,?> getMetadataAdapter();
+    MetadataAdapter<?, ?, ?> getMetadataAdapter();
 
     /**
      * Tet the fully qualified name filter used to filter types to be scanned.
@@ -50,7 +50,6 @@ public interface Configuration {
      */
     ExecutorService getExecutorService();
 
-
     /**
      * Get class loaders, might be used for resolving methods/fields.
      *
@@ -61,8 +60,8 @@ public interface Configuration {
     /**
      * If true (default), expand super types after scanning, for super types
      * that were not scanned.
-     * <p>
-     * see {@link org.reflections.Reflections#expandSuperTypes()}
+     * 
+     * <p>see {@link org.reflections.Reflections#expandSuperTypes()}
      *
      * @return true if should expand super types
      */

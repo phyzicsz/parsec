@@ -1,7 +1,7 @@
 package com.phyzicsz.parsec.reflections;
 
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
-import static com.phyzicsz.parsec.reflections.util.Utils.filter;
+import com.phyzicsz.parsec.reflections.util.Utils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
@@ -25,26 +25,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * convenient java reflection helper methods
- * <p>
- * 1. some helper methods to get type by name:
+ * Convenient java reflection helper methods.
+ * 
+ * <p>1. some helper methods to get type by name:
  * {@link #forName(String, ClassLoader...)} and
  * {@link #forNames(Collection, ClassLoader...)} )}
- * <p>
- * 2. some helper methods to get all
+ * 
+ * <p>2. some helper methods to get all
  * types/methods/fields/constructors/properties matching some predicates,
  * generally:
  * <pre>{@code Set&#60?> result = getAllXXX(type/s, withYYY) }</pre>
- * <p>
- * where get methods are:
+ * 
+ * <p>where get methods are:
  * <ul>
  * <li>{@link #getAllSuperTypes(Class, java.util.function.Predicate...)}
  * <li>{@link #getAllFields(Class, java.util.function.Predicate...)}
  * <li>{@link #getAllMethods(Class, java.util.function.Predicate...)}
  * <li>{@link #getAllConstructors(Class, java.util.function.Predicate...)}
  * </ul>
- * <p>
- * and predicates included here all starts with "with", such as
+ * 
+ * <p>and predicates included here all starts with "with", such as
  * <ul>
  * <li>{@link #withAnnotation(java.lang.annotation.Annotation)}
  * <li>{@link #withModifier(int)}
@@ -59,8 +59,7 @@ import org.slf4j.LoggerFactory;
  * <li>{@link #withTypeAssignableTo}
  * </ul>
  *
- * <p>
- * <br>
+ * <p><br>
  * for example, getting all getters would be:
  * <pre>{@code
  *      Set&#60Method> getters = getAllMethods(someClasses,
@@ -76,7 +75,7 @@ import org.slf4j.LoggerFactory;
 public abstract class ReflectionUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ReflectionUtils.class);
-    
+
     /**
      * would include {@code Object.class} when
      * {@link #getAllSuperTypes(Class, java.util.function.Predicate[])}. default
@@ -87,8 +86,9 @@ public abstract class ReflectionUtils {
     /**
      * Get all super types of given {@code type}, including, optionally filtered
      * by {@code predicates}.
-     * <p>
-     * include {@code Object.class} if {@link #includeObject} is true
+     * 
+     * <p>include {@code Object.class} if {@link #includeObject} is true
+     *
      * @param type type information
      * @param predicates the predicates to match
      * @return the super types for the matching predicates
@@ -101,11 +101,12 @@ public abstract class ReflectionUtils {
                 result.addAll(getAllSuperTypes(supertype));
             }
         }
-        return filter(result, predicates);
+        return Utils.filter(result, predicates);
     }
 
     /**
      * Get the immediate supertype and interfaces of the given {@code type}.
+     *
      * @param type type information
      * @return the supertypes for the class
      */
@@ -125,6 +126,7 @@ public abstract class ReflectionUtils {
     /**
      * Get all methods of given {@code type}, up the super class hierarchy,
      * optionally filtered by {@code predicates}.
+     *
      * @param type type information
      * @param predicates predicates to match
      * @return the methods for the matching predicates
@@ -140,23 +142,26 @@ public abstract class ReflectionUtils {
     /**
      * Get methods of given {@code type}, optionally filtered by
      * {@code predicates}.
+     *
      * @param t type information
      * @param predicates predicates to match
      * @return the methods for the matching predictes
      */
     public static Set<Method> getMethods(Class<?> t, Predicate<? super Method>... predicates) {
-        return filter(t.isInterface() ? t.getMethods() : t.getDeclaredMethods(), predicates);
+        return Utils.filter(t.isInterface() ? t.getMethods() : t.getDeclaredMethods(), predicates);
     }
 
     /**
      * Get all constructors of given {@code type}, up the super class hierarchy,
      * optionally filtered by {@code predicates}.
+     *
      * @param type type information
      * @param predicates the matching predicates
      * @return the constuctors for the matching predicates
      */
-    @SuppressWarnings({"unchecked","rawtypes"})
-    public static Set<Constructor> getAllConstructors(final Class<?> type, Predicate<? super Constructor>... predicates) {
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static Set<Constructor> getAllConstructors(final Class<?> type, 
+            Predicate<? super Constructor>... predicates) {
         Set<Constructor> result = new HashSet<>();
         for (Class<?> t : getAllSuperTypes(type)) {
             result.addAll(getConstructors(t, predicates));
@@ -167,19 +172,19 @@ public abstract class ReflectionUtils {
     /**
      * Get constructors of given {@code type}, optionally filtered by
      * {@code predicates}.
-     * 
+     *
      * @param t type information
      * @param predicates the matching predicates
      * @return the constuctors for the matching predicates
      */
     public static Set<Constructor<?>> getConstructors(Class<?> t, Predicate<? super Constructor<?>>... predicates) {
-        return filter(t.getDeclaredConstructors(), predicates);
+        return Utils.filter(t.getDeclaredConstructors(), predicates);
     }
 
     /**
      * Get all fields of given {@code type}, up the super class hierarchy,
      * optionally filtered by {@code predicates}.
-     * 
+     *
      * @param type the type information
      * @param predicates the matching predicates
      * @return the fields for the matching predicates
@@ -195,23 +200,26 @@ public abstract class ReflectionUtils {
     /**
      * Get fields of given {@code type}, optionally filtered by
      * {@code predicates}.
+     *
      * @param type the type information
      * @param predicates the matching predicates
      * @return the fields for the matching predicates
      */
     public static Set<Field> getFields(Class<?> type, Predicate<? super Field>... predicates) {
-        return filter(type.getDeclaredFields(), predicates);
+        return Utils.filter(type.getDeclaredFields(), predicates);
     }
 
     /**
      * Get all annotations of given {@code type}, up the super class hierarchy,
      * optionally filtered by {@code predicates}.
+     *
      * @param <T> the class information
      * @param type type information
      * @param predicates the matching predicates
-     * @return  the annotations for the matching predicates
+     * @return the annotations for the matching predicates
      */
-    public static <T extends AnnotatedElement> Set<Annotation> getAllAnnotations(T type, Predicate<Annotation>... predicates) {
+    public static <T extends AnnotatedElement> Set<Annotation> getAllAnnotations(T type, 
+            Predicate<Annotation>... predicates) {
         Set<Annotation> result = new LinkedHashSet<>();
         List<AnnotatedElement> keys = new ArrayList<>();
         if (type instanceof Class) {
@@ -229,31 +237,34 @@ public abstract class ReflectionUtils {
 
     /**
      * Get annotations of given {@code type}, optionally honorInherited,
-     * optionally filtered by {@code predicates}
+     * optionally filtered by {@code predicates}.
+     *
      * @param <T> class information
      * @param type type information
      * @param predicates the matching predicates
      * @return the annotations for the matching predicates
      */
-    public static <T extends AnnotatedElement> Set<Annotation> getAnnotations(T type, Predicate<Annotation>... predicates) {
-        return filter(type.getDeclaredAnnotations(), predicates);
+    public static <T extends AnnotatedElement> Set<Annotation> getAnnotations(T type, 
+            Predicate<Annotation>... predicates) {
+        return Utils.filter(type.getDeclaredAnnotations(), predicates);
     }
 
     /**
      * Filter all given {@code elements} with {@code predicates}.
-     * 
+     *
      * @param <T> class information
      * @param elements elements to filter
      * @param predicates matching predicates
      * @return all elements matching predicates
      */
-    public static <T extends AnnotatedElement> Set<T> getAll(final Set<T> elements, Predicate<? super T>... predicates) {
-        return filter(elements, predicates);
+    public static <T extends AnnotatedElement> Set<T> getAll(final Set<T> elements, 
+            Predicate<? super T>... predicates) {
+        return Utils.filter(elements, predicates);
     }
-
 
     /**
      * Find member name equals given {@code name}.
+     *
      * @param <T> the class information
      * @param name the member name
      * @return the member with name
@@ -264,7 +275,7 @@ public abstract class ReflectionUtils {
 
     /**
      * Where member name startsWith given {@code prefix}.
-     * 
+     *
      * @param <T> class information
      * @param prefix the prefix for the member name
      * @return the member with the given prefix
@@ -274,9 +285,9 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * Find member's {@code toString} matching a given {@code regex}
-     * <p>
-     * for example:
+     * Find member's {@code toString} matching a given {@code regex}.
+     * 
+     * <p>for example:
      * <pre>
      *  getAllMethods(someClass, withPattern("public void .*"))
      * </pre>
@@ -291,43 +302,45 @@ public abstract class ReflectionUtils {
 
     /**
      * FInd element annotated with given {@code annotation}.
-     * 
+     *
      * @param <T> class information
      * @param annotation the annotation
      * @return find element annotated with matching annotation
      */
-    public static <T extends AnnotatedElement> Predicate<T> withAnnotation(final Class<? extends Annotation> annotation) {
+    public static <T extends AnnotatedElement> Predicate<T> withAnnotation(
+            final Class<? extends Annotation> annotation) {
         return input -> input != null && input.isAnnotationPresent(annotation);
-    }
-
-    /**
-     * Find element annotated with given {@code annotations}.
-     * 
-     * @param <T> class information
-     * @param annotations the annotations to match
-     * @return the elements with annotated with matching annotation
-     */
-    public static <T extends AnnotatedElement> Predicate<T> withAnnotations(final Class<? extends Annotation>... annotations) {
-        return input -> input != null && Arrays.equals(annotations, annotationTypes(input.getAnnotations()));
     }
 
     /**
      * Find element annotated with given {@code annotation}, including
      * member matching.
-     * 
+     *
      * @param <T> class information
      * @param annotation the annotation to match
-     * @return  the element annotated with matching annotation
+     * @return the element annotated with matching annotation
      */
     public static <T extends AnnotatedElement> Predicate<T> withAnnotation(final Annotation annotation) {
         return input -> input != null && input.isAnnotationPresent(annotation.annotationType())
                 && areAnnotationMembersMatching(input.getAnnotation(annotation.annotationType()), annotation);
     }
+    
+    /**
+     * Find element annotated with given {@code annotations}.
+     *
+     * @param <T> class information
+     * @param annotations the annotations to match
+     * @return the elements with annotated with matching annotation
+     */
+    public static <T extends AnnotatedElement> Predicate<T> withAnnotations(
+            final Class<? extends Annotation>... annotations) {
+        return input -> input != null && Arrays.equals(annotations, annotationTypes(input.getAnnotations()));
+    }
 
     /**
      * Find element annotated with given {@code annotations}, including
      * member matching.
-     * 
+     *
      * @param <T> class information
      * @param annotations the annotations to match
      * @return the elements with matching annotations
@@ -347,7 +360,7 @@ public abstract class ReflectionUtils {
 
     /**
      * Find method/constructor parameter types equals given {@code types}.
-     * 
+     *
      * @param types type information
      * @return the method/constructor with matching parameter types
      */
@@ -357,7 +370,7 @@ public abstract class ReflectionUtils {
 
     /**
      * Find member parameter types assignable to given {@code types}.
-     * 
+     *
      * @param types the type information
      * @return the members matching the assignable type
      */
@@ -368,7 +381,7 @@ public abstract class ReflectionUtils {
     /**
      * Find method/constructor parameter types assignable from given
      * {@code types}.
-     * 
+     *
      * @param types type information
      * @return the method/constuctor matching the assignable types
      */
@@ -377,10 +390,10 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * Find method/constructor parameters count equal given {@code count}
-     * @param count.
-     * 
-     * @return the method/consrtuctors with matching parameter count.
+     * Find method/constructor parameters count equal given {@code count}.
+     *
+     * @param count the parameter count
+     * @return the method/constructors with matching parameter count.
      */
     public static Predicate<Member> withParametersCount(final int count) {
         return input -> input != null && parameterTypes(input).length == count;
@@ -389,27 +402,33 @@ public abstract class ReflectionUtils {
     /**
      * Find method/constructor has any parameter with an annotation matches
      * given {@code annotations}.
-     * 
+     *
      * @param annotationClass the annotation class to match
      * @return the method/constuctors with matching annotations
      */
     public static Predicate<Member> withAnyParameterAnnotation(final Class<? extends Annotation> annotationClass) {
-        return input -> input != null && annotationTypes(parameterAnnotations(input)).stream().anyMatch(input1 -> input1.equals(annotationClass));
+        return input -> input != null 
+                && annotationTypes(parameterAnnotations(input))
+                        .stream()
+                        .anyMatch(input1 -> input1.equals(annotationClass));  
     }
 
     /**
      * Find method/constructor has any parameter with an annotation matches
-     * given {@code annotation}, including member matching
+     * given {@code annotation}, including member matching.
+     *
      * @param annotation the matching annotation
      * @return the method/constuctor with matching annotation
      */
     public static Predicate<Member> withAnyParameterAnnotation(final Annotation annotation) {
-        return input -> input != null && parameterAnnotations(input).stream().anyMatch(input1 -> areAnnotationMembersMatching(annotation, input1));
+        return input -> input != null && parameterAnnotations(input)
+                .stream()
+                .anyMatch(input1 -> areAnnotationMembersMatching(annotation, input1));
     }
 
     /**
      * Find field type equal given {@code type}.
-     * 
+     *
      * @param <T> class information
      * @param type type information
      * @return the field with matching types
@@ -419,7 +438,8 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * Find field type assignable to given {@code type}
+     * Find field type assignable to given {@code type}.
+     *
      * @param <T> class information
      * @param type type information
      * @return the field with matching type
@@ -429,7 +449,8 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * Find method return type equal given {@code type}
+     * Find method return type equal given {@code type}.
+     *
      * @param <T> class information
      * @param type type information
      * @return the method with matching type
@@ -439,7 +460,8 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * Find method return type assignable from given {@code type}
+     * Find method return type assignable from given {@code type}.
+     *
      * @param <T> class information
      * @param type type information
      * @return the method with matching type
@@ -449,12 +471,13 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * Find member modifier matches given {@code mod}
-     * <p>
-     * for example:
+     * Find member modifier matches given {@code mod}.
+     * 
+     * <p>for example:
      * <pre>
      * withModifier(Modifier.PUBLIC)
      * </pre>
+     *
      * @param <T> class information
      * @param mod the modifier
      * @return member with matching modifier
@@ -464,12 +487,13 @@ public abstract class ReflectionUtils {
     }
 
     /**
-     * Find class modifier matches given {@code mod}
-     * <p>
-     * for example:
+     * Find class modifier matches given {@code mod}.
+     * 
+     * <p>for example:
      * <pre>
      * withModifier(Modifier.PUBLIC)
      * </pre>
+     *
      * @param mod modifier
      * @return the class with matching modifier
      */
@@ -479,8 +503,8 @@ public abstract class ReflectionUtils {
 
     /**
      * Resolve a java type name to a Class.
-     * <p>
-     * if optional {@link ClassLoader}s are not specified, then both
+     * 
+     * <p>if optional {@link ClassLoader}s are not specified, then both
      * {@link org.reflections.util.ClasspathHelper#contextClassLoader()} and
      * {@link org.reflections.util.ClasspathHelper#staticClassLoader()} are used
      *
@@ -515,19 +539,23 @@ public abstract class ReflectionUtils {
                     try {
                         return Class.forName(type, false, classLoader);
                     } catch (ClassNotFoundException e) {
-                        reflectionsExceptions.add(new ReflectionsException("could not get type for name " + typeName, e));
+                        reflectionsExceptions.add(
+                                new ReflectionsException("could not get type for name " + typeName, e));
                     }
                 }
                 try {
                     return classLoader.loadClass(type);
                 } catch (ClassNotFoundException e) {
-                    reflectionsExceptions.add(new ReflectionsException("could not get type for name " + typeName, e));
+                    reflectionsExceptions.add(
+                            new ReflectionsException("could not get type for name " + typeName, e));
                 }
             }
 
             if (logger.isTraceEnabled()) {
                 for (ReflectionsException reflectionsException : reflectionsExceptions) {
-                    logger.trace("could not get type for name " + typeName + " from any class loader", reflectionsException);
+                    logger.trace("could not get type for name " 
+                            + typeName 
+                            + " from any class loader", reflectionsException);
                 }
             }
 
@@ -538,7 +566,7 @@ public abstract class ReflectionUtils {
     /**
      * Resolve all given string representation of types to a list of java
      * types.
-     * 
+     *
      * @param <T> class information
      * @param classes the classes to resolve
      * @param classLoaders class loader
@@ -579,8 +607,26 @@ public abstract class ReflectionUtils {
 
     private static void initPrimitives() {
         if (primitiveNames == null) {
-            primitiveNames = Arrays.asList("boolean", "char", "byte", "short", "int", "long", "float", "double", "void");
-            primitiveTypes = Arrays.asList(boolean.class, char.class, byte.class, short.class, int.class, long.class, float.class, double.class, void.class);
+            primitiveNames = Arrays.asList(
+                    "boolean", 
+                    "char", 
+                    "byte", 
+                    "short", 
+                    "int", 
+                    "long", 
+                    "float", 
+                    "double", 
+                    "void");
+            primitiveTypes = Arrays.asList(
+                    boolean.class, 
+                    char.class, 
+                    byte.class, 
+                    short.class, 
+                    int.class, 
+                    long.class, 
+                    float.class, 
+                    double.class, 
+                    void.class);
             primitiveDescriptors = Arrays.asList("Z", "C", "B", "S", "I", "J", "F", "D", "V");
         }
     }
@@ -609,7 +655,10 @@ public abstract class ReflectionUtils {
                         return false;
                     }
                 } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                    throw new ReflectionsException(String.format("could not invoke method %s on annotation %s", method.getName(), annotation1.annotationType()), e);
+                    throw new ReflectionsException(
+                            String.format("could not invoke method %s on annotation %s", 
+                                    method.getName(), 
+                                    annotation1.annotationType()), e);
                 }
             }
             return true;

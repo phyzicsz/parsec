@@ -1,7 +1,7 @@
 package com.phyzicsz.parsec.reflections;
 
 import com.phyzicsz.parsec.reflections.scanners.Scanner;
-import static com.phyzicsz.parsec.reflections.util.Utils.index;
+import com.phyzicsz.parsec.reflections.util.Utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,14 +14,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * stores metadata information in multimaps
- * <p>
- * use the different query methods (getXXX) to query the metadata
- * <p>
- * the query methods are string based, and does not cause the class loader to
+ * Stores metadata information in multimaps.
+ * 
+ * <p>Use the different query methods (getXXX) to query the metadata
+ * 
+ * <p>The query methods are string based, and does not cause the class loader to
  * define the types
- * <p>
- * use {@link org.reflections.Reflections#getStore()} to access this store
+ * 
+ * <p>Use {@link org.reflections.Reflections#getStore()} to access this store
  */
 public class Store {
 
@@ -30,14 +30,14 @@ public class Store {
     protected Store(Configuration configuration) {
         storeMap = new ConcurrentHashMap<>();
         for (Scanner scanner : configuration.getScanners()) {
-            String index = index(scanner.getClass());
+            String index = Utils.index(scanner.getClass());
             storeMap.computeIfAbsent(index, s -> new ConcurrentHashMap<>());
         }
     }
 
     /**
      * Return all indices.
-     * 
+     *
      * @return the keys in the store
      */
     public Set<String> keySet() {
@@ -46,8 +46,8 @@ public class Store {
 
     /**
      * Get the multimap object for the given {@code index}, otherwise throws a
-     * {@link com.phyzicsz.parsec.reflections.ReflectionsException},
-     * 
+     * {@link com.phyzicsz.parsec.reflections.ReflectionsException}.
+     *
      */
     private Map<String, Collection<String>> get(String index) {
         Map<String, Collection<String>> mmap = storeMap.get(index);
@@ -59,18 +59,18 @@ public class Store {
 
     /**
      * Get the values stored for the given {@code index} and {@code key}.
-     * 
+     *
      * @param scannerClass the scanner class
      * @param key the key
      * @return the matching values
      */
     public Set<String> get(Class<?> scannerClass, String key) {
-        return get(index(scannerClass), Collections.singletonList(key));
+        return get(Utils.index(scannerClass), Collections.singletonList(key));
     }
 
     /**
      * Get the values stored for the given {@code index} and {@code key}.
-     * 
+     *
      * @param index the index
      * @param key the key
      * @return the matching values
@@ -81,18 +81,18 @@ public class Store {
 
     /**
      * Get the values stored for the given {@code index} and {@code keys}.
-     * 
+     *
      * @param scannerClass the scanner class
      * @param keys the keys
      * @return the matching values
      */
     public Set<String> get(Class<?> scannerClass, Collection<String> keys) {
-        return get(index(scannerClass), keys);
+        return get(Utils.index(scannerClass), keys);
     }
 
     /**
      * Get the values stored for the given {@code index} and {@code keys}.
-     * 
+     *
      */
     private Set<String> get(String index, Collection<String> keys) {
         Map<String, Collection<String>> mmap = get(index);
@@ -109,13 +109,13 @@ public class Store {
     /**
      * Recursively get the values stored for the given {@code index} and
      * {@code keys}, including keys.
-     * 
+     *
      * @param scannerClass the scanner class
      * @param keys the keys
      * @return the matching values
      */
     public Set<String> getAllIncluding(Class<?> scannerClass, Collection<String> keys) {
-        String index = index(scannerClass);
+        String index = Utils.index(scannerClass);
         Map<String, Collection<String>> mmap = get(index);
         List<String> workKeys = new ArrayList<>(keys);
 
@@ -135,7 +135,7 @@ public class Store {
     /**
      * Recursively get the values stored for the given {@code index} and
      * {@code key}, not including keys.
-     * 
+     *
      * @param scannerClass the scanner class
      * @param key the key
      * @return the matching values
@@ -147,7 +147,7 @@ public class Store {
     /**
      * Recursively get the values stored for the given {@code index} and
      * {@code keys}, not including keys.
-     * 
+     *
      * @param scannerClass the scanner class
      * @param keys the keys
      * @return the matching values
@@ -161,16 +161,34 @@ public class Store {
         return map != null ? new HashSet<>(map.keySet()) : Collections.emptySet();
     }
 
+    /**
+     * Get the values for the index.
+     * 
+     * @param index the index
+     * @return the set of values
+     */
     public Set<String> values(String index) {
         Map<String, Collection<String>> map = storeMap.get(index);
-        return map != null ? map.values().stream().flatMap(Collection::stream).collect(Collectors.toSet()) : Collections.emptySet();
+        return map != null ? map
+                .values()
+                .stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet()) : Collections.emptySet();
     }
 
-    //
+    
     public boolean put(Class<?> scannerClass, String key, String value) {
-        return put(index(scannerClass), key, value);
+        return put(Utils.index(scannerClass), key, value);
     }
 
+    /**
+     * Store a value for an index and key.
+     * 
+     * @param index the index to store the value in
+     * @param key the key to store the value with
+     * @param value the value to store
+     * @return boolean true if stored
+     */
     public boolean put(String index, String key, String value) {
         return storeMap.computeIfAbsent(index, s -> new ConcurrentHashMap<>())
                 .computeIfAbsent(key, s -> Collections.synchronizedList(new ArrayList<>()))

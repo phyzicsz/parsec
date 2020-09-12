@@ -2,7 +2,6 @@ package com.phyzicsz.parsec.reflections.adapters;
 
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import com.phyzicsz.parsec.reflections.util.Utils;
-import static com.phyzicsz.parsec.reflections.util.Utils.join;
 import com.phyzicsz.parsec.reflections.vfs.Vfs;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -16,8 +15,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javassist.bytecode.AccessFlag;
-import static javassist.bytecode.AccessFlag.isPrivate;
-import static javassist.bytecode.AccessFlag.isProtected;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.Descriptor;
@@ -28,14 +25,15 @@ import javassist.bytecode.annotation.Annotation;
 
 /**
  * Adapter based on Javaassist.
- * 
- * @author phyzicsz <phyzics.z@gmail.com>
+ *
+ * @author phyzicsz (phyzics.z@gmail.com)
  */
 public class JavassistAdapter implements MetadataAdapter<ClassFile, FieldInfo, MethodInfo> {
 
     /**
      * Setting this to false will result in returning only visible annotations
-     * from the relevant methods here (only {@link java.lang.annotation.RetentionPolicy#RUNTIME})
+     * from the relevant methods here (only {@link java.lang.annotation.RetentionPolicy#RUNTIME}).
+     * 
      */
     public static boolean includeInvisibleTag = true;
 
@@ -62,21 +60,24 @@ public class JavassistAdapter implements MetadataAdapter<ClassFile, FieldInfo, M
     }
 
     @Override
-    public List<String> getClassAnnotationNames(final ClassFile aClass) {
-        return getAnnotationNames((AnnotationsAttribute) aClass.getAttribute(AnnotationsAttribute.visibleTag),
-                includeInvisibleTag ? (AnnotationsAttribute) aClass.getAttribute(AnnotationsAttribute.invisibleTag) : null);
+    public List<String> getClassAnnotationNames(final ClassFile classz) {
+        return getAnnotationNames((AnnotationsAttribute) classz.getAttribute(AnnotationsAttribute.visibleTag),
+                includeInvisibleTag 
+                        ? (AnnotationsAttribute) classz.getAttribute(AnnotationsAttribute.invisibleTag) : null);
     }
 
     @Override
     public List<String> getFieldAnnotationNames(final FieldInfo field) {
         return getAnnotationNames((AnnotationsAttribute) field.getAttribute(AnnotationsAttribute.visibleTag),
-                includeInvisibleTag ? (AnnotationsAttribute) field.getAttribute(AnnotationsAttribute.invisibleTag) : null);
+                includeInvisibleTag 
+                        ? (AnnotationsAttribute) field.getAttribute(AnnotationsAttribute.invisibleTag) : null);
     }
 
     @Override
     public List<String> getMethodAnnotationNames(final MethodInfo method) {
         return getAnnotationNames((AnnotationsAttribute) method.getAttribute(AnnotationsAttribute.visibleTag),
-                includeInvisibleTag ? (AnnotationsAttribute) method.getAttribute(AnnotationsAttribute.invisibleTag) : null);
+                includeInvisibleTag 
+                        ? (AnnotationsAttribute) method.getAttribute(AnnotationsAttribute.invisibleTag) : null);
     }
 
     @Override
@@ -129,14 +130,14 @@ public class JavassistAdapter implements MetadataAdapter<ClassFile, FieldInfo, M
     @Override
     public String getMethodModifier(MethodInfo method) {
         int accessFlags = method.getAccessFlags();
-        return isPrivate(accessFlags) ? "private"
-                : isProtected(accessFlags) ? "protected"
+        return AccessFlag.isPrivate(accessFlags) ? "private"
+                : AccessFlag.isProtected(accessFlags) ? "protected"
                 : isPublic(accessFlags) ? "public" : "";
     }
 
     @Override
     public String getMethodKey(ClassFile cls, MethodInfo method) {
-        return getMethodName(method) + "(" + join(getParameterNames(method), ", ") + ")";
+        return getMethodName(method) + "(" + Utils.join(getParameterNames(method), ", ") + ")";
     }
 
     @Override

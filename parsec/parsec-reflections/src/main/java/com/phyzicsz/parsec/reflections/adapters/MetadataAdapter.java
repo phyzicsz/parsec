@@ -5,21 +5,19 @@ import java.util.List;
 
 /**
  * Interface for metadata adaptation.
- * 
+ *
  * @param <C> class information
  * @param <F> field information
  * @param <M> method information
  */
-public interface MetadataAdapter<C,F,M> {
+public interface MetadataAdapter<C, F, M> {
 
-    //
     String getClassName(final C cls);
 
     String getSuperclassName(final C cls);
 
     List<String> getInterfacesNames(final C cls);
 
-    //
     List<F> getFields(final C cls);
 
     List<M> getMethods(final C cls);
@@ -28,7 +26,7 @@ public interface MetadataAdapter<C,F,M> {
 
     List<String> getParameterNames(final M method);
 
-    List<String> getClassAnnotationNames(final C aClass);
+    List<String> getClassAnnotationNames(final C classz);
 
     List<String> getFieldAnnotationNames(final F field);
 
@@ -49,7 +47,7 @@ public interface MetadataAdapter<C,F,M> {
     String getMethodFullKey(C cls, M method);
 
     boolean isPublic(Object o);
-    
+
     boolean acceptsInput(String file);
-    
+
 }
