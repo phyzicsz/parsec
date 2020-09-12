@@ -1,10 +1,11 @@
 package com.phyzicsz.parsec.reflections.scanners;
 
 import com.phyzicsz.parsec.reflections.Store;
-import static com.phyzicsz.parsec.reflections.util.Utils.join;
+import com.phyzicsz.parsec.reflections.util.Utils;
 
 /**
- * scans fields and methods and stores fqn as key and elements as values
+ * Scans fields and methods and stores fqn as key and elements as values.
+ * 
  */
 @SuppressWarnings({"unchecked"})
 public class TypeElementsScanner extends AbstractScanner {
@@ -34,7 +35,7 @@ public class TypeElementsScanner extends AbstractScanner {
             for (Object method : getMetadataAdapter().getMethods(cls)) {
                 if (!publicOnly || getMetadataAdapter().isPublic(method)) {
                     String methodKey = getMetadataAdapter().getMethodName(method) + "("
-                            + join(getMetadataAdapter().getParameterNames(method), ", ") + ")";
+                            + Utils.join(getMetadataAdapter().getParameterNames(method), ", ") + ")";
                     put(store, className, methodKey);
                 }
             }

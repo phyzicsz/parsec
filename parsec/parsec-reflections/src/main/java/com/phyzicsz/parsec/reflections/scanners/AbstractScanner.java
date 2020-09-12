@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 
 /**
  * Abstract scanner type.
- * 
+ *
  */
 @SuppressWarnings({"RawUseOfParameterizedType"})
 public abstract class AbstractScanner implements Scanner {
@@ -72,7 +72,7 @@ public abstract class AbstractScanner implements Scanner {
         return fqn != null && resultFilter.test(fqn);
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     protected MetadataAdapter getMetadataAdapter() {
         return configuration.getMetadataAdapter();
     }

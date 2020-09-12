@@ -3,9 +3,14 @@ package com.phyzicsz.parsec.reflections.scanners;
 import com.phyzicsz.parsec.reflections.Store;
 import java.util.List;
 
+
+/**
+ * Scans for method's annotations.
+ * 
+ */
 @SuppressWarnings({"unchecked"})
-/** scans for method's annotations */
 public class MethodAnnotationsScanner extends AbstractScanner {
+
     @Override
     public void scan(final Object cls, Store store) {
         for (Object method : getMetadataAdapter().getMethods(cls)) {

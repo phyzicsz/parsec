@@ -5,13 +5,14 @@ import com.phyzicsz.parsec.reflections.adapters.MetadataAdapter;
 import java.util.List;
 
 /**
- * scans methods/constructors and indexes parameters, return type and parameter
- * annotations
+ * Scans methods/constructors and indexes parameters, return type and parameter
+ * annotations.
+ * 
  */
 public class MethodParameterScanner extends AbstractScanner {
 
     @Override
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void scan(Object cls, Store store) {
         final MetadataAdapter md = getMetadataAdapter();
 

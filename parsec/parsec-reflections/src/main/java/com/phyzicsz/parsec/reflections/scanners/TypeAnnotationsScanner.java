@@ -5,7 +5,8 @@ import java.lang.annotation.Inherited;
 import java.util.List;
 
 /**
- * scans for class's annotations, where @Retention(RetentionPolicy.RUNTIME)
+ * Scans for class's annotations, where @Retention(RetentionPolicy.RUNTIME).
+ * 
  */
 @SuppressWarnings({"unchecked"})
 public class TypeAnnotationsScanner extends AbstractScanner {

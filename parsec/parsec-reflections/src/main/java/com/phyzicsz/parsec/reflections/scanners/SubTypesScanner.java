@@ -5,23 +5,24 @@ import com.phyzicsz.parsec.reflections.util.FilterBuilder;
 import java.util.List;
 
 /**
- * scans for superclass and interfaces of a class, allowing a reverse lookup for
- * subtypes
+ * Scans for superclass and interfaces of a class, allowing a reverse lookup for
+ * subtypes.
+ * 
  */
 public class SubTypesScanner extends AbstractScanner {
 
     /**
-     * created new SubTypesScanner. will exclude direct Object subtypes
+     * Created new SubTypesScanner. will exclude direct Object subtypes.
+     * 
      */
     public SubTypesScanner() {
         this(true); //exclude direct Object subtypes by default
     }
 
     /**
-     * created new SubTypesScanner.
+     * Created new SubTypesScanner.
      *
-     * @param excludeObjectClass if false, include direct {@link Object}
-     * subtypes in results.
+     * @param excludeObjectClass if false, include direct {@link Object} subtypes in results.
      */
     public SubTypesScanner(boolean excludeObjectClass) {
         if (excludeObjectClass) {

@@ -10,12 +10,13 @@ import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
 
 /**
- * scans methods/constructors and indexes parameter names
+ * Scans methods/constructors and indexes parameter names.
+ * 
  */
 public class MethodParameterNamesScanner extends AbstractScanner {
 
     @Override
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void scan(Object cls, Store store) {
         final MetadataAdapter md = getMetadataAdapter();
 
@@ -23,7 +24,8 @@ public class MethodParameterNamesScanner extends AbstractScanner {
             String key = md.getMethodFullKey(cls, method);
             if (acceptResult(key)) {
                 CodeAttribute codeAttribute = ((MethodInfo) method).getCodeAttribute();
-                LocalVariableAttribute table = codeAttribute != null ? (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag) : null;
+                LocalVariableAttribute table = codeAttribute != null 
+                        ? (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag) : null;
                 int length = md.getParameterNames(method).size();
                 if (length > 0) {
                     int shift = Modifier.isStatic(((MethodInfo) method).getAccessFlags()) ? 0 : 1; //skip this

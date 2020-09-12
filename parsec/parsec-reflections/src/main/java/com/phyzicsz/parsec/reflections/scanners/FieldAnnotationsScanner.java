@@ -4,7 +4,8 @@ import com.phyzicsz.parsec.reflections.Store;
 import java.util.List;
 
 /**
- * scans for field's annotations
+ * Scans for field's annotations.
+ * 
  */
 @SuppressWarnings({"unchecked"})
 public class FieldAnnotationsScanner extends AbstractScanner {

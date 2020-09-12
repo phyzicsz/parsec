@@ -10,9 +10,8 @@ import java.util.regex.Pattern;
 
 /**
  * Builds include/exclude filters for Reflections.
- * 
- * <p>
- * For example:
+ *
+ * <p>For example:
  * <pre>{@code
  * Predicate<String> filter1 = FilterBuilder.parsePackages("-java, "-javax");
  * Predicate<String> filter2 = new FilterBuilder().include(".*").exclude("java.*");
@@ -64,25 +63,15 @@ public class FilterBuilder implements Predicate<String> {
     }
 
     /**
-     * Include a package of a given class
+     * Include a package of a given class.
      *
-     * @param aClass the class to include
+     * @param classz the class to include
      * @return fluent builder
      */
-    public FilterBuilder includePackage(final Class<?> aClass) {
-        return add(new Include(packageNameRegex(aClass)));
+    public FilterBuilder includePackage(final Class<?> classz) {
+        return add(new Include(packageNameRegex(classz)));
     }
-
-    /**
-     * Exclude a package of a given class.
-     *
-     * @param aClass the class to exclude
-     * @return fluent builder
-     */
-    public FilterBuilder excludePackage(final Class<?> aClass) {
-        return add(new Exclude(packageNameRegex(aClass)));
-    }
-
+    
     /**
      * Include packages of given prefixes.
      *
@@ -94,6 +83,16 @@ public class FilterBuilder implements Predicate<String> {
             add(new Include(prefix(prefix)));
         }
         return this;
+    }
+
+    /**
+     * Exclude a package of a given class.
+     *
+     * @param classz the class to exclude
+     * @return fluent builder
+     */
+    public FilterBuilder excludePackage(final Class<?> classz) {
+        return add(new Exclude(packageNameRegex(classz)));
     }
 
     /**
@@ -109,8 +108,8 @@ public class FilterBuilder implements Predicate<String> {
         return this;
     }
 
-    private static String packageNameRegex(Class<?> aClass) {
-        return prefix(aClass.getPackage().getName() + ".");
+    private static String packageNameRegex(Class<?> classz) {
+        return prefix(classz.getPackage().getName() + ".");
     }
 
     public static String prefix(String qualifiedName) {
@@ -191,16 +190,15 @@ public class FilterBuilder implements Predicate<String> {
 
     /**
      * Parses a string representation of an include/exclude filter.
-     * 
-     * <p>
-     * The given includeExcludeString is a comma separated list of regexes, each
+     *
+     * <p>The given includeExcludeString is a comma separated list of regexes, each
      * starting with either + or - to indicate include/exclude.
-     * <p>
-     * For example parsePackages("-java\\..*, -javax\\..*, -sun\\..*,
+     * 
+     * <p>For example parsePackages("-java\\..*, -javax\\..*, -sun\\..*,
      * -com\\.sun\\..*") or parse("+com\\.myn\\..*,-com\\.myn\\.excluded\\..*").
      * Note that "-java\\..*" will block "java.foo" but not "javax.foo".
-     * <p>
-     * See also the more useful {@link FilterBuilder#parsePackages(String)}
+     * 
+     * <p>See also the more useful {@link FilterBuilder#parsePackages(String)}
      * method.
      *
      * @param includeExcludeString the string to include/exclude based on
@@ -238,16 +236,15 @@ public class FilterBuilder implements Predicate<String> {
 
     /**
      * Parses a string representation of an include/exclude filter.
-     * 
-     * <p>
-     * The given includeExcludeString is a comma separated list of package name
+     *
+     * <p>The given includeExcludeString is a comma separated list of package name
      * segments, each starting with either + or - to indicate include/exclude.
-     * <p>
-     * For example parsePackages("-java, -javax, -sun, -com.sun") or
+     * 
+     * <p>For example parsePackages("-java, -javax, -sun, -com.sun") or
      * parse("+com.myn,-com.myn.excluded"). Note that "-java" will block
      * "java.foo" but not "javax.foo".
-     * <p>
-     * The input strings "-java" and "-java." are equivalent.
+     * 
+     * <p>The input strings "-java" and "-java." are equivalent.
      *
      * @param includeExcludeString the string to include/exclude based on
      * @return fluent builder

@@ -4,15 +4,18 @@ import com.phyzicsz.parsec.reflections.Store;
 import com.phyzicsz.parsec.reflections.vfs.Vfs;
 
 /**
- * collects all resources that are not classes in a collection
- * <p>
- * key: value - {web.xml: WEB-INF/web.xml}
+ * Collects all resources that are not classes in a collection.
+ * 
+ * <p>key: value - {web.xml: WEB-INF/web.xml}
  */
 public class ResourcesScanner extends AbstractScanner {
 
     @Override
     public boolean acceptsInput(String file) {
-        return !file.endsWith(".class") && !file.endsWith(".groovy") && !file.endsWith(".scala") && !file.endsWith(".kt"); //not a class
+        return !file.endsWith(".class") 
+                && !file.endsWith(".groovy") 
+                && !file.endsWith(".scala") 
+                && !file.endsWith(".kt"); //not a class
     }
 
     @Override

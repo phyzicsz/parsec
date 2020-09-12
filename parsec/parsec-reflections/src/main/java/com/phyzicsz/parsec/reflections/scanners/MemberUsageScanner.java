@@ -3,7 +3,7 @@ package com.phyzicsz.parsec.reflections.scanners;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import com.phyzicsz.parsec.reflections.Store;
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
-import static com.phyzicsz.parsec.reflections.util.Utils.join;
+import com.phyzicsz.parsec.reflections.util.Utils;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;
@@ -18,9 +18,9 @@ import javassist.expr.MethodCall;
 import javassist.expr.NewExpr;
 
 /**
- * scans methods/constructors/fields usage
- * <p>
- * <i> depends on
+ * Scans methods/constructors/fields usage.
+ * 
+ * <p><i> depends on
  * {@link com.phyzicsz.parsec.reflections.adapters.JavassistAdapter} configured </i>
  */
 public class MemberUsageScanner extends AbstractScanner {
@@ -28,7 +28,7 @@ public class MemberUsageScanner extends AbstractScanner {
     private ClassPool classPool;
 
     @Override
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void scan(Object cls, Store store) {
         try {
             CtClass ctClass = getClassPool().get(getMetadataAdapter().getClassName(cls));
@@ -40,7 +40,8 @@ public class MemberUsageScanner extends AbstractScanner {
             }
             ctClass.detach();
         } catch (CannotCompileException | NotFoundException e) {
-            throw new ReflectionsException("Could not scan method usage for " + getMetadataAdapter().getClassName(cls), e);
+            throw new ReflectionsException("Could not scan method usage for " 
+                    + getMetadataAdapter().getClassName(cls), e);
         }
     }
 
@@ -82,7 +83,9 @@ public class MemberUsageScanner extends AbstractScanner {
             @Override
             public void edit(FieldAccess f) throws CannotCompileException {
                 try {
-                    put(store, f.getField().getDeclaringClass().getName() + "." + f.getFieldName(), f.getLineNumber(), key);
+                    put(store, f.getField().getDeclaringClass().getName() 
+                            + "." 
+                            + f.getFieldName(), f.getLineNumber(), key);
                 } catch (NotFoundException e) {
                     throw new ReflectionsException("Could not find member " + f.getFieldName() + " in " + key, e);
                 }
@@ -96,9 +99,9 @@ public class MemberUsageScanner extends AbstractScanner {
         }
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     String parameterNames(MethodInfo info) {
-        return join(getMetadataAdapter().getParameterNames(info), ", ");
+        return Utils.join(getMetadataAdapter().getParameterNames(info), ", ");
     }
 
     private ClassPool getClassPool() {
