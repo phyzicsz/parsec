@@ -59,9 +59,11 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * * constructs a {@link ConfigurationBuilder} using the given parameters,
+     * Constructs a {@link ConfigurationBuilder} using the given parameters,
      * in a non statically typed way.that is, each element in {@code params} is
-     * guessed by it's type and populated into the configuration.<ul>
+     * guessed by it's type and populated into the configuration.
+     * 
+     * <ul>
      * <li>{@link String} - add urls using
      * {@link ClasspathHelper#forPackage(String, ClassLoader...)} ()}</li>
      * <li>{@link Class} - add urls using
@@ -80,8 +82,8 @@ public class ConfigurationBuilder implements Configuration {
      * use any parameter type in any order. this constructor uses instanceof on
      * each param and instantiate a {@link ConfigurationBuilder} appropriately.
      *
-     * @param params
-     * @return
+     * @param params configuration parameters
+     * @return fluent builder
      */
      @SuppressWarnings({"unchecked","rawtypes"})
     public static ConfigurationBuilder build(final Object... params) {
@@ -186,10 +188,10 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * set the scanners instances for scanning different metadata
+     * Set the scanners instances for scanning different metadata.
      *
-     * @param scanners
-     * @return
+     * @param scanners the scanners
+     * @return fluent builder
      */
     public ConfigurationBuilder setScanners(final Scanner... scanners) {
         this.scanners.clear();
@@ -197,10 +199,10 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * set the scanners instances for scanning different metadata
+     * Set the scanners instances for scanning different metadata.
      *
-     * @param scanners
-     * @return
+     * @param scanners the scanners
+     * @return fluent builder
      */
     public ConfigurationBuilder addScanners(final Scanner... scanners) {
         this.scanners.addAll(Arrays.asList(scanners));
@@ -213,13 +215,14 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * set the urls to be scanned
+     * Set the urls to be scanned.
+     * 
      * <p>
      * use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
      * convenient methods to get the relevant urls
      *
-     * @param urls
-     * @return
+     * @param urls the urls
+     * @return fluent builder
      */
     public ConfigurationBuilder setUrls(final Collection<URL> urls) {
         this.urls = new HashSet<>(urls);
@@ -227,13 +230,14 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * set the urls to be scanned
+     * Set the urls to be scanned.
+     * 
      * <p>
      * use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
      * convenient methods to get the relevant urls
      *
-     * @param urls
-     * @return
+     * @param urls the urls
+     * @return fluent builder
      */
     public ConfigurationBuilder setUrls(final URL... urls) {
         this.urls = new HashSet<>(Arrays.asList(urls));
@@ -241,13 +245,14 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * add urls to be scanned
+     * Add urls to be scanned.
+     * 
      * <p>
      * use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
      * convenient methods to get the relevant urls
      *
-     * @param urls
-     * @return
+     * @param urls the urls
+     * @return fluent builder
      */
     public ConfigurationBuilder addUrls(final Collection<URL> urls) {
         this.urls.addAll(urls);
@@ -255,13 +260,13 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * add urls to be scanned
+     * Add urls to be scanned.
      * <p>
      * use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
      * convenient methods to get the relevant urls
      *
-     * @param urls
-     * @return
+     * @param urls the urls
+     * @return fluent builder
      */
     public ConfigurationBuilder addUrls(final URL... urls) {
         this.urls.addAll(new HashSet<>(Arrays.asList(urls)));
@@ -269,12 +274,15 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * returns the metadata adapter. if javassist library exists in the
+     * Returns the metadata adapter. if javassist library exists in the
      * classpath, this method returns {@link JavassistAdapter} otherwise
      * defaults to {@link JavaReflectionAdapter}.
+     * 
      * <p>
      * the {@link JavassistAdapter} is preferred in terms of performance and
      * class loading.
+     * 
+     * @return the metadata adapter
      */
     @Override
     public MetadataAdapter<?,?,?> getMetadataAdapter() {
@@ -291,10 +299,10 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * sets the metadata adapter used to fetch metadata from classes
+     * Sets the metadata adapter used to fetch metadata from classes
      *
-     * @param metadataAdapter
-     * @return
+     * @param metadataAdapter the metadata adapter to use
+     * @return fluent builder
      */
     public ConfigurationBuilder setMetadataAdapter(final MetadataAdapter<?,?,?> metadataAdapter) {
         this.metadataAdapter = metadataAdapter;
@@ -318,12 +326,13 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * sets the input filter for all resources to be scanned.
+     * Sets the input filter for all resources to be scanned.
+     * 
      * <p>
      * supply a {@link Predicate} or use the {@link FilterBuilder
      *
-     * @param inputsFilter}
-     * @return
+     * @param inputsFilter the input filter
+     * @return fluent builder
      */
     public ConfigurationBuilder filterInputsBy(Predicate<String> inputsFilter) {
         this.inputsFilter = inputsFilter;
@@ -336,10 +345,10 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * sets the executor service used for scanning.
+     * Sets the executor service used for scanning.
      *
-     * @param executorService
-     * @return
+     * @param executorService the executor service to use
+     * @return fluent builder
      */
     public ConfigurationBuilder setExecutorService(ExecutorService executorService) {
         this.executorService = executorService;
@@ -347,25 +356,29 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * * sets the executor service used for scanning to ThreadPoolExecutor with
-     * core size as {@link java.lang.Runtime#availableProcessors()}
+     * Sets the executor service used for scanning to ThreadPoolExecutor with
+     * core size as {@link java.lang.Runtime#availableProcessors()}.
+     * 
      * <p>
      * default is ThreadPoolExecutor with a single core
      *
-     * @return
+     * @return fluent builde
      */
     public ConfigurationBuilder useParallelExecutor() {
         return useParallelExecutor(Runtime.getRuntime().availableProcessors());
     }
 
     /**
-     * * sets the executor service used for scanning to ThreadPoolExecutor with
-     * core size as the given availableProcessors parameter.the executor service
-     * spawns daemon threads by default.<p>
+     * Sets the executor service used for scanning to ThreadPoolExecutor with
+     * core size as the given availableProcessors parameter.
+     * 
+     * The executor service spawns daemon threads by default.
+     * 
+     * <p>
      * default is ThreadPoolExecutor with a single core
      *
-     * @param availableProcessors
-     * @return
+     * @param availableProcessors the number of available processors
+     * @return fluent builder
      */
     public ConfigurationBuilder useParallelExecutor(final int availableProcessors) {
         ThreadFactory threadFactory = new ThreadFactory() {
@@ -384,7 +397,9 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * get class loader, might be used for scanning or resolving methods/fields
+     * Get class loader, might be used for scanning or resolving methods/fields
+     * 
+     * @return array of class loaders
      */
     @Override
     public ClassLoader[] getClassLoaders() {
@@ -397,12 +412,13 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * if set to true, Reflections will expand super types after scanning.
+     * If set to true, Reflections will expand super types after scanning.
+     * 
      * <p>
      * see {@link org.reflections.Reflections#expandSuperTypes()}
      *
-     * @param expandSuperTypes
-     * @return
+     * @param expandSuperTypes flag to expand supertypes (or not)
+     * @return fluent builder
      */
     public ConfigurationBuilder setExpandSuperTypes(boolean expandSuperTypes) {
         this.expandSuperTypes = expandSuperTypes;
@@ -410,10 +426,10 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * set class loader, might be used for resolving methods/fields
+     * Set class loader, might be used for resolving methods/fields.
      *
-     * @param classLoaders
-     * @return
+     * @param classLoaders the class loaders
+     * @return fluent builder
      */
     public ConfigurationBuilder setClassLoaders(ClassLoader[] classLoaders) {
         this.classLoaders = classLoaders;
@@ -421,20 +437,20 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * add class loader, might be used for resolving methods/fields
+     * Add class loader, might be used for resolving methods/fields
      *
-     * @param classLoader
-     * @return
+     * @param classLoader the class loader
+     * @return fluent builder
      */
     public ConfigurationBuilder addClassLoader(ClassLoader classLoader) {
         return addClassLoaders(classLoader);
     }
 
     /**
-     * add class loader, might be used for resolving methods/fields
+     * Add class loader, might be used for resolving methods/fields.
      *
-     * @param classLoaders
-     * @return
+     * @param classLoaders the class loaders
+     * @return fluent builder
      */
     public ConfigurationBuilder addClassLoaders(ClassLoader... classLoaders) {
         this.classLoaders = this.classLoaders == null
@@ -444,10 +460,10 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * add class loader, might be used for resolving methods/fields
+     * Add class loader, might be used for resolving methods/fields.
      *
-     * @param classLoaders
-     * @return
+     * @param classLoaders the class loaders
+     * @return fluent builder
      */
     public ConfigurationBuilder addClassLoaders(Collection<ClassLoader> classLoaders) {
         return addClassLoaders(classLoaders.toArray(new ClassLoader[classLoaders.size()]));

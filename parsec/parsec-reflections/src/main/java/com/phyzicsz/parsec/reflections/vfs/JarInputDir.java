@@ -9,7 +9,9 @@ import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
 /**
- *
+ * Model for an VFS directory for a jar file
+ * 
+ * @author phyzicsz <phyzics.z@gmail.com>
  */
 public class JarInputDir implements Vfs.Dir {
 

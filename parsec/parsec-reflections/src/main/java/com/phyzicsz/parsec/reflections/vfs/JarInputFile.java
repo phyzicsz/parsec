@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 
 /**
- *
+ * Model for a VFS File.
+ * 
+ * @author phyzicsz <phyzics.z@gmail.com>
  */
 public class JarInputFile implements Vfs.File {
 
