@@ -24,28 +24,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * a fluent builder for {@link org.reflections.Configuration}, to be used for
- * constructing a {@link com.phyzicsz.parsec.reflections.Reflections} instance
- * <p>
- * usage:
- * <pre>
+ * A fluent builder for {@link org.reflections.Configuration}, to be used for
+ * constructing a {@link com.phyzicsz.parsec.reflections.Reflections} instance.
+ * 
+ * <p>Usage:
+ * <pre>{@code
  *      new Reflections(
  *          new ConfigurationBuilder()
  *              .filterInputsBy(new FilterBuilder().include("your project's common package prefix here..."))
  *              .setUrls(ClasspathHelper.forClassLoader())
- *              .setScanners(new SubTypesScanner(), new TypeAnnotationsScanner().filterResultsBy(myClassAnnotationsFilter)));
+ *              .setScanners(new SubTypesScanner(), 
+ *                  new TypeAnnotationsScanner()
+ *                      .filterResultsBy(myClassAnnotationsFilter)));
+ * }
  * </pre>
  * <br>{@link #executorService} is used optionally used for parallel scanning.
  * if value is null then scanning is done in a simple for loop
- * <p>
- * defaults: accept all for {@link #inputsFilter}
+ * 
+ * <p>defaults: accept all for {@link #inputsFilter}
  */
 public class ConfigurationBuilder implements Configuration {
+
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationBuilder.class);
 
     private final List<Scanner> scanners;
     private List<URL> urls;
-    /*lazy*/ protected MetadataAdapter<?,?,?> metadataAdapter;
+    /*lazy*/ protected MetadataAdapter<?, ?, ?> metadataAdapter;
     private Predicate<String> inputsFilter;
     private ExecutorService executorService;
     private ClassLoader[] classLoaders;
@@ -60,7 +64,7 @@ public class ConfigurationBuilder implements Configuration {
      * Constructs a {@link ConfigurationBuilder} using the given parameters,
      * in a non statically typed way.that is, each element in {@code params} is
      * guessed by it's type and populated into the configuration.
-     * 
+     *
      * <ul>
      * <li>{@link String} - add urls using
      * {@link ClasspathHelper#forPackage(String, ClassLoader...)} ()}</li>
@@ -75,15 +79,15 @@ public class ConfigurationBuilder implements Configuration {
      * <li>{@code Object[]} - flatten and use each element as above</li>
      * </ul>
      *
-     * an input {@link FilterBuilder} will be set according to given packages.
-     * <p>
-     * use any parameter type in any order. this constructor uses instanceof on
+     * <p>An input {@link FilterBuilder} will be set according to given packages.
+     * 
+     * <p>Use any parameter type in any order. this constructor uses instanceof on
      * each param and instantiate a {@link ConfigurationBuilder} appropriately.
      *
      * @param params configuration parameters
      * @return fluent builder
      */
-     @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static ConfigurationBuilder build(final Object... params) {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
@@ -130,7 +134,12 @@ public class ConfigurationBuilder implements Configuration {
                 if (Scanner.class.isAssignableFrom((Class) param)) {
                     try {
                         builder.addScanners(((Scanner) ((Class<?>) param).getDeclaredConstructor().newInstance()));
-                    }  catch (IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
+                    } catch (IllegalAccessException 
+                            | InstantiationException 
+                            | NoSuchMethodException 
+                            | SecurityException 
+                            | IllegalArgumentException 
+                            | InvocationTargetException ex) {
                         //fallback
                     }
                 }
@@ -141,7 +150,7 @@ public class ConfigurationBuilder implements Configuration {
             } else if (param instanceof URL) {
                 builder.addUrls((URL) param);
             } else if (param instanceof ClassLoader) {
-                /* already taken care */ 
+                /* already taken care */
             } else if (param instanceof Predicate) {
                 filter.add((Predicate<String>) param);
             } else if (param instanceof ExecutorService) {
@@ -173,6 +182,12 @@ public class ConfigurationBuilder implements Configuration {
         return builder;
     }
 
+    /**
+     * Builder for the given packages.
+     * 
+     * @param packages the packages to scan
+     * @return fluent builder
+     */
     public ConfigurationBuilder forPackages(String... packages) {
         for (String pkg : packages) {
             addUrls(ClasspathHelper.forPackage(pkg));
@@ -214,9 +229,8 @@ public class ConfigurationBuilder implements Configuration {
 
     /**
      * Set the urls to be scanned.
-     * 
-     * <p>
-     * use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
+     *
+     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
      * convenient methods to get the relevant urls
      *
      * @param urls the urls
@@ -229,9 +243,8 @@ public class ConfigurationBuilder implements Configuration {
 
     /**
      * Set the urls to be scanned.
-     * 
-     * <p>
-     * use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
+     *
+     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
      * convenient methods to get the relevant urls
      *
      * @param urls the urls
@@ -244,9 +257,8 @@ public class ConfigurationBuilder implements Configuration {
 
     /**
      * Add urls to be scanned.
-     * 
-     * <p>
-     * use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
+     *
+     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
      * convenient methods to get the relevant urls
      *
      * @param urls the urls
@@ -259,8 +271,8 @@ public class ConfigurationBuilder implements Configuration {
 
     /**
      * Add urls to be scanned.
-     * <p>
-     * use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
+     * 
+     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
      * convenient methods to get the relevant urls
      *
      * @param urls the urls
@@ -275,34 +287,33 @@ public class ConfigurationBuilder implements Configuration {
      * Returns the metadata adapter. if javassist library exists in the
      * classpath, this method returns {@link JavassistAdapter} otherwise
      * defaults to {@link JavaReflectionAdapter}.
-     * 
-     * <p>
-     * the {@link JavassistAdapter} is preferred in terms of performance and
+     *
+     * <p>The {@link JavassistAdapter} is preferred in terms of performance and
      * class loading.
-     * 
+     *
      * @return the metadata adapter
      */
     @Override
-    public MetadataAdapter<?,?,?> getMetadataAdapter() {
+    public MetadataAdapter<?, ?, ?> getMetadataAdapter() {
         if (metadataAdapter != null) {
             return metadataAdapter;
         } else {
             try {
                 return (metadataAdapter = new JavassistAdapter());
             } catch (Throwable e) {
-                    logger.warn("could not create JavassistAdapter, using JavaReflectionAdapter", e);
+                logger.warn("could not create JavassistAdapter, using JavaReflectionAdapter", e);
                 return (metadataAdapter = new JavaReflectionAdapter());
             }
         }
     }
 
     /**
-     * Sets the metadata adapter used to fetch metadata from classes
+     * Sets the metadata adapter used to fetch metadata from classes.
      *
      * @param metadataAdapter the metadata adapter to use
      * @return fluent builder
      */
-    public ConfigurationBuilder setMetadataAdapter(final MetadataAdapter<?,?,?> metadataAdapter) {
+    public ConfigurationBuilder setMetadataAdapter(final MetadataAdapter<?, ?, ?> metadataAdapter) {
         this.metadataAdapter = metadataAdapter;
         return this;
     }
@@ -313,11 +324,11 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * sets the input filter for all resources to be scanned.
-     * <p>
-     * supply a {@link Predicate} or use the {@link FilterBuilder
+     * Sets the input filter for all resources to be scanned.
+     * 
+     * <p>Supply a {@link Predicate} or use the {@link FilterBuilder}
      *
-     * @param inputsFilter}
+     * @param inputsFilter the input filter
      */
     public void setInputsFilter(Predicate<String> inputsFilter) {
         this.inputsFilter = inputsFilter;
@@ -325,9 +336,8 @@ public class ConfigurationBuilder implements Configuration {
 
     /**
      * Sets the input filter for all resources to be scanned.
-     * 
-     * <p>
-     * supply a {@link Predicate} or use the {@link FilterBuilder
+     *
+     * <p>Supply a {@link Predicate} or use the {@link FilterBuilder}
      *
      * @param inputsFilter the input filter
      * @return fluent builder
@@ -356,9 +366,8 @@ public class ConfigurationBuilder implements Configuration {
     /**
      * Sets the executor service used for scanning to ThreadPoolExecutor with
      * core size as {@link java.lang.Runtime#availableProcessors()}.
-     * 
-     * <p>
-     * default is ThreadPoolExecutor with a single core
+     *
+     * <p>Default is ThreadPoolExecutor with a single core
      *
      * @return fluent builde
      */
@@ -369,11 +378,10 @@ public class ConfigurationBuilder implements Configuration {
     /**
      * Sets the executor service used for scanning to ThreadPoolExecutor with
      * core size as the given availableProcessors parameter.
-     * 
-     * The executor service spawns daemon threads by default.
-     * 
-     * <p>
-     * default is ThreadPoolExecutor with a single core
+     *
+     * <p>The executor service spawns daemon threads by default.
+     *
+     * <p>Default is ThreadPoolExecutor with a single core
      *
      * @param availableProcessors the number of available processors
      * @return fluent builder
@@ -395,8 +403,8 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * Get class loader, might be used for scanning or resolving methods/fields
-     * 
+     * Get class loader, might be used for scanning or resolving methods/fields.
+     *
      * @return array of class loaders
      */
     @Override
@@ -411,9 +419,8 @@ public class ConfigurationBuilder implements Configuration {
 
     /**
      * If set to true, Reflections will expand super types after scanning.
-     * 
-     * <p>
-     * see {@link org.reflections.Reflections#expandSuperTypes()}
+     *
+     * <p>See {@link org.reflections.Reflections#expandSuperTypes()}
      *
      * @param expandSuperTypes flag to expand supertypes (or not)
      * @return fluent builder
@@ -435,7 +442,7 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     /**
-     * Add class loader, might be used for resolving methods/fields
+     * Add class loader, might be used for resolving methods/fields.
      *
      * @param classLoader the class loader
      * @return fluent builder
@@ -453,7 +460,8 @@ public class ConfigurationBuilder implements Configuration {
     public ConfigurationBuilder addClassLoaders(ClassLoader... classLoaders) {
         this.classLoaders = this.classLoaders == null
                 ? classLoaders
-                : Stream.concat(Arrays.stream(this.classLoaders), Arrays.stream(classLoaders)).toArray(ClassLoader[]::new);
+                : Stream.concat(Arrays.stream(this.classLoaders), 
+                        Arrays.stream(classLoaders)).toArray(ClassLoader[]::new);
         return this;
     }
 
