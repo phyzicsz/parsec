@@ -95,7 +95,7 @@ public class VfsTest {
         Collection<URL> urls = ClasspathHelper.forPackage("dir+with spaces");
         assertFalse(urls.isEmpty());
         for (URL url : urls) {
-            Vfs.Dir dir = Vfs.fromURL(url);
+            Vfs.Dir dir = Vfs.fromUrl(url);
             Assertions.assertNotNull(dir);
             Assertions.assertNotNull(dir.getFiles().iterator().next());
         }
@@ -110,7 +110,7 @@ public class VfsTest {
         newDir.mkdir();
 
         try {
-            Vfs.Dir dir = Vfs.fromURL(new URL(format("file:{0}", dirWithJarInName)));
+            Vfs.Dir dir = Vfs.fromUrl(new URL(format("file:{0}", dirWithJarInName)));
 
             assertEquals(dirWithJarInName, dir.getPath());
             assertEquals(SystemDir.class, dir.getClass());

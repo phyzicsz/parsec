@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 /**
- * an implementation of {@link org.reflections.vfs.Vfs.File} for a directory
- * {@link java.io.File}
+ * An implementation of {@link org.reflections.vfs.Vfs.File} for a directory
+ * {@link java.io.File}.
+ * 
+ * @author phyzicsz (phyzics.z@gmail.com)
  */
 public class SystemFile implements Vfs.File {
 

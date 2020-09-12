@@ -6,8 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * an implementation of {@link org.reflections.vfs.Vfs.Dir} for
- * {@link java.util.zip.ZipFile}
+ * An implementation of {@link org.reflections.vfs.Vfs.Dir} for
+ * {@link java.util.zip.ZipFile}.
+ * 
+ * @author phyzicsz (phyzics.z@gmail.com)
  */
 public class ZipDir implements Vfs.Dir {
     

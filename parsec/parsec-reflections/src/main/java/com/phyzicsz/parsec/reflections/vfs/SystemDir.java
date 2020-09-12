@@ -4,17 +4,25 @@ import com.phyzicsz.parsec.reflections.ReflectionsException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * An implementation of {@link org.reflections.vfs.Vfs.Dir} for directory {@link java.io.File}.
  * 
- * @author phyzicsz <phyzics.z@gmail.com>
+ * @author phyzicsz (phyzics.z@gmail.com)
  */
 public class SystemDir implements Vfs.Dir {
 
     private final File file;
 
+    /**
+     * Constructor for SystemDir.
+     * 
+     * @param file the input directory
+     */
     public SystemDir(File file) {
         if (file != null && (!file.isDirectory() || !file.canRead())) {
             throw new RuntimeException("cannot use dir " + file);
@@ -36,16 +44,17 @@ public class SystemDir implements Vfs.Dir {
         if (file == null || !file.exists()) {
             return Collections.emptyList();
         }
-        return () -> {
-            try {
-                return Files.walk(file.toPath())
-                        .filter(Files::isRegularFile)
+        
+        Iterable<Vfs.File> iterable = null;
+        try (Stream<Path> stream = Files.walk(file.toPath())) {
+            iterable = stream.filter(Files::isRegularFile)
                         .map(path -> (Vfs.File) new SystemFile(SystemDir.this, path.toFile()))
-                        .iterator();
-            } catch (IOException e) {
-                throw new ReflectionsException("could not get files for " + file, e);
-            }
-        };
+                        .collect(Collectors.toList());
+        } catch (IOException ex) {
+            throw new ReflectionsException("could not get files for " + file, ex);
+        }
+
+        return iterable;
     }
 
     @Override

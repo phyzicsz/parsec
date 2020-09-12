@@ -6,8 +6,8 @@ import java.util.zip.ZipEntry;
 
 /**
  * Model for a VFS File.
- * 
- * @author phyzicsz <phyzics.z@gmail.com>
+ *
+ * @author phyzicsz (phyzics.z@gmail.com)
  */
 public class JarInputFile implements Vfs.File {
 
@@ -16,6 +16,14 @@ public class JarInputFile implements Vfs.File {
     private final long fromIndex;
     private final long endIndex;
 
+    /**
+     * Constructor for JarInputFile.
+     * 
+     * @param entry the zip file entry
+     * @param jarInputDir the input directory
+     * @param cursor the cursor
+     * @param nextCursor the cursor for next
+     */
     public JarInputFile(ZipEntry entry, JarInputDir jarInputDir, long cursor, long nextCursor) {
         this.entry = entry;
         this.jarInputDir = jarInputDir;
@@ -41,6 +49,17 @@ public class JarInputFile implements Vfs.File {
             public int read() throws IOException {
                 if (jarInputDir.cursor >= fromIndex && jarInputDir.cursor <= endIndex) {
                     int read = jarInputDir.jarInputStream.read();
+                    jarInputDir.cursor++;
+                    return read;
+                } else {
+                    return -1;
+                }
+            }
+
+            @Override
+            public int read(byte[] bytes, int offset, int length) throws IOException {
+                if (jarInputDir.cursor >= fromIndex && jarInputDir.cursor <= endIndex) {
+                    int read = jarInputDir.jarInputStream.read(bytes, offset, length);
                     jarInputDir.cursor++;
                     return read;
                 } else {

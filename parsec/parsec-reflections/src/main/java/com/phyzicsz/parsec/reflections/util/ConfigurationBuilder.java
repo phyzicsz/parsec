@@ -13,9 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -45,8 +43,8 @@ import org.slf4j.LoggerFactory;
 public class ConfigurationBuilder implements Configuration {
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationBuilder.class);
 
-    private final Set<Scanner> scanners;
-    private Set<URL> urls;
+    private final List<Scanner> scanners;
+    private List<URL> urls;
     /*lazy*/ protected MetadataAdapter<?,?,?> metadataAdapter;
     private Predicate<String> inputsFilter;
     private ExecutorService executorService;
@@ -54,8 +52,8 @@ public class ConfigurationBuilder implements Configuration {
     private boolean expandSuperTypes = true;
 
     public ConfigurationBuilder() {
-        scanners = new HashSet<>(Arrays.asList(new TypeAnnotationsScanner(), new SubTypesScanner()));
-        urls = new HashSet<>();
+        scanners = new ArrayList<>(Arrays.asList(new TypeAnnotationsScanner(), new SubTypesScanner()));
+        urls = new ArrayList<>();
     }
 
     /**
@@ -183,7 +181,7 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     @Override
-    public Set<Scanner> getScanners() {
+    public List<Scanner> getScanners() {
         return scanners;
     }
 
@@ -210,7 +208,7 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     @Override
-    public Set<URL> getUrls() {
+    public List<URL> getUrls() {
         return urls;
     }
 
@@ -225,7 +223,7 @@ public class ConfigurationBuilder implements Configuration {
      * @return fluent builder
      */
     public ConfigurationBuilder setUrls(final Collection<URL> urls) {
-        this.urls = new HashSet<>(urls);
+        this.urls = new ArrayList<>(urls);
         return this;
     }
 
@@ -240,7 +238,7 @@ public class ConfigurationBuilder implements Configuration {
      * @return fluent builder
      */
     public ConfigurationBuilder setUrls(final URL... urls) {
-        this.urls = new HashSet<>(Arrays.asList(urls));
+        this.urls = new ArrayList<>(Arrays.asList(urls));
         return this;
     }
 
@@ -269,7 +267,7 @@ public class ConfigurationBuilder implements Configuration {
      * @return fluent builder
      */
     public ConfigurationBuilder addUrls(final URL... urls) {
-        this.urls.addAll(new HashSet<>(Arrays.asList(urls)));
+        this.urls.addAll(new ArrayList<>(Arrays.asList(urls)));
         return this;
     }
 

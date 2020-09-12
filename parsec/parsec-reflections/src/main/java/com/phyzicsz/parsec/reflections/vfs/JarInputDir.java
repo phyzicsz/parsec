@@ -9,9 +9,9 @@ import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
 /**
- * Model for an VFS directory for a jar file
+ * Model for an VFS directory for a jar file.
  * 
- * @author phyzicsz <phyzics.z@gmail.com>
+ * @author phyzicsz (phyzics.z@gmail.com)
  */
 public class JarInputDir implements Vfs.Dir {
 
@@ -65,7 +65,7 @@ public class JarInputDir implements Vfs.Dir {
 
                         long size = entry.getSize();
                         if (size < 0) {
-                            size = 0xffffffffl + size; //JDK-6916399
+                            size = 0xffffffffL + size; //JDK-6916399
                         }
                         nextCursor += size;
                         if (!entry.isDirectory()) {

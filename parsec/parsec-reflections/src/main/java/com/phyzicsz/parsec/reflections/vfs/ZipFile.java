@@ -5,8 +5,10 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 
 /**
- * an implementation of {@link org.reflections.vfs.Vfs.File} for
- * {@link java.util.zip.ZipEntry}
+ * An implementation of {@link org.reflections.vfs.Vfs.File} for
+ * {@link java.util.zip.ZipEntry}.
+ * 
+ * @author phyzicsz (phyzics.z@gmail.com)
  */
 public class ZipFile implements Vfs.File {
 

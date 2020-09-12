@@ -3,7 +3,7 @@ package com.phyzicsz.parsec.reflections;
 import com.phyzicsz.parsec.reflections.adapters.MetadataAdapter;
 import com.phyzicsz.parsec.reflections.scanners.Scanner;
 import java.net.URL;
-import java.util.Set;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Predicate;
 
@@ -19,14 +19,14 @@ public interface Configuration {
      *
      * @return the scanners
      */
-    Set<Scanner> getScanners();
+    List<Scanner> getScanners();
 
     /**
      * The urls to be scanned.
      *
      * @return the URLs
      */
-    Set<URL> getUrls();
+    List<URL> getUrls();
 
     /**
      * The metadata adapter used to fetch metadata from classes.

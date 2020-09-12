@@ -293,7 +293,7 @@ public final class Reflections {
     }
 
     private void scan(URL url) {
-        Vfs.Dir dir = Vfs.fromURL(url);
+        Vfs.Dir dir = Vfs.fromUrl(url);
 
         try {
             for (final Vfs.File file : dir.getFiles()) {
