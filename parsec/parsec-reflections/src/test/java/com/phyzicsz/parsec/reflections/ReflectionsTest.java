@@ -30,7 +30,7 @@ import com.phyzicsz.parsec.reflections.scanners.SubTypesScanner;
 import com.phyzicsz.parsec.reflections.scanners.TypeAnnotationsScanner;
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
 import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
-import com.phyzicsz.parsec.reflections.util.FilterBuilder;
+import com.phyzicsz.parsec.reflections.filter.FilterBuilder;
 import static com.phyzicsz.parsec.reflections.util.Utils.index;
 import java.io.File;
 import java.lang.annotation.Annotation;

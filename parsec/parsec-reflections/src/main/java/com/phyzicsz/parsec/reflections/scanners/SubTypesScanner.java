@@ -1,7 +1,7 @@
 package com.phyzicsz.parsec.reflections.scanners;
 
 import com.phyzicsz.parsec.reflections.Store;
-import com.phyzicsz.parsec.reflections.util.FilterBuilder;
+import com.phyzicsz.parsec.reflections.filter.FilterBuilder;
 import java.util.List;
 
 /**

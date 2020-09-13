@@ -1,12 +1,12 @@
-package com.phyzicsz.parsec.reflections.util;
+package com.phyzicsz.parsec.reflections.filter;
 
 import com.google.common.base.Splitter;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
+import com.phyzicsz.parsec.reflections.util.Utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 
 /**
  * Builds include/exclude filters for Reflections.
@@ -138,54 +138,6 @@ public class FilterBuilder implements Predicate<String> {
             } //break on first exclusion
         }
         return accept;
-    }
-
-    public abstract static class Matcher implements Predicate<String> {
-
-        final Pattern pattern;
-
-        protected Matcher(final String regex) {
-            pattern = Pattern.compile(regex);
-        }
-
-        @Override
-        public String toString() {
-            return pattern.pattern();
-        }
-    }
-
-    public static class Include extends Matcher {
-
-        public Include(final String patternString) {
-            super(patternString);
-        }
-
-        @Override
-        public boolean test(final String regex) {
-            return pattern.matcher(regex).matches();
-        }
-
-        @Override
-        public String toString() {
-            return "+" + super.toString();
-        }
-    }
-
-    public static class Exclude extends Matcher {
-
-        public Exclude(final String patternString) {
-            super(patternString);
-        }
-
-        @Override
-        public boolean test(final String regex) {
-            return !pattern.matcher(regex).matches();
-        }
-
-        @Override
-        public String toString() {
-            return "-" + super.toString();
-        }
     }
 
     /**

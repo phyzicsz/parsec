@@ -1,5 +1,6 @@
 package com.phyzicsz.parsec.reflections.util;
 
+import com.phyzicsz.parsec.reflections.filter.FilterBuilder;
 import com.phyzicsz.parsec.reflections.Configuration;
 import com.phyzicsz.parsec.reflections.ReflectionsException;
 import com.phyzicsz.parsec.reflections.adapters.JavaReflectionAdapter;

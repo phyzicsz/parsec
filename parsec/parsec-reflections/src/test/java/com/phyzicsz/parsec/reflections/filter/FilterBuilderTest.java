@@ -1,6 +1,7 @@
-package com.phyzicsz.parsec.reflections;
+package com.phyzicsz.parsec.reflections.filter;
 
-import com.phyzicsz.parsec.reflections.util.FilterBuilder;
+import com.phyzicsz.parsec.reflections.Reflections;
+import com.phyzicsz.parsec.reflections.filter.FilterBuilder;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;

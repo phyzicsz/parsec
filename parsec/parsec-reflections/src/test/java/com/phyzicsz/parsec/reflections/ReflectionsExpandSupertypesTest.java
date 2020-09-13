@@ -3,7 +3,7 @@ package com.phyzicsz.parsec.reflections;
 
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
 import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
-import com.phyzicsz.parsec.reflections.util.FilterBuilder;
+import com.phyzicsz.parsec.reflections.filter.FilterBuilder;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

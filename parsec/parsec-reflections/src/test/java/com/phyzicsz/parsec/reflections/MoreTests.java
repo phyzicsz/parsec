@@ -15,7 +15,7 @@ import com.phyzicsz.parsec.reflections.scanners.SubTypesScanner;
 import com.phyzicsz.parsec.reflections.scanners.TypeAnnotationsScanner;
 import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
 import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
-import com.phyzicsz.parsec.reflections.util.FilterBuilder;
+import com.phyzicsz.parsec.reflections.filter.FilterBuilder;
 import java.lang.annotation.Annotation;
 import java.net.MalformedURLException;
 import java.net.URL;
