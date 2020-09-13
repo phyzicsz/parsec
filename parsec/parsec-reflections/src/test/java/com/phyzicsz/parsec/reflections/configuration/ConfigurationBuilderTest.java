@@ -1,6 +1,7 @@
-package com.phyzicsz.parsec.reflections.util;
+package com.phyzicsz.parsec.reflections.configuration;
 
 
+import com.phyzicsz.parsec.reflections.configuration.ConfigurationBuilder;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 

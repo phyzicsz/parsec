@@ -1,8 +1,8 @@
 package com.phyzicsz.parsec.reflections;
 
 
-import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
-import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
+import com.phyzicsz.parsec.reflections.util.ClasspathUtils;
+import com.phyzicsz.parsec.reflections.configuration.ConfigurationBuilder;
 import com.phyzicsz.parsec.reflections.filter.FilterBuilder;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -34,7 +34,7 @@ public class ReflectionsExpandSupertypesTest {
     @Test
     public void testExpandSupertypes() throws Exception {
         Reflections refExpand = new Reflections(new ConfigurationBuilder().
-                setUrls(ClasspathHelper.forClass(TestModel.ScannedScope.C.class)).
+                setUrls(ClasspathUtils.forClass(TestModel.ScannedScope.C.class)).
                 filterInputsBy(inputsFilter));
         assertTrue(refExpand.getConfiguration().shouldExpandSuperTypes());
         Set<Class<? extends TestModel.A>> subTypesOf = refExpand.getSubTypesOf(TestModel.A.class);
@@ -45,7 +45,7 @@ public class ReflectionsExpandSupertypesTest {
     @Test
     public void testNotExpandSupertypes() throws Exception {
         Reflections refDontExpand = new Reflections(new ConfigurationBuilder().
-                setUrls(ClasspathHelper.forClass(TestModel.ScannedScope.C.class)).
+                setUrls(ClasspathUtils.forClass(TestModel.ScannedScope.C.class)).
                 filterInputsBy(inputsFilter).
                 setExpandSuperTypes(false));
         assertFalse(refDontExpand.getConfiguration().shouldExpandSuperTypes());

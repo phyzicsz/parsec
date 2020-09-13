@@ -2,8 +2,8 @@ package com.phyzicsz.parsec.reflections;
 
 
 import com.phyzicsz.parsec.reflections.scanners.SubTypesScanner;
-import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
-import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
+import com.phyzicsz.parsec.reflections.util.ClasspathUtils;
+import com.phyzicsz.parsec.reflections.configuration.ConfigurationBuilder;
 import static java.util.Collections.singletonList;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -25,7 +25,7 @@ public class ReflectionsThreadSafenessTest {
 
         Callable<Set<Class<? extends Logger>>> callable = () -> {
             final Reflections reflections = new Reflections(new ConfigurationBuilder()
-                    .setUrls(singletonList(ClasspathHelper.forClass(Logger.class)))
+                    .setUrls(singletonList(ClasspathUtils.forClass(Logger.class)))
                     .setScanners(new SubTypesScanner(false)));
 
             return reflections.getSubTypesOf(Logger.class);

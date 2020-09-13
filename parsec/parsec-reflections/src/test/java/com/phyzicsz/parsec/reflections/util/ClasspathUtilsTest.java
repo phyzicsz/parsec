@@ -1,6 +1,6 @@
-package com.phyzicsz.parsec.reflections;
+package com.phyzicsz.parsec.reflections.util;
 
-import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
+import com.phyzicsz.parsec.reflections.util.ClasspathUtils;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test ClasspathHelper utility class
  */
-public final class ClasspathHelperTest {
+public final class ClasspathUtilsTest {
     @Test
     public void testForClassLoaderShouldntReorderUrls() throws MalformedURLException {
         // testing same URL set with different order to not fall into the case when HashSet orders elements in the same order as we do
@@ -25,8 +25,8 @@ public final class ClasspathHelperTest {
 
         final URLClassLoader urlClassLoader1 = new URLClassLoader(urls1, null);
         final URLClassLoader urlClassLoader2 = new URLClassLoader(urls2, null);
-        final Collection<URL> resultUrls1 = ClasspathHelper.forClassLoader(urlClassLoader1);
-        final Collection<URL> resultUrls2 = ClasspathHelper.forClassLoader(urlClassLoader2);
+        final Collection<URL> resultUrls1 = ClasspathUtils.forClassLoader(urlClassLoader1);
+        final Collection<URL> resultUrls2 = ClasspathUtils.forClassLoader(urlClassLoader2);
 
         Assertions.assertArrayEquals(urls1, resultUrls1.toArray(),"URLs returned from forClassLoader should be in the same order as source URLs");
         Assertions.assertArrayEquals(urls2, resultUrls2.toArray(),"URLs returned from forClassLoader should be in the same order as source URLs");

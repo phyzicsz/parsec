@@ -1,6 +1,6 @@
 package com.phyzicsz.parsec.reflections.scanners;
 
-import com.phyzicsz.parsec.reflections.Configuration;
+import com.phyzicsz.parsec.reflections.configuration.Configuration;
 import com.phyzicsz.parsec.reflections.Store;
 import com.phyzicsz.parsec.reflections.vfs.Vfs;
 import java.util.function.Predicate;

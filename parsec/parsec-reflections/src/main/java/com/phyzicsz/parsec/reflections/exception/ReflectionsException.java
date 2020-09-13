@@ -1,4 +1,4 @@
-package com.phyzicsz.parsec.reflections;
+package com.phyzicsz.parsec.reflections.exception;
 
 public class ReflectionsException extends RuntimeException {
 

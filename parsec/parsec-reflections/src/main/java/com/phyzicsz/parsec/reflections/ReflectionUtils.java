@@ -1,6 +1,9 @@
 package com.phyzicsz.parsec.reflections;
 
-import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
+import com.phyzicsz.parsec.reflections.util.ClasspathUtils;
+import com.phyzicsz.parsec.reflections.util.ClasspathUtils;
+import com.phyzicsz.parsec.reflections.util.Utils;
 import com.phyzicsz.parsec.reflections.util.Utils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -534,7 +537,7 @@ public abstract class ReflectionUtils {
             }
 
             List<ReflectionsException> reflectionsExceptions = new ArrayList<>();
-            for (ClassLoader classLoader : ClasspathHelper.classLoaders(classLoaders)) {
+            for (ClassLoader classLoader : ClasspathUtils.classLoaders(classLoaders)) {
                 if (type.contains("[")) {
                     try {
                         return Class.forName(type, false, classLoader);

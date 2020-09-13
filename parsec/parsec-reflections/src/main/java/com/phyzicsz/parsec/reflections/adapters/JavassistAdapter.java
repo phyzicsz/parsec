@@ -1,6 +1,6 @@
 package com.phyzicsz.parsec.reflections.adapters;
 
-import com.phyzicsz.parsec.reflections.ReflectionsException;
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
 import com.phyzicsz.parsec.reflections.util.Utils;
 import com.phyzicsz.parsec.reflections.vfs.Vfs;
 import java.io.BufferedInputStream;

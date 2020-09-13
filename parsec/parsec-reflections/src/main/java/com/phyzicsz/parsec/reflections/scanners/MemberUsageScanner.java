@@ -1,8 +1,8 @@
 package com.phyzicsz.parsec.reflections.scanners;
 
-import com.phyzicsz.parsec.reflections.ReflectionsException;
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
 import com.phyzicsz.parsec.reflections.Store;
-import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
+import com.phyzicsz.parsec.reflections.util.ClasspathUtils;
 import com.phyzicsz.parsec.reflections.util.Utils;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -110,7 +110,7 @@ public class MemberUsageScanner extends AbstractScanner {
                 classPool = new ClassPool();
                 ClassLoader[] classLoaders = getConfiguration().getClassLoaders();
                 if (classLoaders == null) {
-                    classLoaders = ClasspathHelper.classLoaders();
+                    classLoaders = ClasspathUtils.classLoaders();
                 }
                 for (ClassLoader classLoader : classLoaders) {
                     classPool.appendClassPath(new LoaderClassPath(classLoader));

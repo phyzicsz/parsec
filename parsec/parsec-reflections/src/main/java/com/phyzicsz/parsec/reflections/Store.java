@@ -1,5 +1,7 @@
 package com.phyzicsz.parsec.reflections;
 
+import com.phyzicsz.parsec.reflections.configuration.Configuration;
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
 import com.phyzicsz.parsec.reflections.scanners.Scanner;
 import com.phyzicsz.parsec.reflections.util.Utils;
 import java.util.ArrayList;

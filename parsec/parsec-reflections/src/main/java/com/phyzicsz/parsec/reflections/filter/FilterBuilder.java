@@ -1,7 +1,7 @@
 package com.phyzicsz.parsec.reflections.filter;
 
 import com.google.common.base.Splitter;
-import com.phyzicsz.parsec.reflections.ReflectionsException;
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
 import com.phyzicsz.parsec.reflections.util.Utils;
 import java.util.ArrayList;
 import java.util.Collection;

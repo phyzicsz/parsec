@@ -1,5 +1,7 @@
 package com.phyzicsz.parsec.reflections;
 
+import com.phyzicsz.parsec.reflections.configuration.Configuration;
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
 import com.phyzicsz.parsec.reflections.scanners.FieldAnnotationsScanner;
 import com.phyzicsz.parsec.reflections.scanners.MemberUsageScanner;
 import com.phyzicsz.parsec.reflections.scanners.MethodAnnotationsScanner;
@@ -9,7 +11,7 @@ import com.phyzicsz.parsec.reflections.scanners.ResourcesScanner;
 import com.phyzicsz.parsec.reflections.scanners.Scanner;
 import com.phyzicsz.parsec.reflections.scanners.SubTypesScanner;
 import com.phyzicsz.parsec.reflections.scanners.TypeAnnotationsScanner;
-import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
+import com.phyzicsz.parsec.reflections.configuration.ConfigurationBuilder;
 import com.phyzicsz.parsec.reflections.util.Utils;
 import com.phyzicsz.parsec.reflections.vfs.Vfs;
 import java.lang.annotation.Annotation;
@@ -132,7 +134,7 @@ public final class Reflections {
      * {@link org.reflections.Configuration}.
      *
      * <p>It is preferred to use
-     * {@link com.phyzicsz.parsec.reflections.util.ConfigurationBuilder}
+     * {@link com.phyzicsz.parsec.reflections.configuration.ConfigurationBuilder}
      *
      * @param configuration configuration settings
      */
@@ -196,7 +198,7 @@ public final class Reflections {
      *
      * <p>Use any parameter type in any order.this constructor uses instanceof on
      * each param and instantiate a
-     * {@link com.phyzicsz.parsec.reflections.util.ConfigurationBuilder}
+     * {@link com.phyzicsz.parsec.reflections.configuration.ConfigurationBuilder}
      * appropriately. if you prefer the usual statically typed constructor,
      * don't use this, although it can be very useful.
      *

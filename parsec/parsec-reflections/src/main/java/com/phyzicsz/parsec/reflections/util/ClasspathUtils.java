@@ -25,9 +25,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Helper methods for working with the classpath.
  */
-public abstract class ClasspathHelper {
+public abstract class ClasspathUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(ClasspathHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(ClasspathUtils.class);
 
     /**
      * Gets the current thread context class loader.

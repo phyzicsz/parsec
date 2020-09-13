@@ -1,7 +1,8 @@
-package com.phyzicsz.parsec.reflections;
+package com.phyzicsz.parsec.reflections.util;
 
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
 import com.phyzicsz.parsec.reflections.adapters.JavassistAdapter;
-import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
+import com.phyzicsz.parsec.reflections.util.ClasspathUtils;
 import com.phyzicsz.parsec.reflections.vfs.SystemDir;
 import com.phyzicsz.parsec.reflections.vfs.Vfs;
 import java.io.File;
@@ -25,7 +26,7 @@ public class VfsTest {
 
     @Test
     public void testJarFile() throws Exception {
-        URL url = new URL(ClasspathHelper.forClass(Logger.class).toExternalForm().replace("jar:", ""));
+        URL url = new URL(ClasspathUtils.forClass(Logger.class).toExternalForm().replace("jar:", ""));
         assertTrue(url.toString().startsWith("file:"));
         assertTrue(url.toString().contains(".jar"));
 
@@ -39,7 +40,7 @@ public class VfsTest {
 
     @Test
     public void testJarUrl() throws Exception {
-        URL url = ClasspathHelper.forClass(Logger.class);
+        URL url = ClasspathUtils.forClass(Logger.class);
         assertTrue(url.toString().startsWith("jar:file:"));
         assertTrue(url.toString().contains(".jar!"));
 
@@ -53,7 +54,7 @@ public class VfsTest {
 
     @Test
     public void testDirectory() throws Exception {
-        URL url = ClasspathHelper.forClass(getClass());
+        URL url = ClasspathUtils.forClass(getClass());
         assertTrue(url.toString().startsWith("file:"));
         assertFalse(url.toString().contains(".jar"));
 
@@ -67,7 +68,7 @@ public class VfsTest {
 
     @Test
     public void testJarInputStream() throws Exception {
-        URL url = ClasspathHelper.forClass(Logger.class);
+        URL url = ClasspathUtils.forClass(Logger.class);
         assertTrue(Vfs.DefaultUrlTypes.jarInputStream.matches(url));
         try {
             testVfsDir(Vfs.DefaultUrlTypes.jarInputStream.createDir(url));
@@ -76,11 +77,11 @@ public class VfsTest {
             // expected
         }
 
-        url = new URL(ClasspathHelper.forClass(Logger.class).toExternalForm().replace("jar:", "").replace(".jar!", ".jar"));
+        url = new URL(ClasspathUtils.forClass(Logger.class).toExternalForm().replace("jar:", "").replace(".jar!", ".jar"));
         assertTrue(Vfs.DefaultUrlTypes.jarInputStream.matches(url));
         testVfsDir(Vfs.DefaultUrlTypes.jarInputStream.createDir(url));
 
-        url = ClasspathHelper.forClass(getClass());
+        url = ClasspathUtils.forClass(getClass());
         assertFalse(Vfs.DefaultUrlTypes.jarInputStream.matches(url));
         try {
             testVfsDir(Vfs.DefaultUrlTypes.jarInputStream.createDir(url));
@@ -92,7 +93,7 @@ public class VfsTest {
 
     @Test
     public void dirWithSpaces() {
-        Collection<URL> urls = ClasspathHelper.forPackage("dir+with spaces");
+        Collection<URL> urls = ClasspathUtils.forPackage("dir+with spaces");
         assertFalse(urls.isEmpty());
         for (URL url : urls) {
             Vfs.Dir dir = Vfs.fromUrl(url);

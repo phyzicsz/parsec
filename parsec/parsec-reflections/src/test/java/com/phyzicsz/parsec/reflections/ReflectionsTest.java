@@ -1,5 +1,6 @@
 package com.phyzicsz.parsec.reflections;
 
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
 import com.phyzicsz.parsec.reflections.TestModel.AC1;
 import com.phyzicsz.parsec.reflections.TestModel.AC1n;
 import com.phyzicsz.parsec.reflections.TestModel.AC2;
@@ -28,8 +29,8 @@ import com.phyzicsz.parsec.reflections.scanners.MethodParameterScanner;
 import com.phyzicsz.parsec.reflections.scanners.ResourcesScanner;
 import com.phyzicsz.parsec.reflections.scanners.SubTypesScanner;
 import com.phyzicsz.parsec.reflections.scanners.TypeAnnotationsScanner;
-import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
-import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
+import com.phyzicsz.parsec.reflections.util.ClasspathUtils;
+import com.phyzicsz.parsec.reflections.configuration.ConfigurationBuilder;
 import com.phyzicsz.parsec.reflections.filter.FilterBuilder;
 import static com.phyzicsz.parsec.reflections.util.Utils.index;
 import java.io.File;
@@ -66,7 +67,7 @@ public class ReflectionsTest {
     @BeforeAll
     public static void init() {
         reflections = new Reflections(new ConfigurationBuilder()
-                .setUrls(Collections.singletonList(ClasspathHelper.forClass(TestModel.class)))
+                .setUrls(Collections.singletonList(ClasspathUtils.forClass(TestModel.class)))
                 .filterInputsBy(TestModelFilter)
                 .setScanners(
                         new SubTypesScanner(false),
@@ -244,7 +245,7 @@ public class ReflectionsTest {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .filterInputsBy(filter)
                 .setScanners(new ResourcesScanner())
-                .setUrls(Collections.singletonList(ClasspathHelper.forClass(TestModel.class))));
+                .setUrls(Collections.singletonList(ClasspathUtils.forClass(TestModel.class))));
 
         Set<String> resolved = reflections.getResources(Pattern.compile(".*resource1-reflections\\.xml"));
         assertThat(resolved, are("META-INF/reflections/resource1-reflections.xml"));

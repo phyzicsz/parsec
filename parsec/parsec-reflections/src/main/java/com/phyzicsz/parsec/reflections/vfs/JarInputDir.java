@@ -1,6 +1,6 @@
 package com.phyzicsz.parsec.reflections.vfs;
 
-import com.phyzicsz.parsec.reflections.ReflectionsException;
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
 import com.phyzicsz.parsec.reflections.util.Utils;
 import java.io.IOException;
 import java.net.URL;

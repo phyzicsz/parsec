@@ -1,4 +1,4 @@
-package com.phyzicsz.parsec.reflections;
+package com.phyzicsz.parsec.reflections.configuration;
 
 import com.phyzicsz.parsec.reflections.adapters.MetadataAdapter;
 import com.phyzicsz.parsec.reflections.scanners.Scanner;

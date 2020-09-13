@@ -1,7 +1,7 @@
 package com.phyzicsz.parsec.reflections.vfs;
 
-import com.phyzicsz.parsec.reflections.ReflectionsException;
-import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
+import com.phyzicsz.parsec.reflections.util.ClasspathUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -393,7 +393,7 @@ public abstract class Vfs {
 
             @Override
             public Dir createDir(URL url) throws Exception {
-                return fromUrl((URL) ClasspathHelper.contextClassLoader()
+                return fromUrl((URL) ClasspathUtils.contextClassLoader()
                         .loadClass("org.eclipse.core.runtime.FileLocator")
                         .getMethod("resolve", URL.class).invoke(null, url));
             }

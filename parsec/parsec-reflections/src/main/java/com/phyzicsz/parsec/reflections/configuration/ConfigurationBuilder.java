@@ -1,14 +1,15 @@
-package com.phyzicsz.parsec.reflections.util;
+package com.phyzicsz.parsec.reflections.configuration;
 
 import com.phyzicsz.parsec.reflections.filter.FilterBuilder;
-import com.phyzicsz.parsec.reflections.Configuration;
-import com.phyzicsz.parsec.reflections.ReflectionsException;
+import com.phyzicsz.parsec.reflections.configuration.Configuration;
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
 import com.phyzicsz.parsec.reflections.adapters.JavaReflectionAdapter;
 import com.phyzicsz.parsec.reflections.adapters.JavassistAdapter;
 import com.phyzicsz.parsec.reflections.adapters.MetadataAdapter;
 import com.phyzicsz.parsec.reflections.scanners.Scanner;
 import com.phyzicsz.parsec.reflections.scanners.SubTypesScanner;
 import com.phyzicsz.parsec.reflections.scanners.TypeAnnotationsScanner;
+import com.phyzicsz.parsec.reflections.util.ClasspathUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -68,9 +69,9 @@ public class ConfigurationBuilder implements Configuration {
      *
      * <ul>
      * <li>{@link String} - add urls using
-     * {@link ClasspathHelper#forPackage(String, ClassLoader...)} ()}</li>
+     * {@link ClasspathUtils#forPackage(String, ClassLoader[])} ()}</li>
      * <li>{@link Class} - add urls using
-     * {@link ClasspathHelper#forClass(Class, ClassLoader...)} </li>
+     * {@link ClasspathUtils#forClass(Class, ClassLoader[])} </li>
      * <li>{@link ClassLoader} - use these classloaders in order to find urls in
      * ClasspathHelper.forPackage(), ClasspathHelper.forClass() and for
      * resolving types</li>
@@ -129,7 +130,7 @@ public class ConfigurationBuilder implements Configuration {
 
         for (Object param : parameters) {
             if (param instanceof String) {
-                builder.addUrls(ClasspathHelper.forPackage((String) param, classLoaders));
+                builder.addUrls(ClasspathUtils.forPackage((String) param, classLoaders));
                 filter.includePackage((String) param);
             } else if (param instanceof Class) {
                 if (Scanner.class.isAssignableFrom((Class) param)) {
@@ -144,7 +145,7 @@ public class ConfigurationBuilder implements Configuration {
                         //fallback
                     }
                 }
-                builder.addUrls(ClasspathHelper.forClass((Class) param, classLoaders));
+                builder.addUrls(ClasspathUtils.forClass((Class) param, classLoaders));
                 filter.includePackage(((Class) param));
             } else if (param instanceof Scanner) {
                 scanners.add((Scanner) param);
@@ -163,12 +164,12 @@ public class ConfigurationBuilder implements Configuration {
 
         if (builder.getUrls().isEmpty()) {
             if (classLoaders != null) {
-                builder.addUrls(ClasspathHelper.forClassLoader(classLoaders)); //default urls getResources("")
+                builder.addUrls(ClasspathUtils.forClassLoader(classLoaders)); //default urls getResources("")
             } else {
-                builder.addUrls(ClasspathHelper.forClassLoader()); //default urls getResources("")
+                builder.addUrls(ClasspathUtils.forClassLoader()); //default urls getResources("")
             }
             if (builder.urls.isEmpty()) {
-                builder.addUrls(ClasspathHelper.forJavaClassPath());
+                builder.addUrls(ClasspathUtils.forJavaClassPath());
             }
         }
 
@@ -191,7 +192,7 @@ public class ConfigurationBuilder implements Configuration {
      */
     public ConfigurationBuilder forPackages(String... packages) {
         for (String pkg : packages) {
-            addUrls(ClasspathHelper.forPackage(pkg));
+            addUrls(ClasspathUtils.forPackage(pkg));
         }
         return this;
     }
@@ -231,7 +232,7 @@ public class ConfigurationBuilder implements Configuration {
     /**
      * Set the urls to be scanned.
      *
-     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
+     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathUtils}
      * convenient methods to get the relevant urls
      *
      * @param urls the urls
@@ -245,7 +246,7 @@ public class ConfigurationBuilder implements Configuration {
     /**
      * Set the urls to be scanned.
      *
-     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
+     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathUtils}
      * convenient methods to get the relevant urls
      *
      * @param urls the urls
@@ -259,7 +260,7 @@ public class ConfigurationBuilder implements Configuration {
     /**
      * Add urls to be scanned.
      *
-     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
+     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathUtils}
      * convenient methods to get the relevant urls
      *
      * @param urls the urls
@@ -273,7 +274,7 @@ public class ConfigurationBuilder implements Configuration {
     /**
      * Add urls to be scanned.
      * 
-     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathHelper}
+     * <p>Use {@link com.phyzicsz.parsec.reflections.util.ClasspathUtils}
      * convenient methods to get the relevant urls
      *
      * @param urls the urls

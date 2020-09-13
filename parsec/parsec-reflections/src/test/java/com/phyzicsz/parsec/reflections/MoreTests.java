@@ -13,8 +13,8 @@ import com.phyzicsz.parsec.reflections.scanners.MethodParameterNamesScanner;
 import com.phyzicsz.parsec.reflections.scanners.ResourcesScanner;
 import com.phyzicsz.parsec.reflections.scanners.SubTypesScanner;
 import com.phyzicsz.parsec.reflections.scanners.TypeAnnotationsScanner;
-import com.phyzicsz.parsec.reflections.util.ClasspathHelper;
-import com.phyzicsz.parsec.reflections.util.ConfigurationBuilder;
+import com.phyzicsz.parsec.reflections.util.ClasspathUtils;
+import com.phyzicsz.parsec.reflections.configuration.ConfigurationBuilder;
 import com.phyzicsz.parsec.reflections.filter.FilterBuilder;
 import java.lang.annotation.Annotation;
 import java.net.MalformedURLException;
@@ -43,7 +43,7 @@ public class MoreTests {
     @Test
     public void no_exception_when_configured_scanner_store_is_empty() {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forPackage("my.project.prefix"))
+                .setUrls(ClasspathUtils.forPackage("my.project.prefix"))
                 .setScanners(new SubTypesScanner(), new TypeAnnotationsScanner())
                 .filterInputsBy(new FilterBuilder().includePackage("my.project.prefix")));
 
@@ -87,7 +87,7 @@ public class MoreTests {
         URLClassLoader externalClassLoader = new URLClassLoader(new URL[]{externalUrl}, Thread.currentThread().getContextClassLoader());
 
         Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .addUrls(ClasspathHelper.forClass(TestModel.class))
+                .addUrls(ClasspathUtils.forClass(TestModel.class))
                 .addUrls(externalUrl)
                 .addClassLoaders(externalClassLoader));
 

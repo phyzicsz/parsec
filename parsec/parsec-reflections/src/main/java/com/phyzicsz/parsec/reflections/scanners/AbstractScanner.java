@@ -1,7 +1,7 @@
 package com.phyzicsz.parsec.reflections.scanners;
 
-import com.phyzicsz.parsec.reflections.Configuration;
-import com.phyzicsz.parsec.reflections.ReflectionsException;
+import com.phyzicsz.parsec.reflections.configuration.Configuration;
+import com.phyzicsz.parsec.reflections.exception.ReflectionsException;
 import com.phyzicsz.parsec.reflections.Store;
 import com.phyzicsz.parsec.reflections.adapters.MetadataAdapter;
 import com.phyzicsz.parsec.reflections.util.Utils;
